@@ -67,3 +67,64 @@ small {
   color: var(--muted);
   font-size: 0.9rem;
 }
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .cta {
+    padding: 60px 20px;
+  }
+
+  .cta h2 {
+    font-size: 2rem;
+    margin-bottom: 12px;
+  }
+
+  .cta p {
+    font-size: 1.1rem;
+    margin-bottom: 24px;
+  }
+
+  .form {
+    flex-direction: column;
+    max-width: 320px;
+    gap: 8px;
+  }
+
+  .form input,
+  .form button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .cta {
+    padding: 40px 16px;
+  }
+
+  .cta h2 {
+    font-size: 1.5rem;
+  }
+
+  .cta p {
+    font-size: 1rem;
+    margin-bottom: 20px;
+  }
+
+  .form {
+    max-width: 280px;
+  }
+
+  .form input {
+    padding: 10px 12px;
+    font-size: 0.9rem;
+  }
+
+  .form button {
+    padding: 10px 20px;
+    font-size: 0.9rem;
+  }
+
+  small {
+    font-size: 0.8rem;
+  }
+}

@@ -13,6 +13,7 @@
   padding: 14px min(24px, 4vw);
   border-bottom: 1px solid var(--stroke);
   background: color-mix(in oklab, var(--bg) 80%, transparent);
+  z-index: 100;
 }
 .brand {
   display: inline-flex;
@@ -41,14 +42,17 @@
   display: flex;
   gap: 16px;
   align-items: center;
+  flex-wrap: wrap;
 }
 .nav a {
-  color: var(--muted);
+  color: var(--text);
 }
+
 .ctaHeader {
   padding: 8px 14px;
   border-radius: 10px;
   background: var(--brand);
+  color: var(--text);
   font-weight: 700;
 }
 .footer {
@@ -63,4 +67,64 @@
 .footerLinks {
   display: flex;
   gap: 16px;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .header {
+    padding: 12px 16px;
+    flex-direction: column;
+    gap: 12px;
+    align-items: stretch;
+  }
+
+  .nav {
+    gap: 12px;
+    font-size: 0.9rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .nav a {
+    white-space: nowrap;
+  }
+
+  .footer {
+    flex-direction: column;
+    gap: 16px;
+    text-align: center;
+    padding: 20px 16px;
+  }
+
+  .footerLinks {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 480px) {
+  .header {
+    padding: 10px 12px;
+  }
+
+  .brand {
+    font-size: 0.9rem;
+  }
+
+  .logo {
+    width: 28px;
+    height: 28px;
+  }
+
+  .nav {
+    gap: 8px;
+    font-size: 0.8rem;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .ctaHeader {
+    padding: 6px 12px;
+    font-size: 0.8rem;
+  }
 }

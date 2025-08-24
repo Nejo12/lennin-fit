@@ -88,7 +88,6 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 16px;
-  max-width: 400px;
 }
 
 .card {
@@ -113,6 +112,7 @@
       padding: 4px 0;
       color: var(--muted);
       font-size: 0.9rem;
+      text-align: left;
     }
   }
 }
@@ -136,5 +136,98 @@
   .metricValue {
     font-size: 2rem;
     font-weight: 700;
+  }
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 1024px) {
+  .hero {
+    gap: 48px;
+    padding: 60px 20px;
+  }
+
+  .colText h1 {
+    font-size: 3rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero {
+    grid-template-columns: 1fr;
+    gap: 40px;
+    padding: 40px 20px;
+    text-align: center;
+  }
+
+  .colText {
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+    }
+
+    p {
+      font-size: 1.1rem;
+      margin-bottom: 24px;
+    }
+  }
+
+  .actions {
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+
+  .btnPrimary,
+  .btnGhost {
+    width: 100%;
+    max-width: 280px;
+    text-align: center;
+  }
+
+  .bullets {
+    text-align: left;
+    max-width: 300px;
+    margin: 0 auto;
+  }
+
+  .colVisual {
+    order: -1;
+  }
+
+  .card,
+  .cardAccent {
+    padding: 16px;
+  }
+
+  .cardAccent .metricValue {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero {
+    padding: 30px 16px;
+    gap: 30px;
+  }
+
+  .colText {
+    h1 {
+      font-size: 2rem;
+    }
+
+    p {
+      font-size: 1rem;
+    }
+  }
+
+  .card,
+  .cardAccent {
+    padding: 12px;
+  }
+
+  .card ul li {
+    font-size: 0.8rem;
+    align-items: flex-start;
   }
 }

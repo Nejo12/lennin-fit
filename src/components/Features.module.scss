@@ -94,3 +94,80 @@
     color-mix(in oklab, var(--brand) 5%, var(--panel)) 100%
   );
 }
+
+/* Mobile Responsiveness */
+@media (max-width: 1024px) {
+  .features {
+    padding: 60px 20px;
+  }
+
+  .features h2 {
+    font-size: 2rem;
+    margin-bottom: 40px;
+  }
+}
+
+@media (max-width: 768px) {
+  .features {
+    padding: 40px 20px;
+  }
+
+  .features h2 {
+    font-size: 1.75rem;
+    margin-bottom: 32px;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    margin-bottom: 60px;
+  }
+
+  .item {
+    padding: 20px;
+  }
+
+  .pricing {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .tier {
+    padding: 24px 20px;
+  }
+
+  .tier .price {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .features {
+    padding: 30px 16px;
+  }
+
+  .features h2 {
+    font-size: 1.5rem;
+    margin-bottom: 24px;
+  }
+
+  .item {
+    padding: 16px;
+  }
+
+  .item h3 {
+    font-size: 1.1rem;
+  }
+
+  .tier {
+    padding: 20px 16px;
+  }
+
+  .tier h3 {
+    font-size: 1.25rem;
+  }
+
+  .tier .price {
+    font-size: 1.75rem;
+  }
+}

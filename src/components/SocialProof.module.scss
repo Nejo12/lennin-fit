@@ -17,6 +17,8 @@
   justify-content: center;
   gap: 16px;
   flex-wrap: wrap;
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
 .badge {
@@ -26,4 +28,51 @@
   border-radius: 20px;
   font-size: 0.9rem;
   font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .proof {
+    padding: 30px 20px;
+  }
+
+  .proof p {
+    font-size: 1rem;
+    margin-bottom: 20px;
+  }
+
+  .row {
+    gap: 12px;
+    justify-content: center;
+  }
+
+  .badge {
+    padding: 6px 12px;
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .proof {
+    padding: 24px 16px;
+  }
+
+  .proof p {
+    font-size: 0.9rem;
+    margin-bottom: 16px;
+  }
+
+  .row {
+    gap: 8px;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .badge {
+    padding: 5px 10px;
+    font-size: 0.75rem;
+    width: fit-content;
+  }
 }
