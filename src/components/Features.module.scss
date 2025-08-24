@@ -1,14 +1,96 @@
-.features { width: min(1120px, 92vw); margin: 56px auto 0; }
-.features h2 { text-align: center; font-size: clamp(24px, 4vw, 36px); margin-bottom: 22px; }
-.grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
-.item { background: var(--panel); border: 1px solid var(--stroke); border-radius: 16px; padding: 16px; color: var(--muted); }
-.item h3 { color: var(--text); margin: 0 0 8px; font-size: 18px; }
-.pricing { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 36px; }
-.tier { background: var(--panel); border: 1px solid var(--stroke); border-radius: 16px; padding: 18px; }
-.price { font-size: 28px; font-weight: 900; margin: 6px 0 10px; color: var(--brand); }
-.highlight { outline: 2px solid var(--brand); }
+.features {
+  padding: 80px 0;
+  max-width: 1200px;
+  margin: 0 auto;
 
-@media (max-width: 960px) {
-  .grid { grid-template-columns: 1fr 1fr; }
-  .pricing { grid-template-columns: 1fr; }
+  h2 {
+    text-align: center;
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 48px;
+    color: var(--text);
+  }
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+  margin-bottom: 80px;
+}
+
+.item {
+  background: var(--panel);
+  border: 1px solid var(--stroke);
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: var(--shadow);
+
+  h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: var(--text);
+  }
+
+  p {
+    color: var(--muted);
+    line-height: 1.6;
+  }
+}
+
+.pricing {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.tier {
+  background: var(--panel);
+  border: 1px solid var(--stroke);
+  border-radius: 12px;
+  padding: 32px 24px;
+  text-align: center;
+  box-shadow: var(--shadow);
+
+  h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 16px;
+    color: var(--text);
+  }
+
+  .price {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 24px;
+    color: var(--brand);
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    li {
+      padding: 8px 0;
+      color: var(--muted);
+      border-bottom: 1px solid var(--stroke);
+
+      &:last-child {
+        border-bottom: none;
+      }
+    }
+  }
+}
+
+.highlight {
+  border-color: var(--brand);
+  background: linear-gradient(
+    135deg,
+    var(--panel) 0%,
+    color-mix(in oklab, var(--brand) 5%, var(--panel)) 100%
+  );
 }

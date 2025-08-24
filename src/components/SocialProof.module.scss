@@ -1,3 +1,29 @@
-.proof { width: min(1120px, 92vw); margin: 12px auto 0; text-align: center; color: var(--muted); }
-.row { display: flex; gap: 10px; justify-content: center; margin-top: 12px; flex-wrap: wrap; }
-.badge { border: 1px solid var(--stroke); padding: 6px 10px; border-radius: 999px; }
+.proof {
+  text-align: center;
+  padding: 40px 0;
+  background: var(--panel);
+  border-top: 1px solid var(--stroke);
+  border-bottom: 1px solid var(--stroke);
+
+  p {
+    font-size: 1.1rem;
+    color: var(--muted);
+    margin-bottom: 24px;
+  }
+}
+
+.row {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.badge {
+  background: var(--stroke);
+  color: var(--text);
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 500;
+}

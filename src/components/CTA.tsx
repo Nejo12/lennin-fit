@@ -1,5 +1,5 @@
-import React from 'react'
-import s from './CTA.module.scss'
+import React from 'react';
+import s from './CTA.module.scss';
 
 export const CTA: React.FC = () => (
   <section id="start" className={s.cta}>
@@ -7,7 +7,7 @@ export const CTA: React.FC = () => (
     <p>Join the early access list and get the Pro launch discount.</p>
     <form
       className={s.form}
-      action="https://formspree.io/f/xbldoqyd"  /* swap to your form endpoint or Netlify Forms */
+      action="https://formspree.io/f/xbldoqyd" /* swap to your form endpoint or Netlify Forms */
       method="POST"
     >
       <input name="email" type="email" placeholder="you@studio.com" required />
@@ -15,4 +15,4 @@ export const CTA: React.FC = () => (
     </form>
     <small>We only email about product updates. No spam.</small>
   </section>
-)
+);

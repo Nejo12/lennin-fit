@@ -1,5 +1,5 @@
-import React from 'react'
-import s from './Features.module.scss'
+import React from 'react';
+import s from './Features.module.scss';
 
 export const Features: React.FC = () => (
   <section id="features" className={s.features}>
@@ -19,7 +19,9 @@ export const Features: React.FC = () => (
       </article>
       <article className={s.item}>
         <h3>AI assist (soon)</h3>
-        <p>Break down projects, draft follow-ups, and plan your week in seconds.</p>
+        <p>
+          Break down projects, draft follow-ups, and plan your week in seconds.
+        </p>
       </article>
     </div>
 
@@ -53,4 +55,4 @@ export const Features: React.FC = () => (
       </div>
     </div>
   </section>
-)
+);

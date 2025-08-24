@@ -1,24 +1,66 @@
-.page { display: flex; flex-direction: column; min-height: 100dvh; }
+.page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+}
 .header {
-  position: sticky; top: 0; backdrop-filter: blur(6px);
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 14px min(24px,4vw); border-bottom: 1px solid var(--stroke);
+  position: sticky;
+  top: 0;
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px min(24px, 4vw);
+  border-bottom: 1px solid var(--stroke);
   background: color-mix(in oklab, var(--bg) 80%, transparent);
 }
-.brand { display: inline-flex; align-items: center; gap: 10px; font-weight: 700; }
-.logo {
-  width: 32px; height: 32px; display: grid; place-items: center;
-  border-radius: 8px; background: var(--brand); color: var(--brand-ink); font-weight: 900;
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 700;
 }
-.word { letter-spacing: 0.3px; }
-.dot { color: var(--muted); margin-left: 2px; }
-.nav { display: flex; gap: 16px; align-items: center; }
-.nav a { color: var(--muted); }
+.logo {
+  width: 32px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  border-radius: 8px;
+  background: var(--brand);
+  color: var(--brand-ink);
+  font-weight: 900;
+}
+.word {
+  letter-spacing: 0.3px;
+}
+.dot {
+  color: var(--muted);
+  margin-left: 2px;
+}
+.nav {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+.nav a {
+  color: var(--muted);
+}
 .ctaHeader {
-  padding: 8px 14px; border-radius: 10px; background: var(--brand); color: var(--brand-ink); font-weight: 700;
+  padding: 8px 14px;
+  border-radius: 10px;
+  background: var(--brand);
+  font-weight: 700;
 }
 .footer {
-  border-top: 1px solid var(--stroke); margin-top: 64px; padding: 24px;
-  display: flex; align-items: center; justify-content: space-between; color: var(--muted);
+  border-top: 1px solid var(--stroke);
+  margin-top: 64px;
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--muted);
 }
-.footerLinks { display: flex; gap: 16px; }
+.footerLinks {
+  display: flex;
+  gap: 16px;
+}
