@@ -4,6 +4,7 @@
   min-height: 100vh;
   overflow-x: hidden;
 }
+
 .header {
   position: fixed;
   top: 0;
@@ -18,12 +19,16 @@
   background: color-mix(in oklab, var(--bg) 80%, transparent);
   z-index: 100;
 }
+
 .brand {
   display: inline-flex;
   align-items: center;
   gap: 10px;
   font-weight: 700;
+  color: var(--text);
+  text-decoration: none;
 }
+
 .logo {
   width: 32px;
   height: 32px;
@@ -34,57 +39,70 @@
   color: var(--brand-ink);
   font-weight: 900;
 }
+
 .word {
   letter-spacing: 0.3px;
 }
+
 .dot {
   color: var(--muted);
   margin-left: 2px;
 }
-.nav {
-  display: flex;
-  gap: 16px;
-  align-items: center;
-  flex-wrap: wrap;
-}
-.nav a {
-  color: var(--text);
-}
 
-.ctaHeader {
-  padding: 8px 14px;
-  border-radius: 10px;
-  background: var(--brand);
-  color: var(--text);
-  font-weight: 700;
-}
-main {
+.main {
   flex: 1;
-  padding-top: 80px; /* Account for fixed header */
+  padding: 120px 20px 40px;
+  line-height: 1.6;
+  color: var(--text);
 }
 
-.footer {
-  border-top: 1px solid var(--stroke);
-  padding: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  color: var(--muted);
-  flex-shrink: 0;
-  margin-top: auto;
-}
-.footerLinks {
-  display: flex;
-  gap: 16px;
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  background: var(--panel);
+  padding: 40px;
+  border-radius: 12px;
+  border: 1px solid var(--stroke);
 }
 
-.footerLinks a {
+.container .logo {
+  font-size: 2rem;
+  font-weight: bold;
+  color: var(--brand);
+  margin-bottom: 20px;
+  width: auto;
+  height: auto;
+  background: none;
+}
+
+.container h1 {
+  color: var(--text);
+  margin-bottom: 16px;
+  font-size: 2rem;
+}
+
+.container h2 {
+  color: var(--text);
+  margin-top: 32px;
+  margin-bottom: 16px;
+  font-size: 1.5rem;
+}
+
+.container p {
+  margin-bottom: 16px;
   color: var(--muted);
+}
+
+.backLink {
+  display: inline-block;
+  margin-top: 32px;
+  color: var(--brand);
   text-decoration: none;
+  font-weight: 500;
   transition: color 0.2s;
 }
 
-.footerLinks a:hover {
+.backLink:hover {
   color: var(--text);
 }
 
@@ -92,32 +110,22 @@ main {
 @media (max-width: 768px) {
   .header {
     padding: 12px 16px;
-    flex-direction: column;
-    gap: 12px;
-    align-items: stretch;
   }
 
-  .nav {
-    gap: 12px;
-    font-size: 0.9rem;
-    justify-content: center;
-    flex-wrap: wrap;
+  .main {
+    padding: 100px 16px 20px;
   }
 
-  .nav a {
-    white-space: nowrap;
+  .container {
+    padding: 24px;
   }
 
-  .footer {
-    flex-direction: column;
-    gap: 16px;
-    text-align: center;
-    padding: 20px 16px;
+  .container h1 {
+    font-size: 1.75rem;
   }
 
-  .footerLinks {
-    justify-content: center;
-    flex-wrap: wrap;
+  .container h2 {
+    font-size: 1.25rem;
   }
 }
 
@@ -135,15 +143,11 @@ main {
     height: 28px;
   }
 
-  .nav {
-    gap: 8px;
-    font-size: 0.8rem;
-    justify-content: space-between;
-    width: 100%;
+  .main {
+    padding: 90px 12px 16px;
   }
 
-  .ctaHeader {
-    padding: 6px 12px;
-    font-size: 0.8rem;
+  .container {
+    padding: 20px;
   }
 }

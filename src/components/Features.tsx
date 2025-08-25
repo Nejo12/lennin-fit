@@ -4,6 +4,22 @@ import s from './Features.module.scss';
 export const Features: React.FC = () => (
   <section id="features" className={s.features}>
     <h2>Everything fits together</h2>
+
+    <div className={s.proof}>
+      <div className={s.proofItem}>
+        <span className={s.proofIcon}>⏰</span>
+        <span>Saves ~3–5 hrs/week on admin</span>
+      </div>
+      <div className={s.proofItem}>
+        <span className={s.proofIcon}>⚡</span>
+        <span>Invoice in under 60 seconds</span>
+      </div>
+      <div className={s.proofItem}>
+        <span className={s.proofIcon}>📅</span>
+        <span>Calendar-aware tasks</span>
+      </div>
+    </div>
+
     <div className={s.grid}>
       <article className={s.item}>
         <h3>Clients & CRM lite</h3>
@@ -29,6 +45,7 @@ export const Features: React.FC = () => (
       <div className={s.tier}>
         <h3>Free</h3>
         <p className={s.price}>€0</p>
+        <p className={s.tierCopy}>Testing the waters</p>
         <ul>
           <li>Up to 2 clients</li>
           <li>Projects & tasks</li>
@@ -38,6 +55,7 @@ export const Features: React.FC = () => (
       <div className={`${s.tier} ${s.highlight}`}>
         <h3>Pro</h3>
         <p className={s.price}>€15/mo</p>
+        <p className={s.tierCopy}>Working freelancers</p>
         <ul>
           <li>Unlimited clients & projects</li>
           <li>Invoice & payment tracking</li>
@@ -47,6 +65,7 @@ export const Features: React.FC = () => (
       <div className={s.tier}>
         <h3>Business</h3>
         <p className={s.price}>€49/mo</p>
+        <p className={s.tierCopy}>Coaches & agencies</p>
         <ul>
           <li>Client portal</li>
           <li>Custom branding</li>

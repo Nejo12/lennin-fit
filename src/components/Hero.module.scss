@@ -20,6 +20,14 @@
     -webkit-text-fill-color: transparent;
   }
 
+  .moneyHook {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--brand);
+    margin-bottom: 16px;
+    line-height: 1.4;
+  }
+
   p {
     font-size: 1.25rem;
     color: var(--muted);

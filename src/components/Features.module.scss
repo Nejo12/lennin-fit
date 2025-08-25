@@ -12,6 +12,27 @@
   }
 }
 
+.proof {
+  display: flex;
+  justify-content: center;
+  gap: 48px;
+  margin-bottom: 64px;
+  flex-wrap: wrap;
+}
+
+.proofItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 1.125rem;
+  font-weight: 500;
+  color: var(--text);
+}
+
+.proofIcon {
+  font-size: 1.5rem;
+}
+
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -65,8 +86,15 @@
   .price {
     font-size: 2.5rem;
     font-weight: 700;
-    margin-bottom: 24px;
+    margin-bottom: 8px;
     color: var(--brand);
+  }
+
+  .tierCopy {
+    font-size: 0.875rem;
+    color: var(--muted);
+    margin-bottom: 24px;
+    font-style: italic;
   }
 
   ul {

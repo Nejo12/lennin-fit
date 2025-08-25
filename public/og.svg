@@ -1,0 +1,19 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="630" fill="#1F2937"/>
+  <rect x="100" y="100" width="1000" height="430" rx="20" fill="#374151"/>
+  
+  <!-- Logo -->
+  <circle cx="200" cy="200" r="60" fill="#6366F1"/>
+  <text x="200" y="220" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="48" font-weight="bold">L</text>
+  
+  <!-- Title -->
+  <text x="300" y="180" fill="white" font-family="Arial, sans-serif" font-size="48" font-weight="bold">Lennin.fit</text>
+  <text x="300" y="230" fill="#9CA3AF" font-family="Arial, sans-serif" font-size="24">Fit your whole business in one app</text>
+  
+  <!-- Subtitle -->
+  <text x="300" y="300" fill="#D1D5DB" font-family="Arial, sans-serif" font-size="32">Clients, tasks, payments — all fit here</text>
+  
+  <!-- CTA -->
+  <rect x="300" y="350" width="200" height="60" rx="30" fill="#6366F1"/>
+  <text x="400" y="390" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="20" font-weight="bold">Start Free</text>
+</svg>

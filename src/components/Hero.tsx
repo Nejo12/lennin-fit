@@ -6,6 +6,9 @@ export const Hero: React.FC = () => {
     <section className={s.hero}>
       <div className={s.colText}>
         <h1>Fit your whole business in one app.</h1>
+        <p className={s.moneyHook}>
+          Clients, tasks, and invoices in one place—get paid faster.
+        </p>
         <p>
           Stop juggling 5 tools. Lennin gives freelancers tasks, clients, and
           invoices in one place — so you work smart and stress less.
@@ -14,14 +17,11 @@ export const Hero: React.FC = () => {
           <a href="#start" className={s.btnPrimary}>
             Start Free
           </a>
-          <a href="#features" className={s.btnGhost}>
-            See how it fits
-          </a>
         </div>
         <ul className={s.bullets}>
-          <li>Clients & projects in one hub</li>
-          <li>Calendar-aware tasks</li>
-          <li>Invoice & payment tracking</li>
+          <li>Less stress</li>
+          <li>More focus</li>
+          <li>Fewer tools</li>
         </ul>
       </div>
       <div className={s.colVisual} aria-hidden="true">
