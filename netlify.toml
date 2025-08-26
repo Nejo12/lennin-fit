@@ -23,6 +23,12 @@
 
 # Note: Success page is now handled by React Router at /success
 
+# Handle client-side routing for SPA
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
 # Disable secrets scanning for Vite environment variables
 [build.environment]
   SECRETS_SCAN_OMIT_KEYS = "VITE_SUPABASE_URL,VITE_SUPABASE_ANON_KEY"
