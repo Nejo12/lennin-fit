@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import s from './Features.module.scss';
 
 export const Features: React.FC = () => (
@@ -51,6 +52,9 @@ export const Features: React.FC = () => (
           <li>Projects & tasks</li>
           <li>Basic calendar view</li>
         </ul>
+        <Link to="/login" className={s.tierButton}>
+          Start Free
+        </Link>
       </div>
       <div className={`${s.tier} ${s.highlight}`}>
         <h3>Pro</h3>
@@ -61,6 +65,9 @@ export const Features: React.FC = () => (
           <li>Invoice & payment tracking</li>
           <li>Calendar sync & exports</li>
         </ul>
+        <Link to="/login" className={s.tierButton}>
+          Start Free
+        </Link>
       </div>
       <div className={s.tier}>
         <h3>Business</h3>
@@ -71,6 +78,9 @@ export const Features: React.FC = () => (
           <li>Custom branding</li>
           <li>AI assistant</li>
         </ul>
+        <Link to="/login" className={s.tierButton}>
+          Start Free
+        </Link>
       </div>
     </div>
   </section>

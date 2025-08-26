@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import s from './Hero.module.scss';
 
 export const Hero: React.FC = () => {
@@ -14,9 +15,9 @@ export const Hero: React.FC = () => {
           invoices in one place — so you work smart and stress less.
         </p>
         <div className={s.actions}>
-          <a href="#start" className={s.btnPrimary}>
+          <Link to="/login" className={s.btnPrimary}>
             Start Free
-          </a>
+          </Link>
         </div>
         <ul className={s.bullets}>
           <li>Less stress</li>
