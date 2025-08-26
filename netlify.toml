@@ -15,4 +15,14 @@
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
 
+[[redirects]]
+  from = "https://tilsf.com/*"
+  to = "https://lennin.fit/:splat"
+  status = 301
+  force = true
+
 # Note: Success page is now handled by React Router at /success
+
+# Disable secrets scanning for Vite environment variables
+[build.environment]
+  SECRETS_SCAN_OMIT_KEYS = "VITE_SUPABASE_URL,VITE_SUPABASE_ANON_KEY"
