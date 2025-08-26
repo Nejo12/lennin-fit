@@ -10,7 +10,11 @@ Lennin Fit is a comprehensive fitness platform designed to help users achieve th
 
 - **Frontend**: React 18 with TypeScript
 - **Build Tool**: Vite
-- **Styling**: CSS Modules / Tailwind CSS (TBD)
+- **Styling**: Tailwind CSS + CSS Modules
+- **State Management**: TanStack Query + Jotai
+- **Authentication**: Supabase Auth
+- **Database**: Supabase
+- **Routing**: React Router DOM
 - **Linting**: ESLint with TypeScript support
 - **Domain**: [lennin.fit](https://lennin.fit)
 
@@ -31,6 +35,12 @@ cd lennin-fit
 # Install dependencies
 npm install
 
+# Set up environment variables
+cp env.example .env.local
+# Edit .env.local with your Supabase credentials:
+# - VITE_SUPABASE_URL: Your Supabase project URL
+# - VITE_SUPABASE_ANON_KEY: Your Supabase anonymous key
+
 # Start development server
 npm run dev
 ```
@@ -47,8 +57,17 @@ npm run dev
 ```
 lennin-fit/
 ├── src/
-│   ├── components/     # React components
-│   ├── pages/         # Page components
+│   ├── app/           # Protected app routes
+│   │   ├── auth/      # Authentication pages
+│   │   ├── clients/   # Client management
+│   │   ├── dashboard/ # Dashboard page
+│   │   ├── layout/    # App layout components
+│   │   ├── projects/  # Project management
+│   │   └── tasks/     # Task management
+│   ├── components/    # React components
+│   ├── landing/       # Landing page
+│   ├── lib/           # Supabase client & utilities
+│   ├── pages/         # Public pages (Privacy, Terms, etc.)
 │   ├── hooks/         # Custom React hooks
 │   ├── utils/         # Utility functions
 │   ├── types/         # TypeScript type definitions

@@ -68,6 +68,20 @@ small {
   font-size: 0.9rem;
 }
 
+.loginLink {
+  margin-top: 16px;
+  
+  a {
+    color: var(--brand);
+    text-decoration: none;
+    font-weight: 500;
+    
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
 .srOnly {
   position: absolute;
   width: 1px;

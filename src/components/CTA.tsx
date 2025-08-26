@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import s from './CTA.module.scss';
 
 export const CTA: React.FC = () => {
@@ -56,6 +57,9 @@ export const CTA: React.FC = () => {
       <small id="email-help">
         We only email about product updates. No spam.
       </small>
+      <div className={s.loginLink}>
+        <Link to="/login">Already have an account? Sign in</Link>
+      </div>
     </section>
   );
 };
