@@ -10,7 +10,7 @@ Lennin Fit is a comprehensive fitness platform designed to help users achieve th
 
 - **Frontend**: React 18 with TypeScript
 - **Build Tool**: Vite
-- **Styling**: Tailwind CSS + CSS Modules
+- **Styling**: SCSS/Sass + CSS Modules
 - **State Management**: TanStack Query + Jotai
 - **Authentication**: Supabase Auth
 - **Database**: Supabase

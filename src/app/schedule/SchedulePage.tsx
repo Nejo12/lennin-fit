@@ -41,7 +41,6 @@ export default function SchedulePage() {
     }
   ])
 
-  const [showCreateForm, setShowCreateForm] = useState(false)
   const [newEvent, setNewEvent] = useState({
     title: '',
     date: '',
@@ -83,14 +82,13 @@ export default function SchedulePage() {
     }
     setEvents([...events, event])
     setNewEvent({ title: '', date: '', time: '', type: 'meeting', client: '', description: '' })
-    setShowCreateForm(false)
   }
 
   const getEventClass = (type: Event['type']) => {
     switch (type) {
       case 'meeting': return styles.eventMeeting
       case 'task': return styles.eventTask
-      case 'appointment': return styles.eventAppointment
+      case 'appointment': return styles.eventReminder
       default: return styles.eventMeeting
     }
   }
@@ -115,19 +113,19 @@ export default function SchedulePage() {
       
       days.push(
         <div key={day} className={styles.calendarDay}>
-          <div className={styles.calendarDayNumber}>{day}</div>
-          <div className={styles.calendarEvents}>
+          <div className={styles.dayNumber}>{day}</div>
+          <div className={styles.dayEvents}>
             {dayEvents.slice(0, 2).map(event => (
               <div
                 key={event.id}
-                className={`${styles.calendarEvent} ${getEventClass(event.type)}`}
+                className={`${styles.event} ${getEventClass(event.type)}`}
                 title={`${event.time} - ${event.title}`}
               >
                 {event.time} {event.title}
               </div>
             ))}
             {dayEvents.length > 2 && (
-              <div className={styles.moreEvents}>
+              <div className={styles.event}>
                 +{dayEvents.length - 2} more
               </div>
             )}
@@ -143,97 +141,52 @@ export default function SchedulePage() {
     <div className={styles.schedule}>
       <div className={styles.header}>
         <h1 className={styles.title}>Schedule</h1>
+        <p className={styles.subtitle}>Manage your calendar and appointments</p>
       </div>
 
       {/* Create Event Form */}
-      {showCreateForm && (
-        <div className={styles.formSection}>
-          <h3 className={styles.formTitle}>Add New Event</h3>
-          <div className={styles.form}>
-            <div className={styles.formGroup}>
-              <label className={styles.formLabel}>Event Title</label>
-              <input
-                type="text"
-                placeholder="Enter event title"
-                value={newEvent.title}
-                onChange={(e) => setNewEvent({...newEvent, title: e.target.value})}
-                className={styles.formInput}
-              />
-            </div>
-            <div className={styles.formGroup}>
-              <label className={styles.formLabel}>Event Type</label>
-              <select
-                value={newEvent.type}
-                onChange={(e) => setNewEvent({...newEvent, type: e.target.value as Event['type']})}
-                className={styles.formSelect}
-              >
-                <option value="meeting">Meeting</option>
-                <option value="task">Task</option>
-                <option value="appointment">Appointment</option>
-              </select>
-            </div>
-            <div className={styles.formGroup}>
-              <label className={styles.formLabel}>Date</label>
-              <input
-                type="date"
-                value={newEvent.date}
-                onChange={(e) => setNewEvent({...newEvent, date: e.target.value})}
-                className={styles.formInput}
-              />
-            </div>
-            <div className={styles.formGroup}>
-              <label className={styles.formLabel}>Time</label>
-              <input
-                type="time"
-                value={newEvent.time}
-                onChange={(e) => setNewEvent({...newEvent, time: e.target.value})}
-                className={styles.formInput}
-              />
-            </div>
-            <div className={styles.formGroup}>
-              <label className={styles.formLabel}>Client (Optional)</label>
-              <input
-                type="text"
-                placeholder="Enter client name"
-                value={newEvent.client}
-                onChange={(e) => setNewEvent({...newEvent, client: e.target.value})}
-                className={styles.formInput}
-              />
-            </div>
-            <div className={styles.formGroup}>
-              <label className={styles.formLabel}>Description (Optional)</label>
-              <textarea
-                placeholder="Enter event description"
-                value={newEvent.description}
-                onChange={(e) => setNewEvent({...newEvent, description: e.target.value})}
-                className={styles.formTextarea}
-                rows={3}
-              />
-            </div>
-          </div>
-          <div className={styles.formActions}>
-            <button
-              onClick={handleCreateEvent}
-              className={styles.submitButton}
-            >
-              Add Event
-            </button>
-            <button
-              onClick={() => setShowCreateForm(false)}
-              className={styles.cancelButton}
-            >
-              Cancel
-            </button>
-          </div>
+      <div className={styles.form}>
+        <div className={styles.formTitle}>Add New Event</div>
+        <div className={styles.formGrid}>
+          <input
+            type="text"
+            placeholder="Event title"
+            value={newEvent.title}
+            onChange={(e) => setNewEvent({...newEvent, title: e.target.value})}
+            className={styles.formInput}
+          />
+          <select
+            value={newEvent.type}
+            onChange={(e) => setNewEvent({...newEvent, type: e.target.value as Event['type']})}
+            className={styles.formSelect}
+          >
+            <option value="meeting">Meeting</option>
+            <option value="task">Task</option>
+            <option value="appointment">Appointment</option>
+          </select>
+          <input
+            type="date"
+            value={newEvent.date}
+            onChange={(e) => setNewEvent({...newEvent, date: e.target.value})}
+            className={styles.formInput}
+          />
+          <button
+            onClick={handleCreateEvent}
+            className={styles.submitButton}
+          >
+            Add Event
+          </button>
         </div>
-      )}
+      </div>
 
       {/* Calendar */}
-      <div className={styles.calendarSection}>
-        <h3 className={styles.calendarHeader}>{monthNames[month]} {year}</h3>
+      <div className={styles.calendar}>
+        <div className={styles.calendarHeader}>
+          <div className={styles.calendarTitle}>{monthNames[month]} {year}</div>
+        </div>
         <div className={styles.calendarGrid}>
           {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
-            <div key={day} className={styles.calendarDayHeader}>
+            <div key={day} className={styles.dayHeader}>
               {day}
             </div>
           ))}
@@ -242,20 +195,20 @@ export default function SchedulePage() {
       </div>
 
       {/* Legend */}
-      <div className={styles.legendSection}>
-        <h3 className={styles.legendTitle}>Legend</h3>
+      <div className={styles.legend}>
+        <div className={styles.legendTitle}>Legend</div>
         <div className={styles.legendItems}>
           <div className={styles.legendItem}>
-            <div className={`${styles.legendColor} ${styles.legendMeeting}`}></div>
-            <span className={styles.legendText}>Meetings</span>
+            <div className={`${styles.legendColor} ${styles.legendColorMeeting}`}></div>
+            <span className={styles.legendLabel}>Meetings</span>
           </div>
           <div className={styles.legendItem}>
-            <div className={`${styles.legendColor} ${styles.legendTask}`}></div>
-            <span className={styles.legendText}>Tasks</span>
+            <div className={`${styles.legendColor} ${styles.legendColorTask}`}></div>
+            <span className={styles.legendLabel}>Tasks</span>
           </div>
           <div className={styles.legendItem}>
-            <div className={`${styles.legendColor} ${styles.legendAppointment}`}></div>
-            <span className={styles.legendText}>Appointments</span>
+            <div className={`${styles.legendColor} ${styles.legendColorReminder}`}></div>
+            <span className={styles.legendLabel}>Appointments</span>
           </div>
         </div>
       </div>

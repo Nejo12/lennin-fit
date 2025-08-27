@@ -1,39 +1,48 @@
+@use "../../styles/mixins.scss" as *;
+
 .schedule {
-  padding: 24px;
+  display: grid;
+  gap: var(--space-4);
   max-width: 1200px;
   margin: 0 auto;
+  padding: var(--space-4);
 }
 
 .header {
-  margin-bottom: 32px;
+  text-align: center;
+  margin-bottom: var(--space-4);
 }
 
 .title {
-  font-size: 2.5rem;
-  font-weight: 700;
-  margin: 0;
+  font-size: var(--fs-xl);
+  font-weight: 800;
   color: var(--text);
+  margin-bottom: var(--space-1);
 }
 
-.formSection {
-  background: var(--panel);
-  border: 1px solid var(--stroke);
-  border-radius: 16px;
-  padding: 24px;
-  margin-bottom: 32px;
-}
-
-.formTitle {
-  font-size: 1.2rem;
-  font-weight: 600;
-  margin-bottom: 20px;
-  color: var(--text);
+.subtitle {
+  color: var(--muted);
+  font-size: var(--fs-md);
 }
 
 .form {
+  @include card;
+  padding: var(--space-4);
+  margin-bottom: var(--space-4);
+}
+
+.formTitle {
+  font-size: var(--fs-md);
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: var(--space-3);
+}
+
+.formGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 16px;
+  grid-template-columns: 2fr 1fr 1fr auto;
+  gap: var(--space-2);
+  align-items: end;
 }
 
 .formGroup {
@@ -50,14 +59,9 @@
 }
 
 .formInput {
-  width: 100%;
-  background: var(--bg);
-  border: 1px solid var(--stroke);
-  border-radius: 12px;
-  padding: 12px 16px;
-  color: var(--text);
-  font-size: 1rem;
-  transition: border-color 0.2s;
+  @include control;
+  padding: 8px 12px;
+  font-size: var(--fs-sm);
 }
 
 .formInput:focus {
@@ -70,15 +74,9 @@
 }
 
 .formSelect {
-  width: 100%;
-  background: var(--bg);
-  border: 1px solid var(--stroke);
-  border-radius: 12px;
-  padding: 12px 16px;
-  color: var(--text);
-  font-size: 1rem;
-  transition: border-color 0.2s;
-  cursor: pointer;
+  @include control;
+  padding: 8px 12px;
+  font-size: var(--fs-sm);
 }
 
 .formSelect:focus {
@@ -115,15 +113,18 @@
 }
 
 .submitButton {
+  @include button-reset;
   background: var(--brand);
   color: var(--brand-ink);
-  border: none;
-  border-radius: 12px;
-  padding: 12px 24px;
+  padding: 8px 16px;
+  border-radius: var(--radius-md);
   font-weight: 600;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: all 0.2s;
+  font-size: var(--fs-sm);
+  transition: transform var(--anim-fast) ease;
+  
+  &:hover {
+    transform: translateY(-1px);
+  }
 }
 
 .submitButton:hover:not(:disabled) {
@@ -154,148 +155,124 @@
   background: color-mix(in oklab, var(--bg) 80%, var(--stroke));
 }
 
-.calendarSection {
-  background: var(--panel);
-  border: 1px solid var(--stroke);
-  border-radius: 16px;
-  padding: 24px;
-  margin-bottom: 32px;
+.calendar {
+  @include card;
+  padding: var(--space-4);
 }
 
 .calendarHeader {
-  font-size: 1.2rem;
-  font-weight: 600;
-  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-3);
+}
+
+.calendarTitle {
+  font-size: var(--fs-md);
+  font-weight: 700;
   color: var(--text);
 }
 
 .calendarGrid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 1px;
-  background: var(--stroke);
-  border-radius: 12px;
-  overflow: hidden;
-}
-
-.calendarDayHeader {
-  background: var(--panel);
-  padding: 12px 8px;
-  text-align: center;
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: var(--muted);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.calendarDay {
-  background: var(--panel);
-  min-height: 120px;
-  padding: 8px;
-  position: relative;
-  transition: background-color 0.2s;
-}
-
-.calendarDay:hover {
-  background: color-mix(in oklab, var(--panel) 90%, var(--stroke));
-}
-
-.calendarDayNumber {
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: var(--text);
-  margin-bottom: 8px;
-}
-
-.calendarEvents {
-  display: flex;
-  flex-direction: column;
   gap: 2px;
 }
 
-.calendarEvent {
-  padding: 2px 6px;
-  border-radius: 4px;
-  font-size: 0.7rem;
-  color: white;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  cursor: pointer;
-  transition: opacity 0.2s;
+.calendarDay {
+  aspect-ratio: 1;
+  padding: 4px;
+  border-radius: var(--radius-sm);
+  background: var(--elev);
+  border: 1px solid var(--stroke);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-height: 60px;
 }
 
-.calendarEvent:hover {
-  opacity: 0.8;
-}
-
-.eventMeeting {
-  background: #3b82f6;
-}
-
-.eventTask {
-  background: var(--brand);
-}
-
-.eventAppointment {
-  background: #8b5cf6;
-}
-
-.moreEvents {
-  font-size: 0.7rem;
+.dayHeader {
+  font-size: var(--fs-xs);
+  font-weight: 600;
   color: var(--muted);
   text-align: center;
   padding: 2px;
 }
 
-.legendSection {
-  background: var(--panel);
-  border: 1px solid var(--stroke);
-  border-radius: 16px;
-  padding: 24px;
+.dayNumber {
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  color: var(--text);
+  text-align: center;
+  padding: 2px;
+}
+
+.dayEvents {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  flex: 1;
+  overflow: hidden;
+}
+
+.event {
+  padding: 2px 4px;
+  border-radius: 2px;
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--text);
+  cursor: pointer;
+  transition: opacity var(--anim-fast) ease;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  
+  &:hover {
+    opacity: 0.8;
+  }
+}
+
+.eventMeeting { background: color-mix(in oklab, var(--brand) 20%, transparent); }
+.eventTask { background: color-mix(in oklab, #22c55e 20%, transparent); }
+.eventReminder { background: color-mix(in oklab, #f59e0b 20%, transparent); }
+
+.legend {
+  @include card;
+  padding: var(--space-3);
+  margin-top: var(--space-3);
 }
 
 .legendTitle {
-  font-size: 1.2rem;
-  font-weight: 600;
-  margin-bottom: 16px;
+  font-size: var(--fs-sm);
+  font-weight: 700;
   color: var(--text);
+  margin-bottom: var(--space-2);
 }
 
 .legendItems {
   display: flex;
-  gap: 24px;
-  flex-wrap: wrap;
+  gap: var(--space-3);
 }
 
 .legendItem {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--space-1);
 }
 
 .legendColor {
-  width: 12px;
-  height: 12px;
+  width: 8px;
+  height: 8px;
   border-radius: 2px;
 }
 
-.legendText {
-  font-size: 0.9rem;
-  color: var(--text);
-}
+.legendColorMeeting { background: color-mix(in oklab, var(--brand) 20%, transparent); }
+.legendColorTask { background: color-mix(in oklab, #22c55e 20%, transparent); }
+.legendColorReminder { background: color-mix(in oklab, #f59e0b 20%, transparent); }
 
-.legendMeeting {
-  background: #3b82f6;
-}
-
-.legendTask {
-  background: var(--brand);
-}
-
-.legendAppointment {
-  background: #8b5cf6;
+.legendLabel {
+  font-size: var(--fs-xs);
+  color: var(--muted);
 }
 
 .emptyState {
@@ -313,11 +290,12 @@
 /* Mobile Responsiveness */
 @media (max-width: 768px) {
   .schedule {
-    padding: 16px;
+    padding: var(--space-2);
   }
   
-  .form {
+  .formGrid {
     grid-template-columns: 1fr;
+    gap: var(--space-2);
   }
   
   .formActions {
@@ -326,29 +304,29 @@
   
   .calendarGrid {
     grid-template-columns: repeat(7, 1fr);
-    font-size: 0.8rem;
+    gap: 1px;
   }
   
   .calendarDay {
-    min-height: 80px;
-    padding: 4px;
+    min-height: 50px;
+    padding: 2px;
   }
   
-  .calendarDayNumber {
-    font-size: 0.8rem;
+  .dayNumber {
+    font-size: 10px;
   }
   
-  .calendarEvent {
-    font-size: 0.6rem;
-    padding: 1px 4px;
+  .event {
+    font-size: 8px;
+    padding: 1px 2px;
   }
   
   .legendItems {
     flex-direction: column;
-    gap: 12px;
+    gap: var(--space-2);
   }
   
   .title {
-    font-size: 2rem;
+    font-size: var(--fs-lg);
   }
 }

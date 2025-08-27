@@ -4,6 +4,7 @@ import { useInitUser } from '../lib/initUser'
 import Landing from '../landing/Landing'
 import Login from './auth/Login'
 import Verify from './auth/Verify'
+import AuthCallback from './auth/AuthCallback'
 import AppShell from './layout/AppShell'
 import DashboardPage from './dashboard/DashboardPage'
 import TasksPage from './tasks/TasksPage'
@@ -57,10 +58,20 @@ function Protected() {
   return <Outlet />
 }
 
+// Component to handle root URL with auth hash
+function RootAuthHandler() {
+  const hash = window.location.hash
+  if (hash && hash.includes('access_token')) {
+    return <AuthCallback />
+  }
+  return <Landing />
+}
+
 const router = createBrowserRouter([
-  { path: '/', element: <Landing /> },
+  { path: '/', element: <RootAuthHandler /> },
   { path: '/login', element: <Login /> },
   { path: '/verify', element: <Verify /> },
+  { path: '/auth/callback', element: <AuthCallback /> },
   { path: '/privacy', element: <Privacy /> },
   { path: '/terms', element: <Terms /> },
   { path: '/success', element: <Success /> },

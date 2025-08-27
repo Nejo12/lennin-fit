@@ -1,0 +1,13 @@
+@use "../../styles/mixins.scss" as *;
+
+.viewport {
+  position: fixed; right: 16px; bottom: 16px; display: grid; gap: 8px; z-index: 60;
+}
+.toast {
+  @include card; padding: 12px 14px; min-width: 240px;
+  display: grid; gap: 6px; border-color: color-mix(in oklab, var(--stroke) 60%, var(--brand));
+}
+.title { font-weight: 800; }
+.desc { color: var(--muted); font-size: var(--fs-sm); }
+.row { display: flex; gap: 8px; justify-content: flex-end; }
+.close { @include button-reset; color: var(--muted); }

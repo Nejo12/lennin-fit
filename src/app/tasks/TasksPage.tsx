@@ -26,99 +26,78 @@ export default function TasksPage() {
     <div className={styles.tasks}>
       <div className={styles.header}>
         <h1 className={styles.title}>Tasks</h1>
+        <p className={styles.subtitle}>Manage your tasks and track progress</p>
       </div>
 
       {/* Create Task Form */}
-      <div className={styles.formSection}>
-        <h3 className={styles.formTitle}>Add New Task</h3>
-        <form onSubmit={handleSubmit} className={styles.form}>
-          <div className={styles.formGroup}>
-            <label className={styles.formLabel}>Task Title</label>
-            <input 
-              value={title} 
-              onChange={e => setTitle(e.target.value)} 
-              placeholder="Enter task title" 
-              className={styles.formInput}
-              required
-            />
-          </div>
-          <div className={styles.formGroup}>
-            <label className={styles.formLabel}>Due Date</label>
-            <input 
-              value={due} 
-              onChange={e => setDue(e.target.value)} 
-              type="date" 
-              className={styles.formInput}
-            />
-          </div>
+      <div className={styles.form}>
+        <div className={styles.formRow}>
+          <input 
+            value={title} 
+            onChange={e => setTitle(e.target.value)} 
+            placeholder="Task title" 
+            className={styles.taskInput}
+            required
+          />
+          <input 
+            value={due} 
+            onChange={e => setDue(e.target.value)} 
+            type="date" 
+            className={styles.taskDate}
+          />
           <button 
             type="submit"
+            onClick={handleSubmit}
             disabled={create.isPending}
             className={styles.submitButton}
           >
             {create.isPending ? 'Adding...' : 'Add Task'}
           </button>
-        </form>
+        </div>
       </div>
 
       {/* Loading and Error States */}
-      {isLoading && (
-        <div className={styles.loadingState}>
-          <span className={styles.loadingIcon}>⏳</span>
-          <div>Loading tasks...</div>
-        </div>
-      )}
+      {isLoading && <div>Loading tasks...</div>}
       
-      {error && (
-        <div className={styles.errorState}>
-          <div className={styles.errorTitle}>Error loading tasks</div>
-          <div className={styles.errorMessage}>{String(error)}</div>
-        </div>
-      )}
+      {error && <div>Error loading tasks: {String(error)}</div>}
 
       {/* Tasks List */}
-      <div className={styles.tasksSection}>
-        <h3 className={styles.tasksTitle}>All Tasks</h3>
+      <div className={styles.taskList}>
         {data && data.length > 0 ? (
-          <div className={styles.tasksList}>
-            {data.map(task => (
-              <div key={task.id} className={styles.taskItem}>
-                <input 
-                  defaultValue={task.title} 
-                  onBlur={e => update.mutate({ id: task.id, title: e.target.value })} 
-                  className={styles.taskTitle}
-                />
-                <select 
-                  defaultValue={task.status} 
-                  onChange={e => update.mutate({ id: task.id, status: e.target.value as any })} 
-                  className={styles.taskStatus}
-                >
-                  <option value="todo">Todo</option>
-                  <option value="doing">Doing</option>
-                  <option value="done">Done</option>
-                  <option value="blocked">Blocked</option>
-                </select>
-                <input 
-                  type="date" 
-                  defaultValue={task.due_date ?? ''} 
-                  onChange={e => update.mutate({ id: task.id, due_date: e.target.value || null })} 
-                  className={styles.taskDate}
-                />
-                <button 
-                  onClick={() => del.mutate(task.id)}
-                  disabled={del.isPending}
-                  className={styles.deleteButton}
-                >
-                  {del.isPending ? 'Deleting...' : 'Delete'}
-                </button>
-              </div>
-            ))}
-          </div>
+          data.map(task => (
+            <div key={task.id} className={styles.taskItem}>
+              <input 
+                defaultValue={task.title} 
+                onBlur={e => update.mutate({ id: task.id, title: e.target.value })} 
+                className={styles.taskInput}
+              />
+              <select 
+                defaultValue={task.status} 
+                onChange={e => update.mutate({ id: task.id, status: e.target.value as any })} 
+                className={styles.taskSelect}
+              >
+                <option value="todo">Todo</option>
+                <option value="doing">Doing</option>
+                <option value="done">Done</option>
+                <option value="blocked">Blocked</option>
+              </select>
+              <input 
+                type="date" 
+                defaultValue={task.due_date ?? ''} 
+                onChange={e => update.mutate({ id: task.id, due_date: e.target.value || null })} 
+                className={styles.taskDate}
+              />
+              <button 
+                onClick={() => del.mutate(task.id)} 
+                disabled={del.isPending}
+                className={styles.deleteButton}
+              >
+                Delete
+              </button>
+            </div>
+          ))
         ) : (
-          <div className={styles.emptyState}>
-            <span className={styles.emptyIcon}>📋</span>
-            <div>No tasks yet. Add your first task above!</div>
-          </div>
+          <div>No tasks yet. Create your first task above!</div>
         )}
       </div>
     </div>

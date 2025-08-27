@@ -1,69 +1,65 @@
+@use "../../styles/mixins.scss" as *;
+
 .appShell {
   min-height: 100vh;
-  display: grid;
-  grid-template-rows: auto 1fr;
+  display: flex;
+  flex-direction: column;
 }
 
 .header {
+  background: var(--panel);
   border-bottom: 1px solid var(--stroke);
-  padding: 0 24px;
-  height: 64px;
+  padding: var(--space-4);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: var(--panel);
 }
 
 .brand {
-  font-weight: 700;
-  font-size: 1.2rem;
-  color: var(--text);
+  font-weight: 800;
+  font-size: var(--fs-xl);
+  color: var(--brand);
 }
 
 .nav {
   display: flex;
-  gap: 24px;
-  align-items: center;
+  gap: var(--space-4);
 }
 
 .navLink {
   color: var(--muted);
   text-decoration: none;
-  font-weight: 500;
-  padding: 8px 12px;
-  border-radius: 8px;
-  transition: all 0.2s;
-}
-
-.navLink:hover {
-  color: var(--text);
-  background: color-mix(in oklab, var(--bg) 50%, transparent);
-}
-
-.navLink.active {
-  color: var(--brand);
-  background: color-mix(in oklab, var(--brand) 10%, transparent);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  transition: color var(--anim-fast) ease, background var(--anim-fast) ease;
+  
+  &:hover {
+    color: var(--text);
+    background: var(--elev);
+  }
+  
+  &.active {
+    color: var(--brand);
+    background: color-mix(in oklab, var(--brand) 10%, transparent);
+  }
 }
 
 .signOutButton {
-  background: none;
-  border: none;
+  @include button-reset;
   color: var(--muted);
-  font-size: 0.9rem;
-  cursor: pointer;
-  padding: 8px 12px;
-  border-radius: 8px;
-  transition: all 0.2s;
-}
-
-.signOutButton:hover {
-  color: var(--text);
-  background: color-mix(in oklab, var(--bg) 50%, transparent);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  transition: color var(--anim-fast) ease, background var(--anim-fast) ease;
+  
+  &:hover {
+    color: var(--danger);
+    background: color-mix(in oklab, var(--danger) 10%, transparent);
+  }
 }
 
 .main {
-  padding: 24px;
-  background: var(--bg);
+  flex: 1;
+  padding: var(--space-6);
 }
 
 /* Mobile Responsiveness */

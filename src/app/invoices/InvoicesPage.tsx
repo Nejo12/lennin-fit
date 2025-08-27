@@ -73,19 +73,26 @@ export default function InvoicesPage() {
     <div className={styles.invoices}>
       <div className={styles.header}>
         <h1 className={styles.title}>Invoices</h1>
+        <p className={styles.subtitle}>Manage your invoices and payments</p>
       </div>
 
+      {/* Create Invoice Button */}
+      <button 
+        onClick={() => setShowCreateForm(!showCreateForm)}
+        className={styles.submitButton}
+        style={{ marginBottom: '20px' }}
+      >
+        {showCreateForm ? 'Cancel' : 'Create New Invoice'}
+      </button>
+
       {/* AI Suggestions */}
-      <div className={styles.aiSection}>
-        <h3 className={styles.aiTitle}>
-          <span className={styles.aiIcon}>🤖</span>
-          AI Suggestions
-        </h3>
+      <div className={styles.aiSuggestions}>
+        <div className={styles.suggestionsTitle}>AI Suggestions</div>
         <div className={styles.suggestionsList}>
           {getAISuggestions().map((suggestion, index) => (
             <div key={index} className={styles.suggestionItem}>
-              <span className={styles.suggestionText}>{suggestion}</span>
-              <button className={styles.applyButton}>Apply</button>
+              <div className={styles.suggestionText}>{suggestion}</div>
+              <button className={styles.useButton}>Use</button>
             </div>
           ))}
         </div>
@@ -93,93 +100,54 @@ export default function InvoicesPage() {
 
       {/* Create Invoice Form */}
       {showCreateForm && (
-        <div className={styles.formSection}>
-          <h3 className={styles.formTitle}>Create New Invoice</h3>
-          <div className={styles.form}>
-            <div className={styles.formGroup}>
-              <label className={styles.formLabel}>Client Name</label>
-              <input
-                type="text"
-                placeholder="Enter client name"
-                value={newInvoice.clientName}
-                onChange={(e) => setNewInvoice({...newInvoice, clientName: e.target.value})}
-                className={styles.formInput}
-              />
-            </div>
-            <div className={styles.formGroup}>
-              <label className={styles.formLabel}>Amount (€)</label>
-              <input
-                type="number"
-                placeholder="Enter amount"
-                value={newInvoice.amount}
-                onChange={(e) => setNewInvoice({...newInvoice, amount: e.target.value})}
-                className={styles.formInput}
-              />
-            </div>
-            <div className={styles.formGroup}>
-              <label className={styles.formLabel}>Due Date</label>
-              <input
-                type="date"
-                value={newInvoice.dueDate}
-                onChange={(e) => setNewInvoice({...newInvoice, dueDate: e.target.value})}
-                className={styles.formInput}
-              />
-            </div>
-            <div className={styles.formGroup}>
-              <label className={styles.formLabel}>Description</label>
-              <input
-                type="text"
-                placeholder="Enter description"
-                value={newInvoice.description}
-                onChange={(e) => setNewInvoice({...newInvoice, description: e.target.value})}
-                className={styles.formInput}
-              />
-            </div>
-          </div>
-          <div className={styles.formActions}>
-            <button
-              onClick={handleCreateInvoice}
-              className={styles.submitButton}
-            >
-              Create Invoice
-            </button>
-            <button
-              onClick={() => setShowCreateForm(false)}
-              className={styles.cancelButton}
-            >
-              Cancel
-            </button>
-          </div>
+        <div className={styles.form}>
+          <div className={styles.formTitle}>Create New Invoice</div>
+          <div className={styles.formGrid}>
+          <input 
+            type="text"
+            placeholder="Client name"
+            value={newInvoice.clientName}
+            onChange={(e) => setNewInvoice({...newInvoice, clientName: e.target.value})}
+            className={styles.formInput}
+          />
+          <input 
+            type="number"
+            placeholder="Amount"
+            value={newInvoice.amount}
+            onChange={(e) => setNewInvoice({...newInvoice, amount: e.target.value})}
+            className={styles.formInput}
+          />
+          <input 
+            type="date"
+            value={newInvoice.dueDate}
+            onChange={(e) => setNewInvoice({...newInvoice, dueDate: e.target.value})}
+            className={styles.formInput}
+          />
+          <button 
+            onClick={handleCreateInvoice}
+            className={styles.submitButton}
+          >
+            Create Invoice
+          </button>
+        </div>
         </div>
       )}
 
       {/* Invoices List */}
-      <div className={styles.invoicesSection}>
-        <h3 className={styles.invoicesTitle}>All Invoices</h3>
-        {invoices.length > 0 ? (
-          <div className={styles.invoicesList}>
-            {invoices.map((invoice) => (
-              <div key={invoice.id} className={styles.invoiceItem}>
-                <div className={styles.invoiceInfo}>
-                  <div className={styles.invoiceClient}>{invoice.clientName}</div>
-                  <div className={styles.invoiceDescription}>{invoice.description}</div>
-                </div>
-                <div className={styles.invoiceAmount}>
-                  <div className={styles.amountValue}>€{invoice.amount.toLocaleString()}</div>
-                  <div className={`${styles.statusBadge} ${getStatusClass(invoice.status)}`}>
-                    {invoice.status.charAt(0).toUpperCase() + invoice.status.slice(1)}
-                  </div>
-                </div>
-                <div className={styles.invoiceDate}>Due: {invoice.dueDate}</div>
-              </div>
-            ))}
+      <div className={styles.invoicesList}>
+        <div className={styles.invoicesTitle}>All Invoices</div>
+        {invoices.map(invoice => (
+          <div key={invoice.id} className={styles.invoiceItem}>
+            <div className={styles.invoiceInfo}>
+              <div className={styles.invoiceNumber}>{invoice.clientName}</div>
+              <div className={styles.invoiceClient}>{invoice.description}</div>
+            </div>
+            <div className={styles.invoiceAmount}>€{invoice.amount.toLocaleString()}</div>
+            <div className={`${styles.invoiceStatus} ${getStatusClass(invoice.status)}`}>
+              {invoice.status}
+            </div>
           </div>
-        ) : (
-          <div className={styles.emptyState}>
-            <span className={styles.emptyIcon}>📄</span>
-            <div>No invoices yet. Create your first invoice above!</div>
-          </div>
-        )}
+        ))}
       </div>
     </div>
   )

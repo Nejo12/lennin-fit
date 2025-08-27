@@ -58,6 +58,7 @@ export default function DashboardPage() {
         <div className={styles.section}>
           <div className={styles.sectionHeader}>
             <span className={styles.sectionIcon}>💰</span>
+            <span className={styles.sectionIcon}>🌱</span>
             Unpaid Invoices
           </div>
           
@@ -84,6 +85,8 @@ export default function DashboardPage() {
         <div className={styles.section}>
           <div className={styles.sectionHeader}>
             <span className={styles.sectionIcon}>📋</span>
+            <span className={styles.sectionIcon}>✨</span>
+            <span className={styles.sectionIcon}>✨</span>
             This Week's Tasks
           </div>
           

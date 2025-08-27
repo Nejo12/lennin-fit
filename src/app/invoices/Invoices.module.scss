@@ -1,319 +1,170 @@
+@use "../../styles/mixins.scss" as *;
+
 .invoices {
-  padding: 24px;
-  max-width: 1200px;
-  margin: 0 auto;
+  display: grid;
+  gap: var(--space-6);
 }
 
 .header {
-  margin-bottom: 32px;
+  text-align: center;
+  margin-bottom: var(--space-6);
 }
 
 .title {
-  font-size: 2.5rem;
+  font-size: var(--fs-2xl);
+  font-weight: 800;
+  color: var(--text);
+  margin-bottom: var(--space-2);
+}
+
+.subtitle {
+  color: var(--muted);
+  font-size: var(--fs-lg);
+}
+
+.aiSuggestions {
+  @include card;
+  padding: var(--space-5);
+  margin-bottom: var(--space-6);
+}
+
+.suggestionsTitle {
+  font-size: var(--fs-lg);
   font-weight: 700;
-  margin: 0;
   color: var(--text);
-}
-
-.aiSection {
-  background: var(--panel);
-  border: 1px solid var(--stroke);
-  border-radius: 16px;
-  padding: 24px;
-  margin-bottom: 32px;
-}
-
-.aiTitle {
-  font-size: 1.2rem;
-  font-weight: 600;
-  margin-bottom: 20px;
-  color: var(--text);
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.aiIcon {
-  font-size: 1.4rem;
-  color: var(--brand);
+  margin-bottom: var(--space-4);
 }
 
 .suggestionsList {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+  display: grid;
+  gap: var(--space-3);
 }
 
 .suggestionItem {
-  background: color-mix(in oklab, var(--panel) 80%, var(--stroke));
-  border: 1px solid var(--stroke);
-  border-radius: 12px;
-  padding: 16px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  transition: background-color 0.2s;
-}
-
-.suggestionItem:hover {
-  background: color-mix(in oklab, var(--panel) 90%, var(--stroke));
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+  background: var(--elev);
+  border: 1px solid var(--stroke);
 }
 
 .suggestionText {
   color: var(--text);
-  font-size: 0.95rem;
-}
-
-.applyButton {
-  background: var(--brand);
-  color: var(--brand-ink);
-  border: none;
-  border-radius: 8px;
-  padding: 6px 12px;
-  font-size: 0.85rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.applyButton:hover {
-  background: color-mix(in oklab, var(--brand) 90%, white);
-  transform: translateY(-1px);
-}
-
-.formSection {
-  background: var(--panel);
-  border: 1px solid var(--stroke);
-  border-radius: 16px;
-  padding: 24px;
-  margin-bottom: 32px;
-}
-
-.formTitle {
-  font-size: 1.2rem;
-  font-weight: 600;
-  margin-bottom: 20px;
-  color: var(--text);
-}
-
-.form {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 16px;
-}
-
-.formGroup {
-  display: flex;
-  flex-direction: column;
-}
-
-.formLabel {
-  display: block;
-  margin-bottom: 8px;
-  color: var(--muted);
-  font-size: 0.9rem;
   font-weight: 500;
 }
 
-.formInput {
-  width: 100%;
-  background: var(--bg);
-  border: 1px solid var(--stroke);
-  border-radius: 12px;
-  padding: 12px 16px;
+.suggestionAmount {
+  color: var(--brand);
+  font-weight: 600;
+}
+
+.useButton {
+  @include button-reset;
+  background: var(--brand);
+  color: var(--brand-ink);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-sm);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  transition: transform var(--anim-fast) ease;
+  
+  &:hover {
+    transform: translateY(-1px);
+  }
+}
+
+.form {
+  @include card;
+  padding: var(--space-5);
+  margin-bottom: var(--space-6);
+}
+
+.formTitle {
+  font-size: var(--fs-lg);
+  font-weight: 700;
   color: var(--text);
-  font-size: 1rem;
-  transition: border-color 0.2s;
+  margin-bottom: var(--space-4);
 }
 
-.formInput:focus {
-  outline: none;
-  border-color: var(--brand);
+.formGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr auto;
+  gap: var(--space-3);
+  align-items: end;
 }
 
-.formInput::placeholder {
-  color: var(--muted);
-}
-
-.formActions {
-  display: flex;
-  gap: 12px;
-  margin-top: 20px;
+.formInput {
+  @include control;
 }
 
 .submitButton {
+  @include button-reset;
   background: var(--brand);
   color: var(--brand-ink);
-  border: none;
-  border-radius: 12px;
-  padding: 12px 24px;
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
   font-weight: 600;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.submitButton:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow);
-  background: color-mix(in oklab, var(--brand) 90%, white);
-}
-
-.submitButton:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-  transform: none;
-}
-
-.cancelButton {
-  background: var(--bg);
-  color: var(--text);
-  border: 1px solid var(--stroke);
-  border-radius: 12px;
-  padding: 12px 24px;
-  font-weight: 600;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.cancelButton:hover {
-  background: color-mix(in oklab, var(--bg) 80%, var(--stroke));
-}
-
-.invoicesSection {
-  background: var(--panel);
-  border: 1px solid var(--stroke);
-  border-radius: 16px;
-  padding: 24px;
-}
-
-.invoicesTitle {
-  font-size: 1.2rem;
-  font-weight: 600;
-  margin-bottom: 20px;
-  color: var(--text);
+  transition: transform var(--anim-fast) ease;
+  
+  &:hover {
+    transform: translateY(-1px);
+  }
 }
 
 .invoicesList {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+  @include card;
+  padding: var(--space-5);
+}
+
+.invoicesTitle {
+  font-size: var(--fs-lg);
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: var(--space-4);
 }
 
 .invoiceItem {
-  background: color-mix(in oklab, var(--panel) 80%, var(--stroke));
-  border: 1px solid var(--stroke);
-  border-radius: 12px;
-  padding: 16px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  transition: background-color 0.2s;
-}
-
-.invoiceItem:hover {
-  background: color-mix(in oklab, var(--panel) 90%, var(--stroke));
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+  background: var(--elev);
+  margin-bottom: var(--space-2);
 }
 
 .invoiceInfo {
-  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.invoiceNumber {
+  color: var(--text);
+  font-weight: 600;
 }
 
 .invoiceClient {
-  font-weight: 600;
-  color: var(--text);
-  margin-bottom: 4px;
-}
-
-.invoiceDescription {
   color: var(--muted);
-  font-size: 0.9rem;
+  font-size: var(--fs-sm);
 }
 
 .invoiceAmount {
-  text-align: right;
-}
-
-.amountValue {
-  font-weight: 700;
-  font-size: 1.1rem;
-  color: var(--text);
-  margin-bottom: 4px;
-}
-
-.statusBadge {
-  padding: 4px 12px;
-  border-radius: 20px;
-  font-size: 0.8rem;
+  color: var(--brand);
   font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  font-size: var(--fs-lg);
 }
 
-.statusDraft {
-  background: color-mix(in oklab, #fbbf24 20%, transparent);
-  color: #fbbf24;
+.invoiceStatus {
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
+  font-size: var(--fs-xs);
+  font-weight: 600;
 }
 
-.statusSent {
-  background: color-mix(in oklab, #3b82f6 20%, transparent);
-  color: #3b82f6;
-}
-
-.statusPaid {
-  background: color-mix(in oklab, #10b981 20%, transparent);
-  color: #10b981;
-}
-
-.statusOverdue {
-  background: color-mix(in oklab, #ef4444 20%, transparent);
-  color: #ef4444;
-}
-
-.invoiceDate {
-  color: var(--muted);
-  font-size: 0.85rem;
-  margin-left: 16px;
-}
-
-.emptyState {
-  text-align: center;
-  padding: 40px 20px;
-  color: var(--muted);
-}
-
-.emptyIcon {
-  font-size: 3rem;
-  margin-bottom: 16px;
-  display: block;
-}
-
-/* Mobile Responsiveness */
-@media (max-width: 768px) {
-  .invoices {
-    padding: 16px;
-  }
-  
-  .form {
-    grid-template-columns: 1fr;
-  }
-  
-  .formActions {
-    flex-direction: column;
-  }
-  
-  .invoiceItem {
-    flex-direction: column;
-    gap: 12px;
-    align-items: stretch;
-  }
-  
-  .invoiceAmount {
-    text-align: left;
-  }
-  
-  .title {
-    font-size: 2rem;
-  }
-}
+.statusDraft { background: color-mix(in oklab, var(--muted) 20%, transparent); color: var(--muted); }
+.statusSent { background: color-mix(in oklab, var(--brand) 20%, transparent); color: var(--brand); }
+.statusPaid { background: color-mix(in oklab, #22c55e 20%, transparent); color: #22c55e; }
+.statusOverdue { background: color-mix(in oklab, var(--danger) 20%, transparent); color: var(--danger); }
