@@ -9,7 +9,13 @@
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "prettier": "prettier --write .",
-    "prettier-check": "prettier --check ."
+    "prettier-check": "prettier --check .",
+    "deploy": "./scripts/deploy.sh",
+    "deploy:quick": "npm run build && git add . && git commit -m 'Quick deploy' && git push origin main",
+    "check:domains": "echo 'Checking domains...' && curl -I https://tilsf.com && curl -I https://lennin.fit",
+    "test:build": "npm run build && echo '✅ Build test passed'",
+    "clean": "rm -rf dist coverage node_modules/.cache",
+    "setup": "npm install && npm run build"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.56.0",
