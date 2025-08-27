@@ -112,3 +112,59 @@
     background: color-mix(in oklab, var(--danger) 10%, transparent);
   }
 }
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .formRow {
+    grid-template-columns: 1fr;
+    gap: var(--space-2);
+  }
+
+  .taskItem {
+    grid-template-columns: 1fr;
+    gap: var(--space-2);
+    padding: var(--space-3);
+  }
+
+  .taskInput,
+  .taskSelect,
+  .taskDate {
+    font-size: var(--fs-sm);
+    padding: var(--space-2);
+  }
+
+  .submitButton {
+    padding: var(--space-2) var(--space-3);
+    font-size: var(--fs-sm);
+  }
+
+  .title {
+    font-size: var(--fs-xl);
+  }
+
+  .subtitle {
+    font-size: var(--fs-md);
+  }
+}
+
+@media (max-width: 480px) {
+  .form {
+    padding: var(--space-3);
+  }
+
+  .taskItem {
+    padding: var(--space-2);
+  }
+
+  .taskInput,
+  .taskSelect,
+  .taskDate {
+    font-size: var(--fs-xs);
+    padding: var(--space-1) var(--space-2);
+  }
+
+  .submitButton {
+    padding: var(--space-1) var(--space-2);
+    font-size: var(--fs-xs);
+  }
+}

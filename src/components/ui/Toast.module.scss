@@ -32,3 +32,50 @@
   @include button-reset;
   color: var(--muted);
 }
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .viewport {
+    right: 12px;
+    bottom: 12px;
+    gap: 6px;
+  }
+
+  .toast {
+    min-width: 200px;
+    padding: 10px 12px;
+  }
+
+  .title {
+    font-size: var(--fs-sm);
+  }
+
+  .desc {
+    font-size: var(--fs-xs);
+  }
+}
+
+@media (max-width: 480px) {
+  .viewport {
+    right: 8px;
+    bottom: 8px;
+    gap: 4px;
+  }
+
+  .toast {
+    min-width: 180px;
+    padding: 8px 10px;
+  }
+
+  .title {
+    font-size: var(--fs-xs);
+  }
+
+  .desc {
+    font-size: var(--fs-xs);
+  }
+
+  .row {
+    gap: 6px;
+  }
+}

@@ -34,3 +34,31 @@
   font-size: var(--fs-xs);
   color: var(--danger);
 }
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .root {
+    gap: 4px;
+  }
+
+  .label {
+    font-size: var(--fs-xs);
+  }
+
+  .select {
+    padding: 8px 12px;
+    font-size: var(--fs-sm);
+  }
+
+  .hint,
+  .error {
+    font-size: var(--fs-xs);
+  }
+}
+
+@media (max-width: 480px) {
+  .select {
+    padding: 6px 10px;
+    font-size: var(--fs-sm);
+  }
+}

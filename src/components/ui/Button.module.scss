@@ -51,3 +51,38 @@
   opacity: 0.6;
   pointer-events: none;
 }
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .root {
+    padding: 8px 12px;
+    gap: 6px;
+  }
+
+  .sm {
+    padding: 6px 10px;
+    font-size: var(--fs-xs);
+  }
+
+  .lg {
+    padding: 10px 14px;
+    font-size: var(--fs-md);
+  }
+}
+
+@media (max-width: 480px) {
+  .root {
+    padding: 6px 10px;
+    gap: 4px;
+  }
+
+  .sm {
+    padding: 4px 8px;
+    font-size: var(--fs-xs);
+  }
+
+  .lg {
+    padding: 8px 12px;
+    font-size: var(--fs-sm);
+  }
+}

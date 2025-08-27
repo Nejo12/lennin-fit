@@ -21,7 +21,7 @@ export default function DashboardPage() {
   return (
     <div className={styles.dashboard}>
       <div className={styles.header}>
-        <h1 className={styles.title}>Focus Dashboard</h1>
+        <h1 className={styles.title}>Dashboard</h1>
         <p className={styles.subtitle}>
           Your TILSF overview - Tasks, Invoices, Leads, Schedule, Focus
         </p>

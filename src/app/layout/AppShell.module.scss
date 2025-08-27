@@ -76,26 +76,71 @@
 /* Mobile Responsiveness */
 @media (max-width: 768px) {
   .header {
-    padding: 0 16px;
-    flex-direction: column;
+    padding: 12px 16px;
+    flex-direction: row;
     height: auto;
-    padding: 16px;
-    gap: 16px;
+    min-height: 60px;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .brand {
+    font-size: var(--fs-lg);
+    flex-shrink: 0;
   }
 
   .nav {
-    gap: 16px;
+    gap: 8px;
     flex-wrap: wrap;
     justify-content: center;
+    flex: 1;
   }
 
   .navLink {
-    font-size: 0.9rem;
-    padding: 6px 10px;
+    font-size: 0.85rem;
+    padding: 6px 8px;
+    white-space: nowrap;
+  }
+
+  .signOutButton {
+    font-size: 0.85rem;
+    padding: 6px 8px;
+    flex-shrink: 0;
   }
 
   .main {
     padding: 16px;
-    margin-top: 120px; /* Adjust for mobile header height */
+    margin-top: 70px; /* Reduced for more compact header */
+  }
+}
+
+/* Extra small screens */
+@media (max-width: 480px) {
+  .header {
+    padding: 8px 12px;
+    min-height: 50px;
+  }
+
+  .brand {
+    font-size: var(--fs-md);
+  }
+
+  .nav {
+    gap: 4px;
+  }
+
+  .navLink {
+    font-size: 0.8rem;
+    padding: 4px 6px;
+  }
+
+  .signOutButton {
+    font-size: 0.8rem;
+    padding: 4px 6px;
+  }
+
+  .main {
+    padding: 12px;
+    margin-top: 60px;
   }
 }

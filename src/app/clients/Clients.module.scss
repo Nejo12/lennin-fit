@@ -1,6 +1,6 @@
 @use '../../styles/mixins.scss' as *;
 
-.leads {
+.clients {
   display: grid;
   gap: var(--space-6);
   max-width: 1200px;
@@ -38,6 +38,10 @@
   align-items: end;
 }
 
+.formInput {
+  @include control;
+}
+
 .submitButton {
   @include button-reset;
   background: var(--brand);
@@ -52,17 +56,33 @@
   }
 }
 
-.clientList {
+.clientsList {
+  @include card;
+  padding: var(--space-5);
+}
+
+.listTitle {
+  font-size: var(--fs-lg);
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: var(--space-4);
+}
+
+.clientsGrid {
   display: grid;
   gap: var(--space-3);
 }
 
 .clientItem {
-  @include card;
   padding: var(--space-4);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  border-radius: var(--radius-md);
+  background: var(--elev);
+  border: 1px solid var(--stroke);
+  transition: background-color var(--anim-fast) ease;
+
+  &:hover {
+    background: color-mix(in oklab, var(--elev) 90%, var(--stroke));
+  }
 }
 
 .clientInfo {
@@ -72,50 +92,30 @@
 }
 
 .clientName {
-  @include control;
-  background: transparent;
-  border: none;
-  padding: 0;
-  font-weight: 600;
   color: var(--text);
-
-  &:focus-visible {
-    @include focus-ring;
-    background: var(--elev);
-    padding: var(--space-2);
-    border-radius: var(--radius-sm);
-  }
+  font-weight: 600;
+  font-size: var(--fs-md);
+  margin: 0;
 }
 
 .clientEmail {
-  @include control;
-  background: transparent;
-  border: none;
-  padding: 0;
   color: var(--muted);
   font-size: var(--fs-sm);
-
-  &:focus-visible {
-    @include focus-ring;
-    background: var(--elev);
-    padding: var(--space-2);
-    border-radius: var(--radius-sm);
-  }
+  margin: 0;
 }
 
-.deleteButton {
-  @include button-reset;
+.loadingState {
+  text-align: center;
+  padding: var(--space-10) var(--space-5);
   color: var(--muted);
-  padding: var(--space-2);
-  border-radius: var(--radius-sm);
-  transition:
-    color var(--anim-fast) ease,
-    background var(--anim-fast) ease;
+}
 
-  &:hover {
-    color: var(--danger);
-    background: color-mix(in oklab, var(--danger) 10%, transparent);
-  }
+.errorState {
+  text-align: center;
+  padding: var(--space-5);
+  color: var(--danger);
+  background: color-mix(in oklab, var(--danger) 10%, transparent);
+  border-radius: var(--radius-md);
 }
 
 /* Mobile Responsiveness */
@@ -123,13 +123,6 @@
   .formRow {
     grid-template-columns: 1fr;
     gap: var(--space-2);
-  }
-
-  .clientItem {
-    flex-direction: column;
-    gap: var(--space-2);
-    align-items: flex-start;
-    padding: var(--space-3);
   }
 
   .submitButton {
@@ -144,15 +137,20 @@
   .subtitle {
     font-size: var(--fs-md);
   }
+
+  .listTitle {
+    font-size: var(--fs-md);
+  }
 }
 
 @media (max-width: 480px) {
-  .form {
+  .form,
+  .clientsList {
     padding: var(--space-3);
   }
 
   .clientItem {
-    padding: var(--space-2);
+    padding: var(--space-3);
   }
 
   .submitButton {

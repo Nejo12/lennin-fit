@@ -300,7 +300,7 @@
 /* Mobile Responsiveness */
 @media (max-width: 768px) {
   .schedule {
-    padding: var(--space-2);
+    gap: var(--space-3);
   }
 
   .formGrid {
@@ -310,6 +310,13 @@
 
   .formActions {
     flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .submitButton,
+  .cancelButton {
+    padding: var(--space-2) var(--space-3);
+    font-size: var(--fs-sm);
   }
 
   .calendarGrid {
@@ -318,16 +325,20 @@
   }
 
   .calendarDay {
-    min-height: 50px;
+    min-height: 40px;
     padding: 2px;
   }
 
+  .dayHeader {
+    font-size: 9px;
+  }
+
   .dayNumber {
-    font-size: 10px;
+    font-size: 9px;
   }
 
   .event {
-    font-size: 8px;
+    font-size: 7px;
     padding: 1px 2px;
   }
 
@@ -338,5 +349,55 @@
 
   .title {
     font-size: var(--fs-xl);
+  }
+
+  .subtitle {
+    font-size: var(--fs-md);
+  }
+
+  .formTitle {
+    font-size: var(--fs-md);
+  }
+}
+
+@media (max-width: 480px) {
+  .schedule {
+    gap: var(--space-2);
+  }
+
+  .form {
+    padding: var(--space-3);
+  }
+
+  .calendar {
+    padding: var(--space-2);
+  }
+
+  .calendarDay {
+    min-height: 35px;
+    padding: 1px;
+  }
+
+  .dayHeader {
+    font-size: 8px;
+  }
+
+  .dayNumber {
+    font-size: 8px;
+  }
+
+  .event {
+    font-size: 6px;
+    padding: 1px;
+  }
+
+  .submitButton,
+  .cancelButton {
+    padding: var(--space-1) var(--space-2);
+    font-size: var(--fs-xs);
+  }
+
+  .legend {
+    padding: var(--space-2);
   }
 }
