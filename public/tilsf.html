@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TILSF Framework — Tasks, Invoices, Leads, Schedule, Focus</title>
+
+    <!-- SEO -->
+    <meta
+      name="description"
+      content="TILSF is a proven framework for freelancers to manage Tasks, Invoices, Leads, Schedule, and Focus. Learn how to work smarter, not harder."
+    />
+    <meta
+      name="keywords"
+      content="TILSF, freelancer framework, task management, invoice management, lead management, schedule management, focus, productivity"
+    />
+    <meta name="author" content="TILSF Framework" />
+
+    <!-- Open Graph -->
+    <meta
+      property="og:title"
+      content="TILSF Framework — Tasks, Invoices, Leads, Schedule, Focus"
+    />
+    <meta
+      property="og:description"
+      content="A proven framework for freelancers to manage their business efficiently. Tasks, Invoices, Leads, Schedule, and Focus - all in one methodology."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://tilsf.com/" />
+    <meta property="og:image" content="https://tilsf.com/og-tilsf.jpg" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content="TILSF Framework — Tasks, Invoices, Leads, Schedule, Focus"
+    />
+    <meta
+      name="twitter:description"
+      content="A proven framework for freelancers to manage their business efficiently."
+    />
+    <meta name="twitter:image" content="https://tilsf.com/og-tilsf.jpg" />
+
+    <!-- Favicon -->
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+
+    <!-- Preconnect to external domains -->
+    <link rel="preconnect" href="https://lennin.fit" />
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu,
+          Cantarell, sans-serif;
+        line-height: 1.6;
+        color: #333;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem;
+      }
+
+      .header {
+        text-align: center;
+        margin-bottom: 4rem;
+        color: white;
+      }
+
+      .header h1 {
+        font-size: 3.5rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+      }
+
+      .header p {
+        font-size: 1.25rem;
+        opacity: 0.9;
+        max-width: 600px;
+        margin: 0 auto;
+      }
+
+      .framework-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        margin-bottom: 4rem;
+      }
+
+      .framework-card {
+        background: white;
+        padding: 2rem;
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        transition:
+          transform 0.3s ease,
+          box-shadow 0.3s ease;
+      }
+
+      .framework-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+      }
+
+      .framework-card h3 {
+        font-size: 1.5rem;
+        margin-bottom: 0.5rem;
+        color: #2d3748;
+      }
+
+      .framework-card .icon {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+        display: block;
+      }
+
+      .framework-card p {
+        color: #4a5568;
+        line-height: 1.7;
+      }
+
+      .cta-section {
+        text-align: center;
+        background: white;
+        padding: 3rem;
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        margin-bottom: 2rem;
+      }
+
+      .cta-section h2 {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+        color: #2d3748;
+      }
+
+      .cta-section p {
+        font-size: 1.125rem;
+        color: #4a5568;
+        margin-bottom: 2rem;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .cta-button {
+        display: inline-block;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 1rem 2rem;
+        text-decoration: none;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 1.125rem;
+        transition:
+          transform 0.2s ease,
+          box-shadow 0.2s ease;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+      }
+
+      .cta-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
+      }
+
+      .footer {
+        text-align: center;
+        color: white;
+        opacity: 0.8;
+        margin-top: 2rem;
+      }
+
+      .footer a {
+        color: white;
+        text-decoration: underline;
+      }
+
+      @media (max-width: 768px) {
+        .header h1 {
+          font-size: 2.5rem;
+        }
+
+        .container {
+          padding: 1rem;
+        }
+
+        .framework-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header class="header">
+        <h1>TILSF Framework</h1>
+        <p>
+          A proven methodology for freelancers to manage their business
+          efficiently and achieve sustainable success.
+        </p>
+      </header>
+
+      <div class="framework-grid">
+        <div class="framework-card">
+          <span class="icon">📋</span>
+          <h3>Tasks</h3>
+          <p>
+            Organize and complete work with clarity and purpose. Break down
+            complex projects into manageable tasks and track progress
+            systematically.
+          </p>
+        </div>
+
+        <div class="framework-card">
+          <span class="icon">💰</span>
+          <h3>Invoices</h3>
+          <p>
+            Streamline billing and payment tracking. Get paid faster with
+            professional invoicing and automated payment reminders.
+          </p>
+        </div>
+
+        <div class="framework-card">
+          <span class="icon">👥</span>
+          <h3>Leads</h3>
+          <p>
+            Manage client relationships and nurture prospects effectively. Build
+            a sustainable pipeline of quality clients.
+          </p>
+        </div>
+
+        <div class="framework-card">
+          <span class="icon">📅</span>
+          <h3>Schedule</h3>
+          <p>
+            Plan your time strategically and respect your boundaries. Balance
+            work and life with intentional scheduling.
+          </p>
+        </div>
+
+        <div class="framework-card">
+          <span class="icon">🎯</span>
+          <h3>Focus</h3>
+          <p>
+            Eliminate distractions and work with intention. Stress less and
+            achieve more through focused, purposeful work.
+          </p>
+        </div>
+      </div>
+
+      <div class="cta-section">
+        <h2>Ready to implement TILSF?</h2>
+        <p>
+          Lennin.fit is the complete application built on the TILSF framework.
+          Start managing your freelance business the smart way.
+        </p>
+        <a href="https://lennin.fit" class="cta-button"
+          >Get Started with Lennin.fit</a
+        >
+      </div>
+
+      <footer class="footer">
+        <p>&copy; 2024 TILSF Framework. Built with ❤️ for freelancers.</p>
+        <p>
+          <a href="https://lennin.fit/privacy">Privacy Policy</a> |
+          <a href="https://lennin.fit/terms">Terms of Service</a>
+        </p>
+      </footer>
+    </div>
+  </body>
+</html>

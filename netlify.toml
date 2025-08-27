@@ -1,5 +1,5 @@
 [build]
-  command = "npm run build"
+  command = "npm run build:prerender"
   publish = "dist"
 
 # Environment variables for different contexts
@@ -20,3 +20,10 @@
   from = "/*"
   to = "/index.html"
   status = 200
+
+# Serve TILSF static page for tilsf.com domain
+[[redirects]]
+  from = "/"
+  to = "/tilsf.html"
+  status = 200
+  conditions = {Host = "tilsf.com"}
