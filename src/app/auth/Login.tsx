@@ -24,7 +24,7 @@ export default function Login() {
       <div className={styles.header}>
         <a href="/" className={styles.brand}>
           <span className={styles.logo}>L</span>
-                      <span className={styles.brandName}>TILSF</span>
+          <span className={styles.brandName}>TILSF</span>
         </a>
       </div>
 

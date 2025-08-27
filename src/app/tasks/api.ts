@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { supabase } from '@/lib/supabase';
+import { isSupabaseConfigured, getSupabaseClient } from '@/lib/supabase';
 import { currentOrgId } from '@/lib/workspace';
 import { mockData } from '@/lib/mockData';
 import type { Task } from '@/types/db';
@@ -9,7 +9,13 @@ export function useTasks() {
     queryKey: ['tasks'],
     queryFn: async () => {
       try {
-        const { data, error: supabaseError } = await supabase
+        if (!isSupabaseConfigured()) {
+          console.log('Supabase not configured, using mock data for tasks');
+          return mockData.tasks as Task[];
+        }
+
+        const client = getSupabaseClient();
+        const { data, error: supabaseError } = await client
           .from('tasks')
           .select(
             'id, org_id, project_id, title, status, priority, due_date, position, updated_at'
@@ -33,8 +39,14 @@ export function useCreateTask() {
       payload: Pick<Task, 'title' | 'project_id' | 'due_date' | 'priority'>
     ) => {
       try {
+        if (!isSupabaseConfigured()) {
+          console.log('Mock task creation:', payload);
+          return;
+        }
+
+        const client = getSupabaseClient();
         const org_id = await currentOrgId();
-        const { error: supabaseError } = await supabase
+        const { error: supabaseError } = await client
           .from('tasks')
           .insert({ org_id, status: 'todo', position: 0, ...payload });
         if (supabaseError) throw supabaseError;
@@ -52,8 +64,14 @@ export function useUpdateTask() {
   return useMutation({
     mutationFn: async (args: { id: string } & Partial<Task>) => {
       try {
+        if (!isSupabaseConfigured()) {
+          console.log('Mock task update:', args);
+          return;
+        }
+
+        const client = getSupabaseClient();
         const { id, ...rest } = args;
-        const { error: supabaseError } = await supabase
+        const { error: supabaseError } = await client
           .from('tasks')
           .update(rest)
           .eq('id', id);
@@ -72,7 +90,13 @@ export function useDeleteTask() {
   return useMutation({
     mutationFn: async (id: string) => {
       try {
-        const { error: supabaseError } = await supabase
+        if (!isSupabaseConfigured()) {
+          console.log('Mock task deletion:', id);
+          return;
+        }
+
+        const client = getSupabaseClient();
+        const { error: supabaseError } = await client
           .from('tasks')
           .delete()
           .eq('id', id);

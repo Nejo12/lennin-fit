@@ -23,8 +23,8 @@ const Terms: React.FC = () => {
 
           <h2>Acceptance of Terms</h2>
           <p>
-            By accessing and using TILSF, you accept and agree to be bound
-            by the terms and provision of this agreement.
+            By accessing and using TILSF, you accept and agree to be bound by
+            the terms and provision of this agreement.
           </p>
 
           <h2>Use License</h2>
@@ -36,20 +36,20 @@ const Terms: React.FC = () => {
 
           <h2>Disclaimer</h2>
           <p>
-                  The materials on TILSF are provided on an 'as is' basis.
-      TILSF makes no warranties, expressed or implied, and hereby
-            disclaims and negates all other warranties including without
-            limitation, implied warranties or conditions of merchantability,
-            fitness for a particular purpose, or non-infringement of
-            intellectual property or other violation of rights.
+            The materials on TILSF are provided on an 'as is' basis. TILSF makes
+            no warranties, expressed or implied, and hereby disclaims and
+            negates all other warranties including without limitation, implied
+            warranties or conditions of merchantability, fitness for a
+            particular purpose, or non-infringement of intellectual property or
+            other violation of rights.
           </p>
 
           <h2>Limitations</h2>
           <p>
-            In no event shall TILSF or its suppliers be liable for any
-            damages (including, without limitation, damages for loss of data or
-            profit, or due to business interruption) arising out of the use or
-            inability to use the materials on TILSF.
+            In no event shall TILSF or its suppliers be liable for any damages
+            (including, without limitation, damages for loss of data or profit,
+            or due to business interruption) arising out of the use or inability
+            to use the materials on TILSF.
           </p>
 
           <h2>Contact Us</h2>
