@@ -18,6 +18,12 @@ export const Hero: React.FC = () => {
           <Link to="/login" className={s.btnPrimary}>
             Start Free
           </Link>
+          <a
+            href="https://lennin.fit?utm_source=tilsf&utm_medium=website&utm_campaign=hero_cta"
+            className={s.btnSecondary}
+          >
+            Try Lennin Free
+          </a>
         </div>
         <ul className={s.bullets}>
           <li>Less stress</li>

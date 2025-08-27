@@ -2,17 +2,12 @@ User-agent: *
 Allow: /
 
 # Sitemap
-Sitemap: https://lennin.fit/sitemap.xml
-
-# Disallow admin and private areas
-Disallow: /app/
-Disallow: /login
-Disallow: /verify
-Disallow: /auth/
+Sitemap: https://tilsf.com/sitemap.xml
 
 # Allow static assets
 Allow: /assets/
 Allow: /favicon.svg
-Allow: /og.svg
+Allow: /og.jpg
 Allow: /robots.txt
 Allow: /sitemap.xml
+Allow: /tilsf.html

@@ -60,6 +60,14 @@ export const CTA: React.FC = () => {
       <div className={s.loginLink}>
         <Link to="/login">Already have an account? Sign in</Link>
       </div>
+      <div className={s.tryLenninLink}>
+        <a
+          href="https://lennin.fit?utm_source=tilsf&utm_medium=website&utm_campaign=cta_section"
+          className={s.tryLenninButton}
+        >
+          Try Lennin Free
+        </a>
+      </div>
     </section>
   );
 };

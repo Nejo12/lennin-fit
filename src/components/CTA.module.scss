@@ -82,6 +82,46 @@ small {
   }
 }
 
+.tryLenninLink {
+  margin-top: 16px;
+  text-align: center;
+}
+
+.btnGhost {
+  padding: 12px 24px;
+  border: 1px solid var(--stroke);
+  border-radius: 8px;
+  color: var(--text);
+  transition: all 0.2s;
+  width: 280px;
+  text-align: center;
+
+  &:hover {
+    background: var(--stroke);
+  }
+}
+
+.tryLenninButton {
+  display: inline-block;
+  padding: 12px 24px;
+  background: var(--brand);
+  color: var(--brand-ink);
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.2s;
+  margin-top: 16px;
+
+  &:hover {
+    transform: translateY(-2px);
+    text-decoration: none;
+  }
+}
+
+
+
 .srOnly {
   position: absolute;
   width: 1px;
