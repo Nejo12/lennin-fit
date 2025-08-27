@@ -13,6 +13,11 @@
     "deploy": "./scripts/deploy.sh",
     "deploy:quick": "npm run build && git add . && git commit -m 'Quick deploy' && git push origin main",
     "check:domains": "echo 'Checking domains...' && curl -I https://tilsf.com && curl -I https://lennin.fit",
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "test:run": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "typecheck": "tsc --noEmit",
     "test:build": "npm run build && echo '✅ Build test passed'",
     "clean": "rm -rf dist coverage node_modules/.cache",
     "setup": "npm install && npm run build"
@@ -30,20 +35,29 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.33.0",
+    "@testing-library/jest-dom": "^6.8.0",
+    "@testing-library/react": "^16.3.0",
+    "@testing-library/user-event": "^14.6.1",
     "@types/node": "^24.3.0",
     "@types/react": "^19.1.10",
     "@types/react-dom": "^19.1.7",
+    "@types/testing-library__jest-dom": "^5.14.9",
     "@vitejs/plugin-react": "^5.0.0",
+    "@vitest/coverage-v8": "^3.2.4",
     "autoprefixer": "^10.4.21",
     "eslint": "^9.33.0",
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.20",
     "globals": "^16.3.0",
+    "jsdom": "^26.1.0",
+    "msw": "^2.10.5",
     "postcss": "^8.5.6",
     "prettier": "^3.6.2",
     "sass-embedded": "^1.90.0",
     "typescript": "~5.8.3",
     "typescript-eslint": "^8.39.1",
-    "vite": "^7.1.2"
+    "vite": "^7.1.2",
+    "vitest": "^3.2.4",
+    "whatwg-fetch": "^3.6.20"
   }
 }

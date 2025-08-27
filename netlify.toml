@@ -6,19 +6,6 @@
 [build.environment]
   SECRETS_SCAN_OMIT_KEYS = "VITE_SUPABASE_URL,VITE_SUPABASE_ANON_KEY"
 
-# Production redirects - clean and simple
-[[redirects]]
-  from = "https://www.tilsf.com/*"
-  to = "https://tilsf.com/:splat"
-  status = 301
-  force = true
-
-[[redirects]]
-  from = "https://www.lennin.fit/*"
-  to = "https://lennin.fit/:splat"
-  status = 301
-  force = true
-
 # Security headers
 [[headers]]
   for = "/*"
