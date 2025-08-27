@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { supabase } from '../../lib/supabase';
+import { supabase, isSupabaseConfigured } from '../../lib/supabase';
 
 export default function AuthCallback() {
   const [error, setError] = useState<string | null>(null);
@@ -9,6 +9,12 @@ export default function AuthCallback() {
   useEffect(() => {
     const handleAuthCallback = async () => {
       try {
+        // Check if Supabase is configured
+        if (!isSupabaseConfigured()) {
+          setError('Authentication is not configured. Please contact support.');
+          return;
+        }
+
         // Get the URL hash parameters
         const hash = window.location.hash;
         if (!hash) {

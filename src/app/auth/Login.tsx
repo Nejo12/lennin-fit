@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { supabase } from '../../lib/supabase';
+import { supabase, isSupabaseConfigured } from '../../lib/supabase';
 import styles from './Login.module.scss';
 
 export default function Login() {
@@ -10,6 +10,13 @@ export default function Login() {
   const send = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+    
+    // Check if Supabase is configured
+    if (!isSupabaseConfigured()) {
+      setError('Authentication is not configured. Please contact support.');
+      return;
+    }
+    
     const { error } = await supabase.auth.signInWithOtp({
       email,
       options: { emailRedirectTo: `${location.origin}/auth/callback` },
@@ -17,6 +24,49 @@ export default function Login() {
     if (error) setError(error.message);
     else setSent(true);
   };
+
+  // Show configuration error if Supabase is not set up
+  if (!isSupabaseConfigured()) {
+    return (
+      <div className={styles.loginPage}>
+        <div className={styles.header}>
+          <a href="/" className={styles.brand}>
+            <span className={styles.logo}>L</span>
+            <span className={styles.brandName}>TILSF</span>
+          </a>
+        </div>
+        <div className={styles.mainContent}>
+          <div className={styles.container}>
+            <div className={styles.card}>
+              <div className={styles.headerSection}>
+                <div className={styles.logoContainer}>
+                  <span className={styles.logo}>L</span>
+                </div>
+                <h1 className={styles.title}>Configuration Required</h1>
+                <p className={styles.subtitle}>Authentication is not set up</p>
+              </div>
+              <div className={styles.errorMessage}>
+                <div className={styles.errorContent}>
+                  <svg
+                    className={styles.icon}
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                  Supabase authentication is not configured. Please set up your environment variables.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className={styles.loginPage}>

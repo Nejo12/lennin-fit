@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { supabase } from '../../lib/supabase';
+import { supabase, isSupabaseConfigured } from '../../lib/supabase';
 import styles from './Verify.module.scss';
 
 export default function Verify() {
@@ -9,6 +9,12 @@ export default function Verify() {
 
   useEffect(() => {
     (async () => {
+      // Check if Supabase is configured
+      if (!isSupabaseConfigured()) {
+        setStatus('Authentication is not configured. Please contact support.');
+        return;
+      }
+
       const hash = window.location.hash;
       if (!hash.includes('access_token')) {
         setStatus('Invalid link. Please request a new one.');

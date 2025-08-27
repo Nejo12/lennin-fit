@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { supabase } from './supabase';
+import { supabase, isSupabaseConfigured } from './supabase';
 
 export function useAuth() {
   const [loading, setLoading] = useState(true);
@@ -9,21 +9,45 @@ export function useAuth() {
 
   useEffect(() => {
     let mounted = true;
+    
     (async () => {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      if (mounted) setUser(user);
-      setLoading(false);
+      // If Supabase is not configured, return null user
+      if (!isSupabaseConfigured()) {
+        if (mounted) {
+          setUser(null);
+          setLoading(false);
+        }
+        return;
+      }
+
+      try {
+        const {
+          data: { user },
+        } = await supabase.auth.getUser();
+        if (mounted) setUser(user);
+      } catch (error) {
+        console.error('Auth error:', error);
+        if (mounted) setUser(null);
+      } finally {
+        if (mounted) setLoading(false);
+      }
     })();
 
-    const { data: sub } = supabase.auth.onAuthStateChange((_evt, session) => {
-      setUser(session?.user ?? null);
-    });
-    return () => {
-      mounted = false;
-      sub.subscription.unsubscribe();
-    };
+    // Only set up auth state listener if Supabase is configured
+    if (isSupabaseConfigured()) {
+      const { data: sub } = supabase.auth.onAuthStateChange((_evt, session) => {
+        setUser(session?.user ?? null);
+      });
+      
+      return () => {
+        mounted = false;
+        sub.subscription.unsubscribe();
+      };
+    } else {
+      return () => {
+        mounted = false;
+      };
+    }
   }, []);
 
   return { user, loading };
