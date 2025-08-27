@@ -15,7 +15,7 @@ const Success: React.FC = () => {
 
       <main className={styles.main}>
         <div className={styles.container}>
-          <div className={styles.brandLogo}>Lennin.fit</div>
+          <div className={styles.brandLogo}>TILSF</div>
           <h1>You're on the list! 🎉</h1>
           <p>
             Thanks for joining our early access list. We'll email you as soon as

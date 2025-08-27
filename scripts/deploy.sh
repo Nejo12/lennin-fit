@@ -74,7 +74,7 @@ if [ $? -eq 0 ]; then
     echo ""
     echo "🌐 Your sites will be available at:"
     echo "   • https://tilsf.com"
-    echo "   • https://lennin.fit"
+    echo "   • https://tilsf.com"
     echo ""
     echo "📊 Monitor deployment at: https://app.netlify.com"
     echo ""

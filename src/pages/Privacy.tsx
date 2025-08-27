@@ -15,7 +15,7 @@ const Privacy: React.FC = () => {
 
       <main className={styles.main}>
         <div className={styles.container}>
-          <div className={styles.logo}>Lennin.fit</div>
+          <div className={styles.logo}>TILSF</div>
           <h1>Privacy Policy</h1>
           <p>
             <strong>Last updated:</strong> August 24, 2025
@@ -51,7 +51,7 @@ const Privacy: React.FC = () => {
           <h2>Contact Us</h2>
           <p>
             If you have any questions about this Privacy Policy, please contact
-            us at privacy@lennin.fit
+            us at privacy@tilsf.com
           </p>
 
           <Link to="/" className={styles.backLink}>
