@@ -1,0 +1,42 @@
+/* Lazy Image Component */
+.lazy-image {
+  opacity: 0;
+  transition: opacity var(--anim-fast);
+  background: var(--panel);
+  border-radius: var(--radius-md);
+
+  &.loaded {
+    opacity: 1;
+  }
+
+  &.error {
+    opacity: 0.5;
+    filter: grayscale(1);
+  }
+
+  /* Prevent layout shift */
+  &[width][height] {
+    aspect-ratio: attr(width) / attr(height);
+  }
+}
+
+/* Loading skeleton */
+.lazy-image:not(.loaded) {
+  background: linear-gradient(
+    90deg,
+    var(--stroke) 25%,
+    var(--panel) 50%,
+    var(--stroke) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}

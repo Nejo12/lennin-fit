@@ -1,6 +1,11 @@
 import React from 'react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { screen, fireEvent, waitFor } from '@testing-library/react';
+import {
+  screen,
+  fireEvent,
+  waitFor,
+} from '@testing-library/react';
+import { act } from '@testing-library/react';
 import { renderWithProviders } from '../../utils';
 import { createMockTask } from '../../utils';
 
@@ -193,15 +198,19 @@ describe('TasksPage', () => {
       const dateInput = screen.getByLabelText('Due date');
       const submitButton = screen.getByRole('button', { name: /add task/i });
 
-      fireEvent.change(titleInput, { target: { value: 'New Task' } });
-      fireEvent.change(dateInput, { target: { value: '2024-12-31' } });
-      fireEvent.click(submitButton);
+      await act(async () => {
+        fireEvent.change(titleInput, { target: { value: 'New Task' } });
+        fireEvent.change(dateInput, { target: { value: '2024-12-31' } });
+        fireEvent.click(submitButton);
+      });
 
       // Trigger the onSuccess callback to clear the form
       const createCall = mockCreateMutation.mutate.mock.calls[0];
       const onSuccess = createCall[1]?.onSuccess;
       if (onSuccess) {
-        onSuccess();
+        await act(async () => {
+          onSuccess();
+        });
       }
 
       await waitFor(() => {

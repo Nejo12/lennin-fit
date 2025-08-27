@@ -1,0 +1,11 @@
+# TILSF microsite redirects
+
+# Force HTTPS
+http://tilsf.com/* https://tilsf.com/:splat 301!
+http://www.tilsf.com/* https://tilsf.com/:splat 301!
+
+# Redirect www to apex
+https://www.tilsf.com/* https://tilsf.com/:splat 301!
+
+# Handle 404
+/* /404.html 404

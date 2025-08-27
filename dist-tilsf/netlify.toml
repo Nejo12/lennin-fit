@@ -1,0 +1,49 @@
+[build]
+  publish = "."
+
+# Environment variables for different contexts
+[build.environment]
+  SECRETS_SCAN_OMIT_KEYS = "VITE_SUPABASE_URL,VITE_SUPABASE_ANON_KEY"
+
+# Security headers
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "SAMEORIGIN"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Strict-Transport-Security = "max-age=31536000; includeSubDomains; preload"
+    X-XSS-Protection = "1; mode=block"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
+
+# Redirect www to apex domain
+[[redirects]]
+  from = "https://www.tilsf.com/*"
+  to = "https://tilsf.com/:splat"
+  status = 301
+  force = true
+
+# Redirect HTTP to HTTPS
+[[redirects]]
+  from = "http://tilsf.com/*"
+  to = "https://tilsf.com/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "http://www.tilsf.com/*"
+  to = "https://tilsf.com/:splat"
+  status = 301
+  force = true
+
+# Handle 404 page
+[[redirects]]
+  from = "/404"
+  to = "/404.html"
+  status = 404
+
+# Handle all other routes (fallback to index.html for SPA-like behavior)
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

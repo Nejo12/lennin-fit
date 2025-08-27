@@ -3,7 +3,11 @@ import ReactDOM from 'react-dom/client';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ToastProvider } from '@/components/ui/Toast';
 import AppRouter from './app/AppRouter';
+import { initPerformanceOptimizations } from '@/lib/performance';
 import '@/styles/globals.scss';
+
+// Initialize performance optimizations
+initPerformanceOptimizations();
 
 const queryClient = new QueryClient({
   defaultOptions: {

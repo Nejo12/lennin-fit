@@ -241,7 +241,14 @@ describe('TextField', () => {
     });
 
     it('handles controlled input', () => {
-      renderWithProviders(<TextField name="test" value="controlled value" />);
+      const handleChange = vi.fn();
+      renderWithProviders(
+        <TextField 
+          name="test" 
+          value="controlled value" 
+          onChange={handleChange}
+        />
+      );
       const input = screen.getByRole('textbox');
       expect(input).toHaveValue('controlled value');
     });
