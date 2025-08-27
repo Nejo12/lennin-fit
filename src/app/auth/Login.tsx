@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { supabase, isSupabaseConfigured } from '../../lib/supabase';
 import styles from './Login.module.scss';
 
+// Trigger deployment for environment variables
 export default function Login() {
   const [email, setEmail] = useState('');
   const [sent, setSent] = useState(false);
