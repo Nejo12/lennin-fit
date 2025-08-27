@@ -6,9 +6,10 @@ import Login from './auth/Login'
 import Verify from './auth/Verify'
 import AppShell from './layout/AppShell'
 import DashboardPage from './dashboard/DashboardPage'
-import ClientsPage from './clients/ClientsPage'
-import ProjectsPage from './projects/ProjectsPage'
 import TasksPage from './tasks/TasksPage'
+import InvoicesPage from './invoices/InvoicesPage'
+import LeadsPage from './leads/LeadsPage'
+import SchedulePage from './schedule/SchedulePage'
 import Privacy from '../pages/Privacy'
 import Terms from '../pages/Terms'
 import Success from '../pages/Success'
@@ -70,9 +71,10 @@ const router = createBrowserRouter([
         element: <AppShell />,
         children: [
           { index: true, element: <DashboardPage /> },
-          { path: 'clients', element: <ClientsPage /> },
-          { path: 'projects', element: <ProjectsPage /> },
           { path: 'tasks', element: <TasksPage /> },
+          { path: 'invoices', element: <InvoicesPage /> },
+          { path: 'leads', element: <LeadsPage /> },
+          { path: 'schedule', element: <SchedulePage /> },
         ]
       }
     ]

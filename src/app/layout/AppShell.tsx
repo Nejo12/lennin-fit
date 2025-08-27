@@ -1,21 +1,35 @@
 
 import { NavLink, Outlet } from 'react-router-dom'
-import { supabase } from '../../lib/supabase'
+import { supabase } from '@/lib/supabase'
+import styles from './AppShell.module.scss'
 
 export default function AppShell() {
   return (
-    <div className="min-h-screen bg-neutral-950 text-neutral-100 grid grid-rows-[auto,1fr]">
-      <header className="border-b border-neutral-800 px-4 h-14 flex items-center justify-between">
-        <div className="font-bold">Lennin</div>
-        <nav className="flex gap-4 text-neutral-300">
-          <NavLink to="/app" end>Dashboard</NavLink>
-          <NavLink to="/app/clients">Clients</NavLink>
-          <NavLink to="/app/projects">Projects</NavLink>
-          <NavLink to="/app/tasks">Tasks</NavLink>
+    <div className={styles.appShell}>
+      <header className={styles.header}>
+        <div className={styles.brand}>Lennin</div>
+        <nav className={styles.nav}>
+          <NavLink to="/app" end className={({ isActive }) => isActive ? styles.navLink + ' ' + styles.active : styles.navLink}>
+            Focus
+          </NavLink>
+          <NavLink to="/app/tasks" className={({ isActive }) => isActive ? styles.navLink + ' ' + styles.active : styles.navLink}>
+            Tasks
+          </NavLink>
+          <NavLink to="/app/invoices" className={({ isActive }) => isActive ? styles.navLink + ' ' + styles.active : styles.navLink}>
+            Invoices
+          </NavLink>
+          <NavLink to="/app/leads" className={({ isActive }) => isActive ? styles.navLink + ' ' + styles.active : styles.navLink}>
+            Leads
+          </NavLink>
+          <NavLink to="/app/schedule" className={({ isActive }) => isActive ? styles.navLink + ' ' + styles.active : styles.navLink}>
+            Schedule
+          </NavLink>
         </nav>
-        <button onClick={() => supabase.auth.signOut()} className="text-neutral-300">Sign out</button>
+        <button onClick={() => supabase.auth.signOut()} className={styles.signOutButton}>
+          Sign out
+        </button>
       </header>
-      <main className="p-4">
+      <main className={styles.main}>
         <Outlet />
       </main>
     </div>

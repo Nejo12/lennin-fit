@@ -1,0 +1,354 @@
+.schedule {
+  padding: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.header {
+  margin-bottom: 32px;
+}
+
+.title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin: 0;
+  color: var(--text);
+}
+
+.formSection {
+  background: var(--panel);
+  border: 1px solid var(--stroke);
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.formTitle {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: var(--text);
+}
+
+.form {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+}
+
+.formLabel {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--muted);
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.formInput {
+  width: 100%;
+  background: var(--bg);
+  border: 1px solid var(--stroke);
+  border-radius: 12px;
+  padding: 12px 16px;
+  color: var(--text);
+  font-size: 1rem;
+  transition: border-color 0.2s;
+}
+
+.formInput:focus {
+  outline: none;
+  border-color: var(--brand);
+}
+
+.formInput::placeholder {
+  color: var(--muted);
+}
+
+.formSelect {
+  width: 100%;
+  background: var(--bg);
+  border: 1px solid var(--stroke);
+  border-radius: 12px;
+  padding: 12px 16px;
+  color: var(--text);
+  font-size: 1rem;
+  transition: border-color 0.2s;
+  cursor: pointer;
+}
+
+.formSelect:focus {
+  outline: none;
+  border-color: var(--brand);
+}
+
+.formTextarea {
+  width: 100%;
+  background: var(--bg);
+  border: 1px solid var(--stroke);
+  border-radius: 12px;
+  padding: 12px 16px;
+  color: var(--text);
+  font-size: 1rem;
+  transition: border-color 0.2s;
+  resize: vertical;
+  min-height: 80px;
+}
+
+.formTextarea:focus {
+  outline: none;
+  border-color: var(--brand);
+}
+
+.formTextarea::placeholder {
+  color: var(--muted);
+}
+
+.formActions {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.submitButton {
+  background: var(--brand);
+  color: var(--brand-ink);
+  border: none;
+  border-radius: 12px;
+  padding: 12px 24px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.submitButton:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+  background: color-mix(in oklab, var(--brand) 90%, white);
+}
+
+.submitButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.cancelButton {
+  background: var(--bg);
+  color: var(--text);
+  border: 1px solid var(--stroke);
+  border-radius: 12px;
+  padding: 12px 24px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.cancelButton:hover {
+  background: color-mix(in oklab, var(--bg) 80%, var(--stroke));
+}
+
+.calendarSection {
+  background: var(--panel);
+  border: 1px solid var(--stroke);
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.calendarHeader {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: var(--text);
+}
+
+.calendarGrid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 1px;
+  background: var(--stroke);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.calendarDayHeader {
+  background: var(--panel);
+  padding: 12px 8px;
+  text-align: center;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.calendarDay {
+  background: var(--panel);
+  min-height: 120px;
+  padding: 8px;
+  position: relative;
+  transition: background-color 0.2s;
+}
+
+.calendarDay:hover {
+  background: color-mix(in oklab, var(--panel) 90%, var(--stroke));
+}
+
+.calendarDayNumber {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.calendarEvents {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.calendarEvent {
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  color: white;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.calendarEvent:hover {
+  opacity: 0.8;
+}
+
+.eventMeeting {
+  background: #3b82f6;
+}
+
+.eventTask {
+  background: var(--brand);
+}
+
+.eventAppointment {
+  background: #8b5cf6;
+}
+
+.moreEvents {
+  font-size: 0.7rem;
+  color: var(--muted);
+  text-align: center;
+  padding: 2px;
+}
+
+.legendSection {
+  background: var(--panel);
+  border: 1px solid var(--stroke);
+  border-radius: 16px;
+  padding: 24px;
+}
+
+.legendTitle {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: var(--text);
+}
+
+.legendItems {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.legendColor {
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+}
+
+.legendText {
+  font-size: 0.9rem;
+  color: var(--text);
+}
+
+.legendMeeting {
+  background: #3b82f6;
+}
+
+.legendTask {
+  background: var(--brand);
+}
+
+.legendAppointment {
+  background: #8b5cf6;
+}
+
+.emptyState {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--muted);
+}
+
+.emptyIcon {
+  font-size: 3rem;
+  margin-bottom: 16px;
+  display: block;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .schedule {
+    padding: 16px;
+  }
+  
+  .form {
+    grid-template-columns: 1fr;
+  }
+  
+  .formActions {
+    flex-direction: column;
+  }
+  
+  .calendarGrid {
+    grid-template-columns: repeat(7, 1fr);
+    font-size: 0.8rem;
+  }
+  
+  .calendarDay {
+    min-height: 80px;
+    padding: 4px;
+  }
+  
+  .calendarDayNumber {
+    font-size: 0.8rem;
+  }
+  
+  .calendarEvent {
+    font-size: 0.6rem;
+    padding: 1px 4px;
+  }
+  
+  .legendItems {
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .title {
+    font-size: 2rem;
+  }
+}
