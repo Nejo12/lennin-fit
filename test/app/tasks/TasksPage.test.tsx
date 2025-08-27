@@ -131,7 +131,9 @@ describe('TasksPage', () => {
       renderWithProviders(<TasksPage />);
 
       expect(screen.getByText('No tasks yet')).toBeInTheDocument();
-      expect(screen.getByText('Create your first task to get started')).toBeInTheDocument();
+      expect(
+        screen.getByText('Create your first task to get started')
+      ).toBeInTheDocument();
     });
   });
 
@@ -321,7 +323,9 @@ describe('TasksPage', () => {
 
       // Check that the confirmation modal appears
       expect(screen.getByText('Delete Task')).toBeInTheDocument();
-      expect(screen.getByText(/Are you sure you want to delete/)).toBeInTheDocument();
+      expect(
+        screen.getByText(/Are you sure you want to delete/)
+      ).toBeInTheDocument();
       expect(screen.getByText('Task 1')).toBeInTheDocument();
     });
 
@@ -337,7 +341,9 @@ describe('TasksPage', () => {
       });
 
       // Click the Delete button in the modal using the class name
-      const modalDeleteButton = document.querySelector('button._confirmButton_fe4d04');
+      const modalDeleteButton = document.querySelector(
+        'button._confirmButton_fe4d04'
+      );
       fireEvent.click(modalDeleteButton!);
 
       await waitFor(() => {
