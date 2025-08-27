@@ -3,6 +3,8 @@
 .dashboard {
   display: grid;
   gap: var(--space-6);
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .header {
