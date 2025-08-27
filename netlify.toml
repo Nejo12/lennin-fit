@@ -8,16 +8,16 @@
 
 # Production redirects - clean and simple
 [[redirects]]
-  from = "https://www.tilsf.com/*"
-  to = "https://tilsf.com/:splat"
+  from = "/*"
+  to = "/:splat"
   status = 301
-  force = true
+  conditions = {Host = "www.tilsf.com"}
 
 [[redirects]]
-  from = "https://www.lennin.fit/*"
-  to = "https://lennin.fit/:splat"
+  from = "/*"
+  to = "/:splat"
   status = 301
-  force = true
+  conditions = {Host = "www.lennin.fit"}
 
 # Security headers
 [[headers]]

@@ -17,6 +17,7 @@
     "test:ui": "vitest --ui",
     "test:run": "vitest run",
     "test:coverage": "vitest run --coverage",
+    "typecheck": "tsc --noEmit",
     "test:build": "npm run build && echo '✅ Build test passed'",
     "clean": "rm -rf dist coverage node_modules/.cache",
     "setup": "npm install && npm run build"
