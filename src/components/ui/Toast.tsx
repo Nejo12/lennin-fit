@@ -1,17 +1,13 @@
-import React, { createContext, useCallback, useContext, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import s from './Toast.module.scss';
 import Button from './Button';
-
-type ToastKind = 'default'|'success'|'error';
-type ToastItem = { id: string; title?: string; description?: string; duration?: number; kind?: ToastKind; };
-type ToastCtx = { add: (t: Omit<ToastItem, 'id'>) => string; remove: (id: string) => void; };
-
-const Ctx = createContext<ToastCtx | null>(null);
+import type { ToastItem } from './Toast.constants';
+import { Ctx } from './ToastContext';
 
 export function ToastProvider({ children }: React.PropsWithChildren) {
   const [items, setItems] = useState<ToastItem[]>([]);
-  const timers = useRef<Record<string, any>>({});
+  const timers = useRef<Record<string, NodeJS.Timeout>>({});
 
   const remove = useCallback((id: string) => {
     setItems(prev => prev.filter(i => i.id !== id));
@@ -50,8 +46,4 @@ export function ToastProvider({ children }: React.PropsWithChildren) {
   );
 }
 
-export function useToast() {
-  const ctx = useContext(Ctx);
-  if (!ctx) throw new Error('useToast must be used within <ToastProvider>');
-  return ctx;
-}
+

@@ -73,7 +73,7 @@ export default function TasksPage() {
               />
               <select 
                 defaultValue={task.status} 
-                onChange={e => update.mutate({ id: task.id, status: e.target.value as any })} 
+                onChange={e => update.mutate({ id: task.id, status: e.target.value as 'todo' | 'doing' | 'done' | 'blocked' })} 
                 className={styles.taskSelect}
               >
                 <option value="todo">Todo</option>

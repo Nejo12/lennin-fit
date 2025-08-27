@@ -9,13 +9,13 @@ export function useTasks() {
     queryKey: ['tasks'],
     queryFn: async () => {
       try {
-        const { data, error } = await supabase
+        const { data, error: supabaseError } = await supabase
           .from('tasks')
           .select('id, org_id, project_id, title, status, priority, due_date, position, updated_at')
           .order('due_date', { ascending: true, nullsFirst: false })
-        if (error) throw error
+        if (supabaseError) throw supabaseError
         return data as Task[]
-      } catch (error) {
+      } catch {
         // Fallback to mock data if database is not set up
         console.log('Using mock data for tasks')
         return mockData.tasks as Task[]
@@ -30,9 +30,9 @@ export function useCreateTask() {
     mutationFn: async (payload: Pick<Task,'title'|'project_id'|'due_date'|'priority'>) => {
       try {
         const org_id = await currentOrgId()
-        const { error } = await supabase.from('tasks').insert({ org_id, status: 'todo', position: 0, ...payload })
-        if (error) throw error
-      } catch (error) {
+        const { error: supabaseError } = await supabase.from('tasks').insert({ org_id, status: 'todo', position: 0, ...payload })
+        if (supabaseError) throw supabaseError
+      } catch {
         // Mock creation
         console.log('Mock task creation:', payload)
       }
@@ -47,9 +47,9 @@ export function useUpdateTask() {
     mutationFn: async (args: { id: string } & Partial<Task>) => {
       try {
         const { id, ...rest } = args
-        const { error } = await supabase.from('tasks').update(rest).eq('id', id)
-        if (error) throw error
-      } catch (error) {
+        const { error: supabaseError } = await supabase.from('tasks').update(rest).eq('id', id)
+        if (supabaseError) throw supabaseError
+      } catch {
         // Mock update
         console.log('Mock task update:', args)
       }
@@ -63,9 +63,9 @@ export function useDeleteTask() {
   return useMutation({
     mutationFn: async (id: string) => {
       try {
-        const { error } = await supabase.from('tasks').delete().eq('id', id)
-        if (error) throw error
-      } catch (error) {
+        const { error: supabaseError } = await supabase.from('tasks').delete().eq('id', id)
+        if (supabaseError) throw supabaseError
+      } catch {
         // Mock deletion
         console.log('Mock task deletion:', id)
       }

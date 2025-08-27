@@ -7,13 +7,13 @@ export function useUnpaidTotal() {
     queryKey: ['unpaid-total'],
     queryFn: async () => {
       try {
-        const { data, error } = await supabase
+        const { data, error: supabaseError } = await supabase
           .from('invoices')
           .select('amount_total, status')
           .in('status', ['sent','overdue'])
-        if (error) throw error
+        if (supabaseError) throw supabaseError
         return (data ?? []).reduce((sum, r) => sum + Number(r.amount_total || 0), 0)
-      } catch (error) {
+      } catch {
         // Fallback to mock data
         console.log('Using mock data for unpaid total')
         return mockData.invoices
@@ -34,14 +34,14 @@ export function useThisWeekTasks() {
         start.setDate(today.getDate() - today.getDay())
         const end = new Date(start)
         end.setDate(start.getDate() + 7)
-        const { data, error } = await supabase
+        const { data, error: supabaseError } = await supabase
           .from('tasks')
           .select('id, title, due_date, status')
           .gte('due_date', start.toISOString().slice(0,10))
           .lt('due_date', end.toISOString().slice(0,10))
-        if (error) throw error
+        if (supabaseError) throw supabaseError
         return data ?? []
-      } catch (error) {
+      } catch {
         // Fallback to mock data
         console.log('Using mock data for this week tasks')
         const today = new Date()

@@ -9,13 +9,13 @@ export function useClients() {
     queryKey: ['clients'],
     queryFn: async () => {
       try {
-        const { data, error } = await supabase
+        const { data, error: supabaseError } = await supabase
           .from('clients')
           .select('id, org_id, name, email, phone, notes, created_at')
           .order('created_at', { ascending: false })
-        if (error) throw error
+        if (supabaseError) throw supabaseError
         return data as Client[]
-      } catch (error) {
+      } catch {
         // Fallback to mock data if database is not set up
         console.log('Using mock data for clients')
         return mockData.clients as Client[]
@@ -30,9 +30,9 @@ export function useCreateClient() {
     mutationFn: async (payload: Pick<Client,'name'|'email'|'phone'|'notes'>) => {
       try {
         const org_id = await currentOrgId()
-        const { error } = await supabase.from('clients').insert({ org_id, ...payload })
-        if (error) throw error
-      } catch (error) {
+        const { error: supabaseError } = await supabase.from('clients').insert({ org_id, ...payload })
+        if (supabaseError) throw supabaseError
+      } catch {
         // Mock creation - in real app this would be handled by the database
         console.log('Mock client creation:', payload)
       }
@@ -47,9 +47,9 @@ export function useUpdateClient() {
     mutationFn: async (args: { id: string } & Partial<Client>) => {
       try {
         const { id, ...rest } = args
-        const { error } = await supabase.from('clients').update(rest).eq('id', id)
-        if (error) throw error
-      } catch (error) {
+        const { error: supabaseError } = await supabase.from('clients').update(rest).eq('id', id)
+        if (supabaseError) throw supabaseError
+      } catch {
         // Mock update
         console.log('Mock client update:', args)
       }
@@ -63,9 +63,9 @@ export function useDeleteClient() {
   return useMutation({
     mutationFn: async (id: string) => {
       try {
-        const { error } = await supabase.from('clients').delete().eq('id', id)
-        if (error) throw error
-      } catch (error) {
+        const { error: supabaseError } = await supabase.from('clients').delete().eq('id', id)
+        if (supabaseError) throw supabaseError
+      } catch {
         // Mock deletion
         console.log('Mock client deletion:', id)
       }
