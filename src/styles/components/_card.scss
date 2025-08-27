@@ -1,0 +1,258 @@
+@use '../mixins.scss' as *;
+
+/* Card Component */
+.card {
+  @include card;
+  padding: var(--space-6);
+  min-height: 0; /* Allow content to determine height */
+
+  /* Prevent layout shift */
+  box-sizing: border-box;
+}
+
+/* Card variants */
+.card-elevated {
+  @extend .card;
+  box-shadow: var(--shadow-lg);
+
+  &:hover {
+    box-shadow: var(--shadow-xl);
+  }
+}
+
+.card-interactive {
+  @extend .card;
+  cursor: pointer;
+  transition:
+    transform var(--anim-fast),
+    box-shadow var(--anim-fast);
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-xl);
+  }
+
+  &:focus-visible {
+    @include focus-ring;
+    transform: translateY(-4px);
+  }
+
+  &:active {
+    transform: translateY(-2px);
+  }
+
+  /* Reduced motion support */
+  @include reduced-motion {
+    transition: none;
+
+    &:hover,
+    &:focus-visible,
+    &:active {
+      transform: none;
+    }
+  }
+}
+
+.card-flat {
+  @extend .card;
+  box-shadow: none;
+  border: 1px solid var(--stroke);
+
+  &:hover {
+    border-color: var(--stroke-hover);
+  }
+}
+
+/* Card sizes */
+.card-sm {
+  @extend .card;
+  padding: var(--space-4);
+}
+
+.card-lg {
+  @extend .card;
+  padding: var(--space-8);
+}
+
+.card-xl {
+  @extend .card;
+  padding: var(--space-10);
+}
+
+/* Card header */
+.card-header {
+  margin-bottom: var(--space-4);
+  padding-bottom: var(--space-4);
+  border-bottom: 1px solid var(--stroke);
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    margin: 0;
+    color: var(--text);
+    font-weight: var(--fw-semibold);
+  }
+
+  p {
+    margin: var(--space-2) 0 0 0;
+    color: var(--muted);
+    font-size: var(--fs-sm);
+  }
+}
+
+/* Card body */
+.card-body {
+  flex: 1;
+
+  > * + * {
+    margin-top: var(--space-4);
+  }
+}
+
+/* Card footer */
+.card-footer {
+  margin-top: var(--space-4);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--stroke);
+  @include flex-between;
+
+  .btn + .btn {
+    margin-left: var(--space-3);
+  }
+}
+
+/* Card with image */
+.card-image {
+  @extend .card;
+  overflow: hidden;
+
+  .card-image-top {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    margin: calc(-1 * var(--space-6)) calc(-1 * var(--space-6)) var(--space-4);
+  }
+
+  .card-image-bottom {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    margin: var(--space-4) calc(-1 * var(--space-6)) calc(-1 * var(--space-6));
+  }
+}
+
+/* Card grid */
+.card-grid {
+  @include grid-responsive(1, 2, 3);
+  gap: var(--space-6);
+}
+
+.card-grid-2 {
+  @include grid(2, var(--space-6));
+
+  @include mobile {
+    @include grid(1, var(--space-6));
+  }
+}
+
+.card-grid-3 {
+  @include grid(3, var(--space-6));
+
+  @include mobile {
+    @include grid(1, var(--space-6));
+  }
+
+  @include tablet {
+    @include grid(2, var(--space-6));
+  }
+}
+
+.card-grid-4 {
+  @include grid(4, var(--space-6));
+
+  @include mobile {
+    @include grid(1, var(--space-6));
+  }
+
+  @include tablet {
+    @include grid(2, var(--space-6));
+  }
+}
+
+/* Card with accent */
+.card-accent {
+  @extend .card;
+  border-left: 4px solid var(--brand);
+}
+
+.card-accent-danger {
+  @extend .card;
+  border-left: 4px solid var(--danger);
+}
+
+.card-accent-warning {
+  @extend .card;
+  border-left: 4px solid var(--warning);
+}
+
+.card-accent-info {
+  @extend .card;
+  border-left: 4px solid var(--info);
+}
+
+/* Card skeleton loading */
+.card-skeleton {
+  @extend .card;
+
+  .skeleton-line {
+    height: 1rem;
+    background: linear-gradient(
+      90deg,
+      var(--stroke) 25%,
+      var(--panel) 50%,
+      var(--stroke) 75%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: var(--radius-sm);
+    margin-bottom: var(--space-3);
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    &.skeleton-line-sm {
+      height: 0.75rem;
+    }
+
+    &.skeleton-line-lg {
+      height: 1.5rem;
+    }
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* High contrast mode */
+@include high-contrast {
+  .card {
+    border-width: 2px;
+  }
+
+  .card-accent,
+  .card-accent-danger,
+  .card-accent-warning,
+  .card-accent-info {
+    border-left-width: 6px;
+  }
+}

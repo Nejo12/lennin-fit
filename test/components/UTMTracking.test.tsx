@@ -12,10 +12,13 @@ describe('UTM Tracking', () => {
         <Hero />
       </BrowserRouter>
     );
-    
+
     const tryLenninLink = screen.getByText('Try Lennin Free');
     expect(tryLenninLink).toBeInTheDocument();
-    expect(tryLenninLink).toHaveAttribute('href', 'https://lennin.fit?utm_source=tilsf&utm_medium=website&utm_campaign=hero_cta');
+    expect(tryLenninLink).toHaveAttribute(
+      'href',
+      'https://lennin.fit?utm_source=tilsf&utm_medium=website&utm_campaign=hero_cta'
+    );
   });
 
   it('CTA component includes UTM parameters in Try Lennin link', () => {
@@ -24,9 +27,12 @@ describe('UTM Tracking', () => {
         <CTA />
       </BrowserRouter>
     );
-    
+
     const tryLenninLink = screen.getByText('Try Lennin Free');
     expect(tryLenninLink).toBeInTheDocument();
-    expect(tryLenninLink).toHaveAttribute('href', 'https://lennin.fit?utm_source=tilsf&utm_medium=website&utm_campaign=cta_section');
+    expect(tryLenninLink).toHaveAttribute(
+      'href',
+      'https://lennin.fit?utm_source=tilsf&utm_medium=website&utm_campaign=cta_section'
+    );
   });
 });

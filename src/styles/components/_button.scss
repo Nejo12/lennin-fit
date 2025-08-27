@@ -1,0 +1,209 @@
+@use '../mixins.scss' as *;
+
+/* Button Component */
+.btn {
+  @include button-reset;
+  min-height: var(--tap-target);
+  padding: var(--space-3) var(--space-6);
+  border-radius: var(--radius-md);
+  font-size: var(--fs-md);
+  font-weight: var(--fw-semibold);
+  line-height: var(--lh-tight);
+  text-align: center;
+  text-decoration: none;
+  transition:
+    all var(--anim-fast),
+    transform var(--anim-med);
+  user-select: none;
+  white-space: nowrap;
+
+  /* Prevent layout shift */
+  min-width: var(--tap-target);
+
+  &:focus-visible {
+    @include focus-ring;
+  }
+
+  &:active {
+    transform: translateY(1px);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+
+    &:hover {
+      transform: none;
+    }
+  }
+
+  /* Reduced motion support */
+  @include reduced-motion {
+    transition: none;
+
+    &:active {
+      transform: none;
+    }
+  }
+}
+
+/* Button variants */
+.btn-primary {
+  @extend .btn;
+  background: var(--brand);
+  color: var(--brand-ink);
+  border: 1px solid var(--brand);
+
+  &:hover:not(:disabled) {
+    background: var(--brand-hover);
+    border-color: var(--brand-hover);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+  }
+
+  &:focus-visible {
+    @include focus-ring;
+    background: var(--brand-hover);
+  }
+}
+
+.btn-secondary {
+  @extend .btn;
+  background: transparent;
+  color: var(--text);
+  border: 1px solid var(--stroke);
+
+  &:hover:not(:disabled) {
+    background: var(--panel);
+    border-color: var(--stroke-hover);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+  }
+
+  &:focus-visible {
+    @include focus-ring;
+    background: var(--panel);
+    border-color: var(--brand);
+  }
+}
+
+.btn-ghost {
+  @extend .btn;
+  background: transparent;
+  color: var(--text);
+  border: 1px solid transparent;
+
+  &:hover:not(:disabled) {
+    background: var(--panel);
+    border-color: var(--stroke);
+    transform: translateY(-1px);
+  }
+
+  &:focus-visible {
+    @include focus-ring;
+    background: var(--panel);
+    border-color: var(--brand);
+  }
+}
+
+.btn-danger {
+  @extend .btn;
+  background: var(--danger);
+  color: white;
+  border: 1px solid var(--danger);
+
+  &:hover:not(:disabled) {
+    background: var(--danger-hover);
+    border-color: var(--danger-hover);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+  }
+
+  &:focus-visible {
+    @include focus-ring(var(--focus-ring-danger));
+    background: var(--danger-hover);
+  }
+}
+
+/* Button sizes */
+.btn-sm {
+  padding: var(--space-2) var(--space-4);
+  font-size: var(--fs-sm);
+  min-height: calc(var(--tap-target) - var(--space-2));
+}
+
+.btn-lg {
+  padding: var(--space-4) var(--space-8);
+  font-size: var(--fs-lg);
+  min-height: calc(var(--tap-target) + var(--space-2));
+}
+
+/* Button with icon */
+.btn-icon {
+  @extend .btn;
+  @include flex-center;
+  width: var(--tap-target);
+  padding: var(--space-3);
+
+  svg {
+    width: 1.25em;
+    height: 1.25em;
+  }
+}
+
+/* Button group */
+.btn-group {
+  display: inline-flex;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+
+  .btn {
+    border-radius: 0;
+    border-right-width: 0;
+
+    &:first-child {
+      border-top-left-radius: var(--radius-md);
+      border-bottom-left-radius: var(--radius-md);
+    }
+
+    &:last-child {
+      border-top-right-radius: var(--radius-md);
+      border-bottom-right-radius: var(--radius-md);
+      border-right-width: 1px;
+    }
+  }
+}
+
+/* Loading state */
+.btn-loading {
+  position: relative;
+  color: transparent;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 1em;
+    height: 1em;
+    margin: -0.5em 0 0 -0.5em;
+    border: 2px solid currentColor;
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* High contrast mode */
+@include high-contrast {
+  .btn {
+    border-width: 2px;
+  }
+}
