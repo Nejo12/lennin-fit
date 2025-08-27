@@ -1,0 +1,234 @@
+@use '../styles/mixins.scss' as *;
+
+.backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: grid;
+  place-items: center;
+  z-index: 1000;
+  backdrop-filter: blur(4px);
+  animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.content {
+  animation: slideIn 0.3s ease-out;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  background: #2a2a2a;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+  max-width: 480px;
+  width: 90vw;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.header {
+  background: #1f1f1f;
+  padding: 20px 24px 16px;
+  border-bottom: 2px solid #dc2626;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.title {
+  color: var(--muted);
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0;
+  text-align: center;
+}
+
+.closeButton {
+  position: absolute;
+  top: 50%;
+  right: 24px;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: #666666;
+  cursor: pointer;
+  padding: 8px 12px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background-color: rgba(220, 38, 38, 0.15);
+    color: #dc2626;
+    transform: translateY(-50%) scale(1.1);
+  }
+
+  &:focus-visible {
+    outline: 2px solid #3b82f6;
+    outline-offset: 2px;
+  }
+}
+
+.message {
+  color: var(--muted);
+  text-align: center;
+  padding: 32px 24px;
+  font-size: 16px;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.taskName {
+  color: var(--muted);
+  font-weight: 700;
+  font-size: 18px;
+  padding: 2px 6px;
+  border-radius: 6px;
+  position: relative;
+  display: inline-block;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin: 0 2px;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      135deg,
+      rgba(101, 212, 110, 0.08),
+      rgba(16, 185, 129, 0.08),
+      rgba(5, 150, 105, 0.08)
+    );
+    border: 1px solid rgba(101, 212, 110, 0.2);
+    border-radius: 6px;
+    z-index: -1;
+    backdrop-filter: blur(4px);
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    background: linear-gradient(
+      135deg,
+      rgba(101, 212, 110, 0.3),
+      rgba(16, 185, 129, 0.3)
+    );
+    border-radius: 8px;
+    z-index: -2;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  &:hover::after {
+    opacity: 1;
+  }
+}
+
+.actions {
+  display: flex;
+  gap: 12px;
+  padding: 0 24px 24px;
+  justify-content: flex-end;
+}
+
+.cancelButton {
+  background: #404040 !important;
+  color: var(--text) !important;
+  border: 1px solid #525252 !important;
+  padding: 12px 24px !important;
+  border-radius: 8px !important;
+  font-weight: 500 !important;
+  transition: all 0.2s ease !important;
+  min-width: 100px !important;
+
+  &:hover {
+    background: #525252 !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+  }
+
+  &:focus-visible {
+    outline: 2px solid #3b82f6 !important;
+    outline-offset: 2px !important;
+  }
+}
+
+.confirmButton {
+  background: #dc2626 !important;
+  color: var(--text) !important;
+  border: 1px solid #dc2626 !important;
+  padding: 12px 24px !important;
+  border-radius: 8px !important;
+  font-weight: 600 !important;
+  transition: all 0.2s ease !important;
+  min-width: 100px !important;
+
+  &:hover {
+    background: #b91c1c !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 4px 12px rgba(220, 38, 38, 0.4) !important;
+  }
+
+  &:focus-visible {
+    outline: 2px solid #3b82f6 !important;
+    outline-offset: 2px !important;
+  }
+}
+
+/* Mobile responsiveness */
+@media (max-width: 480px) {
+  .content {
+    width: 95vw;
+    margin: 20px;
+  }
+
+  .header {
+    padding: 16px 20px 12px;
+  }
+
+  .title {
+    font-size: 16px;
+  }
+
+  .closeButton {
+    top: 16px;
+    right: 20px;
+  }
+
+  .message {
+    padding: 24px 20px;
+    font-size: 15px;
+  }
+
+  .actions {
+    flex-direction: column-reverse;
+    gap: 8px;
+    padding: 0 20px 20px;
+  }
+
+  .cancelButton,
+  .confirmButton {
+    width: 100% !important;
+    min-width: unset !important;
+    justify-content: center !important;
+  }
+}

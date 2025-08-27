@@ -11,13 +11,13 @@ export default function Login() {
   const send = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
-    
+
     // Check if Supabase is configured
     if (!isSupabaseConfigured()) {
       setError('Authentication is not configured. Please contact support.');
       return;
     }
-    
+
     const { error } = await supabase.auth.signInWithOtp({
       email,
       options: { emailRedirectTo: `${location.origin}/auth/callback` },
@@ -59,7 +59,8 @@ export default function Login() {
                       clipRule="evenodd"
                     />
                   </svg>
-                  Supabase authentication is not configured. Please set up your environment variables.
+                  Supabase authentication is not configured. Please set up your
+                  environment variables.
                 </div>
               </div>
             </div>

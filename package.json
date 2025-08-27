@@ -6,8 +6,10 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "build:analyze": "tsc && vite build --mode analyze",
     "preview": "vite preview",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "lint:fix": "eslint . --ext ts,tsx --fix",
     "prettier": "prettier --write .",
     "prettier-check": "prettier --check .",
     "deploy": "./scripts/deploy.sh",
@@ -17,10 +19,17 @@
     "test:ui": "vitest --ui",
     "test:run": "vitest run",
     "test:coverage": "vitest run --coverage",
+    "test:watch": "vitest --watch",
     "typecheck": "tsc --noEmit",
+    "typecheck:watch": "tsc --noEmit --watch",
     "test:build": "npm run build && echo '✅ Build test passed'",
     "clean": "rm -rf dist coverage node_modules/.cache",
-    "setup": "npm install && npm run build"
+    "setup": "npm install && npm run build",
+    "dev:check": "npm run typecheck && npm run lint && npm run test:run",
+    "format": "npm run prettier && npm run lint:fix",
+    "validate": "npm run typecheck && npm run lint && npm run test:coverage && npm run build",
+    "storybook": "storybook dev -p 6006",
+    "storybook:build": "storybook build"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.56.0",

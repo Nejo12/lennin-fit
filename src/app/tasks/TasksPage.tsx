@@ -1,23 +1,8 @@
 import React, { useState, useCallback, useMemo } from 'react';
 import { useTasks, useCreateTask, useUpdateTask, useDeleteTask } from './api';
+import OptimizedTaskList from '../../components/OptimizedTaskList';
+import { type Task } from '../../components/TaskItem';
 import styles from './Tasks.module.scss';
-
-// Debounce hook for performance optimization
-function useDebounce<T extends (...args: never[]) => void>(
-  callback: T,
-  delay: number
-): T {
-  const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
-
-  return useCallback(
-    ((...args: never[]) => {
-      if (timeoutId) clearTimeout(timeoutId);
-      const newTimeoutId = setTimeout(() => callback(...args), delay);
-      setTimeoutId(newTimeoutId);
-    }) as T,
-    [callback, delay, timeoutId]
-  );
-}
 
 export default function TasksPage() {
   const { data, isLoading, error, refetch } = useTasks();
@@ -33,21 +18,6 @@ export default function TasksPage() {
   const optimisticData = useMemo(() => {
     return optimisticTasks || data;
   }, [optimisticTasks, data]);
-
-  // Debounced title update for performance
-  const debouncedTitleUpdate = useDebounce(
-    (taskId: string, newTitle: string) => {
-      if (newTitle.trim() !== '') {
-        update.mutate({ id: taskId, title: newTitle.trim() });
-      }
-    },
-    500
-  );
-
-  // Debounced date update for performance
-  const debouncedDateUpdate = useDebounce((taskId: string, dueDate: string) => {
-    update.mutate({ id: taskId, due_date: dueDate || null });
-  }, 300);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -94,42 +64,33 @@ export default function TasksPage() {
 
   const handleDelete = useCallback(
     (taskId: string) => {
-      if (window.confirm('Are you sure you want to delete this task?')) {
-        // Optimistic update
-        setOptimisticTasks(
-          prev => prev?.filter(task => task.id !== taskId) || undefined
-        );
+      // Optimistic update
+      setOptimisticTasks(
+        prev => prev?.filter(task => task.id !== taskId) || undefined
+      );
 
-        del.mutate(taskId, {
-          onError: () => {
-            // Revert optimistic update on error
-            refetch();
-          },
-        });
-      }
+      del.mutate(taskId, {
+        onError: () => {
+          // Revert optimistic update on error
+          refetch();
+        },
+      });
     },
     [del, refetch]
   );
 
-  const handleTitleUpdate = useCallback(
-    (taskId: string, newTitle: string) => {
-      debouncedTitleUpdate(taskId, newTitle);
-    },
-    [debouncedTitleUpdate]
-  );
-
-  const handleStatusUpdate = useCallback(
-    (taskId: string, status: 'todo' | 'doing' | 'done' | 'blocked') => {
+  const handleTaskUpdate = useCallback(
+    (taskId: string, updates: Partial<Task>) => {
       // Optimistic update for immediate feedback
       setOptimisticTasks(
         prev =>
           prev?.map(task =>
-            task.id === taskId ? { ...task, status } : task
+            task.id === taskId ? { ...task, ...updates } : task
           ) || undefined
       );
 
       update.mutate(
-        { id: taskId, status },
+        { id: taskId, ...updates },
         {
           onError: () => {
             // Revert optimistic update on error
@@ -141,27 +102,9 @@ export default function TasksPage() {
     [update, refetch]
   );
 
-  const handleDateUpdate = useCallback(
-    (taskId: string, dueDate: string) => {
-      debouncedDateUpdate(taskId, dueDate);
-    },
-    [debouncedDateUpdate]
-  );
-
   const handleRetry = useCallback(() => {
     refetch();
   }, [refetch]);
-
-  // Keyboard navigation support
-  const handleKeyDown = useCallback(
-    (e: React.KeyboardEvent, action: () => void) => {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        action();
-      }
-    },
-    []
-  );
 
   if (isLoading && !optimisticData) {
     return (
@@ -241,69 +184,21 @@ export default function TasksPage() {
         </div>
       )}
 
-      {/* Tasks List */}
-      <div className={styles.taskList} role="list">
-        {optimisticData && optimisticData.length > 0 ? (
-          optimisticData.map(task => (
-            <div
-              key={task.id}
-              className={styles.taskItem}
-              role="listitem"
-              aria-label={`Task: ${task.title}`}
-            >
-              <input
-                defaultValue={task.title}
-                onBlur={e => handleTitleUpdate(task.id, e.target.value)}
-                onKeyDown={e => {
-                  if (e.key === 'Enter') {
-                    e.currentTarget.blur();
-                  }
-                }}
-                className={styles.taskInput}
-                aria-label={`Task title for ${task.title}`}
-                maxLength={200}
-              />
-              <select
-                defaultValue={task.status}
-                onChange={e =>
-                  handleStatusUpdate(
-                    task.id,
-                    e.target.value as 'todo' | 'doing' | 'done' | 'blocked'
-                  )
-                }
-                className={styles.taskSelect}
-                aria-label={`Status for ${task.title}`}
-              >
-                <option value="todo">Todo</option>
-                <option value="doing">Doing</option>
-                <option value="done">Done</option>
-                <option value="blocked">Blocked</option>
-              </select>
-              <input
-                type="date"
-                defaultValue={task.due_date ?? ''}
-                onChange={e => handleDateUpdate(task.id, e.target.value)}
-                className={styles.taskDate}
-                aria-label={`Due date for ${task.title}`}
-              />
-              <button
-                onClick={() => handleDelete(task.id)}
-                onKeyDown={e => handleKeyDown(e, () => handleDelete(task.id))}
-                disabled={del.isPending}
-                className={styles.deleteButton}
-                aria-label={`Delete ${task.title}`}
-                title="Delete task"
-              >
-                Delete
-              </button>
-            </div>
-          ))
-        ) : (
-          <div className={styles.emptyState} role="status">
-            <p>No tasks yet. Create your first task above!</p>
-          </div>
-        )}
-      </div>
+      {/* Optimized Tasks List */}
+      {optimisticData && (
+        <OptimizedTaskList
+          tasks={optimisticData.map(task => ({
+            ...task,
+            due_date: task.due_date || null,
+            priority:
+              (task.priority === 'urgent' ? 'high' : task.priority) || 'medium',
+            status:
+              (task.status === 'blocked' ? 'todo' : task.status) || 'todo',
+          }))}
+          onUpdate={handleTaskUpdate}
+          onDelete={handleDelete}
+        />
+      )}
 
       {/* Loading indicator for background updates */}
       {(update.isPending || del.isPending) && (

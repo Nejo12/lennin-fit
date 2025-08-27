@@ -9,7 +9,7 @@ export function useAuth() {
 
   useEffect(() => {
     let mounted = true;
-    
+
     (async () => {
       // If Supabase is not configured, return null user
       if (!isSupabaseConfigured()) {
@@ -38,7 +38,7 @@ export function useAuth() {
       const { data: sub } = supabase.auth.onAuthStateChange((_evt, session) => {
         setUser(session?.user ?? null);
       });
-      
+
       return () => {
         mounted = false;
         sub.subscription.unsubscribe();

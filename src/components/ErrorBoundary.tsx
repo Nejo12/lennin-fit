@@ -4,21 +4,29 @@ interface Props {
   children: ReactNode;
   fallback?: ReactNode;
   onError?: (error: Error, errorInfo: ErrorInfo) => void;
+  retryCount?: number;
+  maxRetries?: number;
 }
 
 interface State {
   hasError: boolean;
   error?: Error;
   errorInfo?: ErrorInfo;
+  retryCount: number;
+  isRetrying: boolean;
 }
 
 export class ErrorBoundary extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    this.state = { hasError: false };
+    this.state = {
+      hasError: false,
+      retryCount: 0,
+      isRetrying: false,
+    };
   }
 
-  static getDerivedStateFromError(error: Error): State {
+  static getDerivedStateFromError(error: Error): Partial<State> {
     return { hasError: true, error };
   }
 
@@ -33,27 +41,90 @@ export class ErrorBoundary extends Component<Props, State> {
     // Call custom error handler if provided
     this.props.onError?.(error, errorInfo);
 
-    // In production, you might want to send this to an error reporting service
-    // Example: Sentry.captureException(error, { extra: errorInfo });
+    // Send to error reporting service in production
+    if (process.env.NODE_ENV === 'production') {
+      this.reportError(error, errorInfo);
+    }
   }
 
-  handleRetry = () => {
-    this.setState({ hasError: false, error: undefined, errorInfo: undefined });
+  reportError = async (error: Error, errorInfo: ErrorInfo) => {
+    try {
+      // Send to your error reporting service (e.g., Sentry, LogRocket)
+      const errorData = {
+        message: error.message,
+        stack: error.stack,
+        componentStack: errorInfo.componentStack,
+        timestamp: new Date().toISOString(),
+        userAgent: navigator.userAgent,
+        url: window.location.href,
+      };
+
+      // Example: Send to your API endpoint
+      await fetch('/api/errors', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(errorData),
+      });
+    } catch (reportError) {
+      console.error('Failed to report error:', reportError);
+    }
+  };
+
+  handleRetry = async () => {
+    const { maxRetries = 3 } = this.props;
+    const { retryCount } = this.state;
+
+    if (retryCount >= maxRetries) {
+      // Show permanent error state
+      return;
+    }
+
+    this.setState({ isRetrying: true });
+
+    try {
+      // Wait a bit before retrying
+      await new Promise(resolve =>
+        setTimeout(resolve, 1000 * (retryCount + 1))
+      );
+
+      this.setState(prevState => ({
+        hasError: false,
+        error: undefined,
+        errorInfo: undefined,
+        retryCount: prevState.retryCount + 1,
+        isRetrying: false,
+      }));
+    } catch (retryError) {
+      this.setState({ isRetrying: false });
+      console.error('Retry failed:', retryError);
+    }
   };
 
   handleReportError = () => {
     const { error, errorInfo } = this.state;
     if (error) {
-      // In a real app, you'd send this to your error reporting service
-      console.log('Error reported:', {
-        error: error.message,
-        stack: error.stack,
-        errorInfo,
-      });
+      this.reportError(error, errorInfo!);
 
-      // For demo purposes, we'll just show an alert
+      // Show user feedback
       alert('Error has been reported. Thank you for your feedback!');
     }
+  };
+
+  getErrorMessage = (error: Error): string => {
+    // Provide user-friendly error messages based on error type
+    if (error.name === 'NetworkError' || error.message.includes('fetch')) {
+      return 'Network connection issue. Please check your internet connection.';
+    }
+
+    if (error.name === 'TypeError' && error.message.includes('Cannot read')) {
+      return 'Something went wrong with the data. Please refresh the page.';
+    }
+
+    if (error.message.includes('auth')) {
+      return 'Authentication error. Please sign in again.';
+    }
+
+    return 'Something unexpected happened. Our team has been notified.';
   };
 
   render() {
@@ -63,6 +134,10 @@ export class ErrorBoundary extends Component<Props, State> {
         return this.props.fallback;
       }
 
+      const { error, retryCount, isRetrying } = this.state;
+      const maxRetries = this.props.maxRetries || 3;
+      const canRetry = retryCount < maxRetries;
+
       // Default error UI
       return (
         <div className="error-boundary">
@@ -70,14 +145,15 @@ export class ErrorBoundary extends Component<Props, State> {
             <div className="error-icon">⚠️</div>
             <h2>Something went wrong</h2>
             <p>
-              We're sorry, but something unexpected happened. Our team has been
-              notified.
+              {error
+                ? this.getErrorMessage(error)
+                : 'An unexpected error occurred.'}
             </p>
 
-            {process.env.NODE_ENV === 'development' && this.state.error && (
+            {process.env.NODE_ENV === 'development' && error && (
               <details className="error-details">
                 <summary>Error Details (Development)</summary>
-                <pre>{this.state.error.stack}</pre>
+                <pre>{error.stack}</pre>
                 {this.state.errorInfo && (
                   <pre>{this.state.errorInfo.componentStack}</pre>
                 )}
@@ -85,13 +161,17 @@ export class ErrorBoundary extends Component<Props, State> {
             )}
 
             <div className="error-actions">
-              <button
-                onClick={this.handleRetry}
-                className="retry-button"
-                aria-label="Try again"
-              >
-                Try Again
-              </button>
+              {canRetry && (
+                <button
+                  onClick={this.handleRetry}
+                  disabled={isRetrying}
+                  className="retry-button"
+                  aria-label="Try again"
+                >
+                  {isRetrying ? 'Retrying...' : 'Try Again'}
+                </button>
+              )}
+
               <button
                 onClick={this.handleReportError}
                 className="report-button"
@@ -99,7 +179,24 @@ export class ErrorBoundary extends Component<Props, State> {
               >
                 Report Error
               </button>
+
+              <button
+                onClick={() => window.location.reload()}
+                className="reload-button"
+                aria-label="Reload page"
+              >
+                Reload Page
+              </button>
             </div>
+
+            {!canRetry && (
+              <div className="error-limit">
+                <p>
+                  Maximum retry attempts reached. Please reload the page or
+                  contact support.
+                </p>
+              </div>
+            )}
           </div>
 
           <style>{`
@@ -171,7 +268,8 @@ export class ErrorBoundary extends Component<Props, State> {
             }
 
             .retry-button,
-            .report-button {
+            .report-button,
+            .reload-button {
               padding: 0.75rem 1.5rem;
               border: none;
               border-radius: 8px;
@@ -186,9 +284,15 @@ export class ErrorBoundary extends Component<Props, State> {
               color: white;
             }
 
-            .retry-button:hover {
+            .retry-button:hover:not(:disabled) {
               background: #2563eb;
               transform: translateY(-1px);
+            }
+
+            .retry-button:disabled {
+              opacity: 0.6;
+              cursor: not-allowed;
+              transform: none;
             }
 
             .report-button {
@@ -202,6 +306,25 @@ export class ErrorBoundary extends Component<Props, State> {
               transform: translateY(-1px);
             }
 
+            .reload-button {
+              background: #10b981;
+              color: white;
+            }
+
+            .reload-button:hover {
+              background: #059669;
+              transform: translateY(-1px);
+            }
+
+            .error-limit {
+              margin-top: 1.5rem;
+              padding: 1rem;
+              background: #fef2f2;
+              border: 1px solid #fecaca;
+              border-radius: 6px;
+              color: #dc2626;
+            }
+
             @media (max-width: 640px) {
               .error-content {
                 padding: 2rem 1rem;
@@ -212,7 +335,8 @@ export class ErrorBoundary extends Component<Props, State> {
               }
 
               .retry-button,
-              .report-button {
+              .report-button,
+              .reload-button {
                 width: 100%;
               }
             }

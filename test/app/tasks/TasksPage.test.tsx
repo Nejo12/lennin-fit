@@ -130,9 +130,8 @@ describe('TasksPage', () => {
 
       renderWithProviders(<TasksPage />);
 
-      expect(
-        screen.getByText('No tasks yet. Create your first task above!')
-      ).toBeInTheDocument();
+      expect(screen.getByText('No tasks yet')).toBeInTheDocument();
+      expect(screen.getByText('Create your first task to get started')).toBeInTheDocument();
     });
   });
 
@@ -240,10 +239,15 @@ describe('TasksPage', () => {
       // Wait for debounced update
       await waitFor(
         () => {
-          expect(mockUpdateMutation.mutate).toHaveBeenCalledWith({
-            id: '1',
-            title: 'Updated Task 1',
-          });
+          expect(mockUpdateMutation.mutate).toHaveBeenCalledWith(
+            {
+              id: '1',
+              title: 'Updated Task 1',
+            },
+            expect.objectContaining({
+              onError: expect.any(Function),
+            })
+          );
         },
         { timeout: 1000 }
       );
@@ -275,10 +279,15 @@ describe('TasksPage', () => {
       fireEvent.change(firstDateInput, { target: { value: '2024-01-15' } });
 
       await waitFor(() => {
-        expect(mockUpdateMutation.mutate).toHaveBeenCalledWith({
-          id: '1',
-          due_date: '2024-01-15',
-        });
+        expect(mockUpdateMutation.mutate).toHaveBeenCalledWith(
+          {
+            id: '1',
+            due_date: '2024-01-15',
+          },
+          expect.objectContaining({
+            onError: expect.any(Function),
+          })
+        );
       });
     });
 
@@ -290,68 +299,68 @@ describe('TasksPage', () => {
       fireEvent.change(firstDateInput, { target: { value: '' } });
 
       await waitFor(() => {
-        expect(mockUpdateMutation.mutate).toHaveBeenCalledWith({
-          id: '1',
-          due_date: null,
-        });
+        expect(mockUpdateMutation.mutate).toHaveBeenCalledWith(
+          {
+            id: '1',
+            due_date: null,
+          },
+          expect.objectContaining({
+            onError: expect.any(Function),
+          })
+        );
       });
     });
   });
 
   describe('Delete Task', () => {
-    it('deletes task when delete button is clicked', async () => {
-      const confirmSpy = vi.spyOn(window, 'confirm').mockReturnValue(true);
-
+    it('shows confirmation modal when delete button is clicked', async () => {
       renderWithProviders(<TasksPage />);
 
       const deleteButtons = screen.getAllByRole('button', { name: /delete/i });
       fireEvent.click(deleteButtons[0]);
 
-      expect(mockDeleteMutation.mutate).toHaveBeenCalledWith(
-        '1',
-        expect.objectContaining({
-          onError: expect.any(Function),
-        })
-      );
-
-      confirmSpy.mockRestore();
+      // Check that the confirmation modal appears
+      expect(screen.getByText('Delete Task')).toBeInTheDocument();
+      expect(screen.getByText(/Are you sure you want to delete/)).toBeInTheDocument();
+      expect(screen.getByText('Task 1')).toBeInTheDocument();
     });
 
-    it('shows confirmation before deleting', async () => {
-      const confirmSpy = vi.spyOn(window, 'confirm').mockReturnValue(true);
-
+    it('deletes task when confirmed in modal', async () => {
       renderWithProviders(<TasksPage />);
 
       const deleteButtons = screen.getAllByRole('button', { name: /delete/i });
       fireEvent.click(deleteButtons[0]);
 
-      expect(confirmSpy).toHaveBeenCalledWith(
-        'Are you sure you want to delete this task?'
-      );
-      expect(mockDeleteMutation.mutate).toHaveBeenCalledWith(
-        '1',
-        expect.objectContaining({
-          onError: expect.any(Function),
-        })
-      );
+      // Wait for modal to appear
+      await waitFor(() => {
+        expect(screen.getByText('Delete Task')).toBeInTheDocument();
+      });
 
-      confirmSpy.mockRestore();
+      // Click the Delete button in the modal using the class name
+      const modalDeleteButton = document.querySelector('button._confirmButton_fe4d04');
+      fireEvent.click(modalDeleteButton!);
+
+      await waitFor(() => {
+        expect(mockDeleteMutation.mutate).toHaveBeenCalledWith(
+          '1',
+          expect.objectContaining({
+            onError: expect.any(Function),
+          })
+        );
+      });
     });
 
-    it('does not delete when user cancels confirmation', async () => {
-      const confirmSpy = vi.spyOn(window, 'confirm').mockReturnValue(false);
-
+    it('does not delete when user cancels in modal', async () => {
       renderWithProviders(<TasksPage />);
 
       const deleteButtons = screen.getAllByRole('button', { name: /delete/i });
       fireEvent.click(deleteButtons[0]);
 
-      expect(confirmSpy).toHaveBeenCalledWith(
-        'Are you sure you want to delete this task?'
-      );
+      // Click the Cancel button in the modal
+      const cancelButton = screen.getByRole('button', { name: /cancel/i });
+      fireEvent.click(cancelButton);
+
       expect(mockDeleteMutation.mutate).not.toHaveBeenCalled();
-
-      confirmSpy.mockRestore();
     });
   });
 
@@ -378,7 +387,6 @@ describe('TasksPage', () => {
       expect(firstSelect).toHaveTextContent('Todo');
       expect(firstSelect).toHaveTextContent('Doing');
       expect(firstSelect).toHaveTextContent('Done');
-      expect(firstSelect).toHaveTextContent('Blocked');
     });
   });
 
