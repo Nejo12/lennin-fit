@@ -33,37 +33,10 @@
 
 .formRow {
   display: grid;
-  grid-template-columns: 1fr auto auto auto;
+  grid-template-columns: 1fr auto auto;
   gap: var(--space-3);
   align-items: end;
-}
-
-.submitButton {
-  @include button-reset;
-  background: var(--brand);
-  color: var(--brand-ink);
-  padding: var(--space-3) var(--space-4);
-  border-radius: var(--radius-md);
-  font-weight: 600;
-  transition: transform var(--anim-fast) ease;
-
-  &:hover {
-    transform: translateY(-1px);
-  }
-}
-
-.taskList {
-  display: grid;
-  gap: var(--space-3);
-}
-
-.taskItem {
-  @include card;
-  padding: var(--space-4);
-  display: grid;
-  grid-template-columns: 1fr auto auto auto;
-  gap: var(--space-3);
-  align-items: center;
+  margin-bottom: var(--space-2);
 }
 
 .taskInput {
@@ -80,7 +53,7 @@
   }
 }
 
-.taskSelect {
+.taskDate {
   @include control;
   background: var(--elev);
   border: 1px solid var(--stroke);
@@ -89,7 +62,120 @@
   font-size: var(--fs-sm);
 }
 
-.taskDate {
+.submitButton {
+  @include button-reset;
+  background: var(--brand);
+  color: var(--brand-ink);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  transition: transform var(--anim-fast) ease;
+
+  &:hover {
+    transform: translateY(-1px);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+  }
+}
+
+.helpText {
+  font-size: var(--fs-sm);
+  color: var(--muted);
+  margin-top: var(--space-2);
+}
+
+.statusText {
+  font-size: var(--fs-sm);
+  color: var(--success);
+  margin-top: var(--space-2);
+  font-weight: 500;
+}
+
+.loadingState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-8);
+  color: var(--muted);
+}
+
+.spinner {
+  width: 24px;
+  height: 24px;
+  border: 3px solid var(--stroke);
+  border-top: 3px solid var(--brand);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: var(--space-4);
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.errorState {
+  @include card;
+  background: var(--error-bg);
+  border: 1px solid var(--error);
+  color: var(--error);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin-bottom: var(--space-6);
+}
+
+.retryButton {
+  @include button-reset;
+  background: var(--error);
+  color: white;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-sm);
+  font-size: var(--fs-sm);
+  font-weight: 500;
+  transition: background var(--anim-fast) ease;
+
+  &:hover {
+    background: var(--error-hover);
+  }
+}
+
+.taskList {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.taskItem {
+  @include card;
+  padding: var(--space-4);
+  display: grid;
+  grid-template-columns: 1fr auto auto auto;
+  gap: var(--space-3);
+  align-items: center;
+  transition: all var(--anim-fast) ease;
+
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-lg);
+  }
+
+  &:focus-within {
+    border-color: var(--brand);
+    box-shadow: 0 0 0 3px var(--brand-alpha);
+  }
+}
+
+.taskSelect {
   @include control;
   background: var(--elev);
   border: 1px solid var(--stroke);
@@ -110,6 +196,46 @@
   &:hover {
     color: var(--danger);
     background: color-mix(in oklab, var(--danger) 10%, transparent);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+.emptyState {
+  text-align: center;
+  padding: var(--space-8);
+  color: var(--muted);
+  font-size: var(--fs-lg);
+  background: var(--elev);
+  border-radius: var(--radius-md);
+  border: 2px dashed var(--stroke);
+}
+
+.backgroundLoading {
+  position: fixed;
+  bottom: var(--space-6);
+  right: var(--space-6);
+  background: var(--text);
+  color: var(--bg);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--fs-sm);
+  font-weight: 500;
+  box-shadow: var(--shadow-lg);
+  z-index: 1000;
+
+  .spinner {
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top: 2px solid white;
+    margin: 0;
   }
 }
 
@@ -145,6 +271,12 @@
   .subtitle {
     font-size: var(--fs-md);
   }
+
+  .backgroundLoading {
+    bottom: var(--space-4);
+    right: var(--space-4);
+    left: var(--space-4);
+  }
 }
 
 @media (max-width: 480px) {
@@ -166,5 +298,32 @@
   .submitButton {
     padding: var(--space-1) var(--space-2);
     font-size: var(--fs-xs);
+  }
+}
+
+// High contrast mode support
+@media (prefers-contrast: high) {
+  .taskInput,
+  .taskDate,
+  .taskSelect {
+    border-width: 3px;
+  }
+
+  .submitButton,
+  .deleteButton {
+    border: 2px solid currentColor;
+  }
+}
+
+// Reduced motion support
+@media (prefers-reduced-motion: reduce) {
+  .spinner {
+    animation: none;
+  }
+
+  .taskItem:hover,
+  .submitButton:hover,
+  .deleteButton:hover {
+    transform: none;
   }
 }
