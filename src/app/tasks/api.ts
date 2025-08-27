@@ -1,8 +1,8 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { supabase } from '@/lib/supabase'
-import { currentOrgId } from '@/lib/workspace'
-import { mockData } from '@/lib/mockData'
-import type { Task } from '@/types/db'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { supabase } from '@/lib/supabase';
+import { currentOrgId } from '@/lib/workspace';
+import { mockData } from '@/lib/mockData';
+import type { Task } from '@/types/db';
 
 export function useTasks() {
   return useQuery({
@@ -11,65 +11,77 @@ export function useTasks() {
       try {
         const { data, error: supabaseError } = await supabase
           .from('tasks')
-          .select('id, org_id, project_id, title, status, priority, due_date, position, updated_at')
-          .order('due_date', { ascending: true, nullsFirst: false })
-        if (supabaseError) throw supabaseError
-        return data as Task[]
+          .select(
+            'id, org_id, project_id, title, status, priority, due_date, position, updated_at'
+          )
+          .order('due_date', { ascending: true, nullsFirst: false });
+        if (supabaseError) throw supabaseError;
+        return data as Task[];
       } catch {
         // Fallback to mock data if database is not set up
-        console.log('Using mock data for tasks')
-        return mockData.tasks as Task[]
+        console.log('Using mock data for tasks');
+        return mockData.tasks as Task[];
       }
-    }
-  })
+    },
+  });
 }
 
 export function useCreateTask() {
-  const qc = useQueryClient()
+  const qc = useQueryClient();
   return useMutation({
-    mutationFn: async (payload: Pick<Task,'title'|'project_id'|'due_date'|'priority'>) => {
+    mutationFn: async (
+      payload: Pick<Task, 'title' | 'project_id' | 'due_date' | 'priority'>
+    ) => {
       try {
-        const org_id = await currentOrgId()
-        const { error: supabaseError } = await supabase.from('tasks').insert({ org_id, status: 'todo', position: 0, ...payload })
-        if (supabaseError) throw supabaseError
+        const org_id = await currentOrgId();
+        const { error: supabaseError } = await supabase
+          .from('tasks')
+          .insert({ org_id, status: 'todo', position: 0, ...payload });
+        if (supabaseError) throw supabaseError;
       } catch {
         // Mock creation
-        console.log('Mock task creation:', payload)
+        console.log('Mock task creation:', payload);
       }
     },
-    onSuccess: () => qc.invalidateQueries({ queryKey: ['tasks'] })
-  })
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['tasks'] }),
+  });
 }
 
 export function useUpdateTask() {
-  const qc = useQueryClient()
+  const qc = useQueryClient();
   return useMutation({
     mutationFn: async (args: { id: string } & Partial<Task>) => {
       try {
-        const { id, ...rest } = args
-        const { error: supabaseError } = await supabase.from('tasks').update(rest).eq('id', id)
-        if (supabaseError) throw supabaseError
+        const { id, ...rest } = args;
+        const { error: supabaseError } = await supabase
+          .from('tasks')
+          .update(rest)
+          .eq('id', id);
+        if (supabaseError) throw supabaseError;
       } catch {
         // Mock update
-        console.log('Mock task update:', args)
+        console.log('Mock task update:', args);
       }
     },
-    onSuccess: () => qc.invalidateQueries({ queryKey: ['tasks'] })
-  })
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['tasks'] }),
+  });
 }
 
 export function useDeleteTask() {
-  const qc = useQueryClient()
+  const qc = useQueryClient();
   return useMutation({
     mutationFn: async (id: string) => {
       try {
-        const { error: supabaseError } = await supabase.from('tasks').delete().eq('id', id)
-        if (supabaseError) throw supabaseError
+        const { error: supabaseError } = await supabase
+          .from('tasks')
+          .delete()
+          .eq('id', id);
+        if (supabaseError) throw supabaseError;
       } catch {
         // Mock deletion
-        console.log('Mock task deletion:', id)
+        console.log('Mock task deletion:', id);
       }
     },
-    onSuccess: () => qc.invalidateQueries({ queryKey: ['tasks'] })
-  })
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['tasks'] }),
+  });
 }

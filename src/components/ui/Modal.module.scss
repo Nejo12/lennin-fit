@@ -1,16 +1,35 @@
-@use "../../styles/mixins.scss" as *;
+@use '../../styles/mixins.scss' as *;
 
 .backdrop {
-  position: fixed; inset: 0; background: rgba(0,0,0,.5);
-  display: grid; place-items: center; z-index: 50;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: grid;
+  place-items: center;
+  z-index: 50;
 }
 .panel {
-  @include card; width: min(560px, 92vw); padding: 20px;
-  display: grid; gap: 12px;
+  @include card;
+  width: min(560px, 92vw);
+  padding: 20px;
+  display: grid;
+  gap: 12px;
 }
-.header { display: flex; justify-content: space-between; align-items: center; }
-.title { font-weight: 800; font-size: var(--fs-lg); }
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.title {
+  font-weight: 800;
+  font-size: var(--fs-lg);
+}
 .close {
-  @include button-reset; color: var(--muted); border-radius: var(--radius-sm); padding: 6px;
-  &:focus-visible { @include focus-ring; }
+  @include button-reset;
+  color: var(--muted);
+  border-radius: var(--radius-sm);
+  padding: 6px;
+  &:focus-visible {
+    @include focus-ring;
+  }
 }

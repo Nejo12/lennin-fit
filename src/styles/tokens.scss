@@ -11,15 +11,34 @@
   --stroke: #1e1f23;
 
   /* typography */
-  --font-sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Inter, Roboto, Arial, "Noto Sans";
-  --fs-xs: 12px; --fs-sm: 14px; --fs-md: 16px; --fs-lg: 18px; --fs-xl: 22px; --fs-2xl: 28px; --fs-3xl: 32px;
+  --font-sans:
+    ui-sans-serif, system-ui, -apple-system, Segoe UI, Inter, Roboto, Arial,
+    'Noto Sans';
+  --fs-xs: 12px;
+  --fs-sm: 14px;
+  --fs-md: 16px;
+  --fs-lg: 18px;
+  --fs-xl: 22px;
+  --fs-2xl: 28px;
+  --fs-3xl: 32px;
 
   /* spacing & radius */
-  --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px; --space-5: 20px; --space-6: 24px; --space-10: 40px;
-  --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px; --radius-xl: 20px;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-10: 40px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
 
   /* motion & shadow */
-  --shadow: 0 10px 30px rgba(0,0,0,.35);
-  --focus-ring: 0 0 0 3px rgba(101,212,110,.35);
-  --anim-fast: 150ms; --anim-med: 200ms; --anim-slow: 300ms;
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+  --focus-ring: 0 0 0 3px rgba(101, 212, 110, 0.35);
+  --anim-fast: 150ms;
+  --anim-med: 200ms;
+  --anim-slow: 300ms;
 }

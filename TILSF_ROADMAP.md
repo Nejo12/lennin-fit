@@ -1,26 +1,29 @@
 # TILSF Roadmap Alignment
 
 ## Overview
+
 Lennin Fit is now aligned with the TILSF framework, providing marketing symmetry where every feature corresponds to one letter of TILSF.
 
 ## Sprint 1 Status ✅ COMPLETED
 
 ### 🎯 **T**asks
+
 - **Status**: ✅ Implemented (Sprint 1)
 - **Features**: Full CRUD operations with React Query + Supabase
 - **Location**: `/app/tasks`
-- **MVP**: 
+- **MVP**:
   - Create, edit, delete tasks
   - Status management (todo, doing, done, blocked)
   - Due date tracking
   - Inline editing
   - Real-time data sync
 
-### 💰 **I**nvoices  
+### 💰 **I**nvoices
+
 - **Status**: ✅ UI Implemented (Priority Feature)
 - **Features**: Manual invoice creation + AI suggestions
 - **Location**: `/app/invoices`
-- **MVP**: 
+- **MVP**:
   - Create, edit, and track invoices
   - AI-powered suggestions for invoice creation
   - Status tracking (draft, sent, paid, overdue)
@@ -28,6 +31,7 @@ Lennin Fit is now aligned with the TILSF framework, providing marketing symmetry
 - **Next**: Database integration in Sprint 2
 
 ### 👥 **L**eads
+
 - **Status**: ✅ Implemented (Sprint 1)
 - **Features**: CRM-lite system with React Query + Supabase
 - **Location**: `/app/leads`
@@ -39,6 +43,7 @@ Lennin Fit is now aligned with the TILSF framework, providing marketing symmetry
   - Clean, professional UI
 
 ### 📅 **S**chedule
+
 - **Status**: ✅ UI Implemented (MVP v2)
 - **Features**: Calendar view for appointments and tasks
 - **Location**: `/app/schedule`
@@ -50,6 +55,7 @@ Lennin Fit is now aligned with the TILSF framework, providing marketing symmetry
 - **Next**: Database integration in Sprint 2
 
 ### 🎯 **F**ocus
+
 - **Status**: ✅ Implemented (Sprint 1)
 - **Features**: Dashboard that ties everything together
 - **Location**: `/app` (main dashboard)
@@ -63,6 +69,7 @@ Lennin Fit is now aligned with the TILSF framework, providing marketing symmetry
 ## Technical Implementation
 
 ### ✅ Sprint 1 Achievements
+
 - **React Query Integration**: Full data management with caching
 - **TypeScript Contracts**: Proper type safety with `src/types/db.ts`
 - **Workspace Helper**: `currentOrgId()` for organization-scoped data
@@ -71,6 +78,7 @@ Lennin Fit is now aligned with the TILSF framework, providing marketing symmetry
 - **Real-time Updates**: Automatic cache invalidation
 
 ### File Structure
+
 ```
 src/
 ├── types/
@@ -88,6 +96,7 @@ src/
 ```
 
 ### Database Schema Ready
+
 - **Clients**: Full CRUD with org-scoped RLS
 - **Tasks**: Full CRUD with org-scoped RLS
 - **Projects**: Query ready for Sprint 2
@@ -96,6 +105,7 @@ src/
 ## Sprint 2 Preview
 
 ### 🎯 **Invoices** (Priority)
+
 - Database integration
 - Header + line items
 - Status management (draft/sent/paid/overdue)
@@ -103,11 +113,13 @@ src/
 - AI suggestions integration
 
 ### 🤖 **AI Features**
+
 - "Suggest line items" button
 - OpenAI integration
 - Pro plan gating
 
 ### 📅 **Schedule Enhancement**
+
 - Database integration
 - Weekly calendar grid
 - ICS export

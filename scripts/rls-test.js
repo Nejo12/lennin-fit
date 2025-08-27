@@ -21,7 +21,7 @@ async function testRLS() {
   const { data: auth1, error: authError1 } = await supabase.auth.signInWithOtp({
     email: 'test1@example.com',
   });
-  
+
   if (authError1) {
     console.log('⚠️  Account 1 not found, creating test data...');
     // Create test client for account 1
@@ -30,11 +30,11 @@ async function testRLS() {
       .insert({
         name: 'Test Client 1',
         email: 'client1@test.com',
-        org_id: 'test-org-1'
+        org_id: 'test-org-1',
       })
       .select()
       .single();
-    
+
     if (clientError1) {
       console.log('❌ Failed to create test client 1:', clientError1.message);
     } else {
@@ -44,7 +44,7 @@ async function testRLS() {
     console.log('✅ Account 1 authenticated');
   }
 
-  // Test Account 2  
+  // Test Account 2
   console.log('\n📧 Testing Account 2 (test2@example.com)...');
   const { data: auth2, error: authError2 } = await supabase.auth.signInWithOtp({
     email: 'test2@example.com',
@@ -56,13 +56,13 @@ async function testRLS() {
     const { data: client2, error: clientError2 } = await supabase
       .from('clients')
       .insert({
-        name: 'Test Client 2', 
+        name: 'Test Client 2',
         email: 'client2@test.com',
-        org_id: 'test-org-2'
+        org_id: 'test-org-2',
       })
       .select()
       .single();
-    
+
     if (clientError2) {
       console.log('❌ Failed to create test client 2:', clientError2.message);
     } else {
@@ -74,28 +74,32 @@ async function testRLS() {
 
   // Test data isolation
   console.log('\n🔒 Testing data isolation...');
-  
+
   // Sign in as account 1
   await supabase.auth.signInWithOtp({ email: 'test1@example.com' });
-  
+
   const { data: clients1, error: error1 } = await supabase
     .from('clients')
     .select('*');
-  
+
   console.log('Account 1 clients:', clients1?.length || 0);
-  
-  // Sign in as account 2  
+
+  // Sign in as account 2
   await supabase.auth.signInWithOtp({ email: 'test2@example.com' });
-  
+
   const { data: clients2, error: error2 } = await supabase
     .from('clients')
     .select('*');
-  
+
   console.log('Account 2 clients:', clients2?.length || 0);
 
   // Verify isolation
-  const account1HasAccount2Data = clients1?.some(c => c.org_id === 'test-org-2');
-  const account2HasAccount1Data = clients2?.some(c => c.org_id === 'test-org-1');
+  const account1HasAccount2Data = clients1?.some(
+    c => c.org_id === 'test-org-2'
+  );
+  const account2HasAccount1Data = clients2?.some(
+    c => c.org_id === 'test-org-1'
+  );
 
   if (!account1HasAccount2Data && !account2HasAccount1Data) {
     console.log('✅ RLS working correctly - data properly isolated');

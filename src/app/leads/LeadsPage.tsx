@@ -1,22 +1,27 @@
-import React, { useState } from 'react'
-import { useClients, useCreateClient, useDeleteClient, useUpdateClient } from './api'
-import styles from './Leads.module.scss'
+import React, { useState } from 'react';
+import {
+  useClients,
+  useCreateClient,
+  useDeleteClient,
+  useUpdateClient,
+} from './api';
+import styles from './Leads.module.scss';
 
 export default function LeadsPage() {
-  const { data, isLoading, error } = useClients()
-  const create = useCreateClient()
-  const update = useUpdateClient()
-  const del = useDeleteClient()
+  const { data, isLoading, error } = useClients();
+  const create = useCreateClient();
+  const update = useUpdateClient();
+  const del = useDeleteClient();
 
-  const [name, setName] = useState('')
-  const [email, setEmail] = useState('')
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    create.mutate({ name, email: email || null })
-    setName('')
-    setEmail('')
-  }
+    e.preventDefault();
+    create.mutate({ name, email: email || null });
+    setName('');
+    setEmail('');
+  };
 
   return (
     <div className={styles.leads}>
@@ -28,21 +33,21 @@ export default function LeadsPage() {
       {/* Create Client Form */}
       <div className={styles.form}>
         <div className={styles.formRow}>
-          <input 
-            value={name} 
-            onChange={e => setName(e.target.value)} 
-            placeholder="Client name" 
+          <input
+            value={name}
+            onChange={e => setName(e.target.value)}
+            placeholder="Client name"
             className={styles.clientName}
             required
           />
-          <input 
-            value={email} 
-            onChange={e => setEmail(e.target.value)} 
-            placeholder="Email (optional)" 
+          <input
+            value={email}
+            onChange={e => setEmail(e.target.value)}
+            placeholder="Email (optional)"
             type="email"
             className={styles.clientEmail}
           />
-          <button 
+          <button
             type="submit"
             onClick={handleSubmit}
             disabled={create.isPending}
@@ -55,7 +60,7 @@ export default function LeadsPage() {
 
       {/* Loading and Error States */}
       {isLoading && <div>Loading clients...</div>}
-      
+
       {error && <div>Error loading clients: {String(error)}</div>}
 
       {/* Clients List */}
@@ -64,19 +69,26 @@ export default function LeadsPage() {
           data.map(client => (
             <div key={client.id} className={styles.clientItem}>
               <div className={styles.clientInfo}>
-                <input 
-                  defaultValue={client.name} 
-                  onBlur={e => update.mutate({ id: client.id, name: e.target.value })} 
+                <input
+                  defaultValue={client.name}
+                  onBlur={e =>
+                    update.mutate({ id: client.id, name: e.target.value })
+                  }
                   className={styles.clientName}
                 />
-                <input 
-                  defaultValue={client.email ?? ''} 
-                  onBlur={e => update.mutate({ id: client.id, email: e.target.value || null })} 
+                <input
+                  defaultValue={client.email ?? ''}
+                  onBlur={e =>
+                    update.mutate({
+                      id: client.id,
+                      email: e.target.value || null,
+                    })
+                  }
                   className={styles.clientEmail}
                   placeholder="No email"
                 />
               </div>
-              <button 
+              <button
                 onClick={() => del.mutate(client.id)}
                 disabled={del.isPending}
                 className={styles.deleteButton}
@@ -90,5 +102,5 @@ export default function LeadsPage() {
         )}
       </div>
     </div>
-  )
+  );
 }

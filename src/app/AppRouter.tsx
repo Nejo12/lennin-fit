@@ -1,44 +1,54 @@
-import { createBrowserRouter, RouterProvider, Outlet, Navigate } from 'react-router-dom'
-import { useAuth } from '../lib/useAuth'
-import { useInitUser } from '../lib/initUser'
-import Landing from '../landing/Landing'
-import Login from './auth/Login'
-import Verify from './auth/Verify'
-import AuthCallback from './auth/AuthCallback'
-import AppShell from './layout/AppShell'
-import DashboardPage from './dashboard/DashboardPage'
-import TasksPage from './tasks/TasksPage'
-import InvoicesPage from './invoices/InvoicesPage'
-import LeadsPage from './leads/LeadsPage'
-import SchedulePage from './schedule/SchedulePage'
-import Privacy from '../pages/Privacy'
-import Terms from '../pages/Terms'
-import Success from '../pages/Success'
+import {
+  createBrowserRouter,
+  RouterProvider,
+  Outlet,
+  Navigate,
+} from 'react-router-dom';
+import { useAuth } from '../lib/useAuth';
+import { useInitUser } from '../lib/initUser';
+import Landing from '../landing/Landing';
+import Login from './auth/Login';
+import Verify from './auth/Verify';
+import AuthCallback from './auth/AuthCallback';
+import AppShell from './layout/AppShell';
+import DashboardPage from './dashboard/DashboardPage';
+import TasksPage from './tasks/TasksPage';
+import InvoicesPage from './invoices/InvoicesPage';
+import LeadsPage from './leads/LeadsPage';
+import SchedulePage from './schedule/SchedulePage';
+import Privacy from '../pages/Privacy';
+import Terms from '../pages/Terms';
+import Success from '../pages/Success';
 
 function Protected() {
-  const { user, loading } = useAuth()
-  useInitUser()
-  
+  const { user, loading } = useAuth();
+  useInitUser();
+
   if (loading) {
     return (
-      <div style={{ 
-        display: 'flex', 
-        justifyContent: 'center', 
-        alignItems: 'center', 
-        height: '100vh',
-        background: 'linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #0a0a0a 100%)',
-        color: '#ffffff'
-      }}>
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: '100vh',
+          background:
+            'linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #0a0a0a 100%)',
+          color: '#ffffff',
+        }}
+      >
         <div style={{ textAlign: 'center' }}>
-          <div style={{ 
-            width: '40px', 
-            height: '40px', 
-            border: '3px solid #10b981', 
-            borderTop: '3px solid transparent', 
-            borderRadius: '50%', 
-            animation: 'spin 1s linear infinite',
-            margin: '0 auto 16px'
-          }}></div>
+          <div
+            style={{
+              width: '40px',
+              height: '40px',
+              border: '3px solid #10b981',
+              borderTop: '3px solid transparent',
+              borderRadius: '50%',
+              animation: 'spin 1s linear infinite',
+              margin: '0 auto 16px',
+            }}
+          ></div>
           <p>Loading your account...</p>
         </div>
         <style>{`
@@ -48,23 +58,23 @@ function Protected() {
           }
         `}</style>
       </div>
-    )
+    );
   }
-  
+
   if (!user) {
-    return <Navigate to="/login" replace />
+    return <Navigate to="/login" replace />;
   }
-  
-  return <Outlet />
+
+  return <Outlet />;
 }
 
 // Component to handle root URL with auth hash
 function RootAuthHandler() {
-  const hash = window.location.hash
+  const hash = window.location.hash;
   if (hash && hash.includes('access_token')) {
-    return <AuthCallback />
+    return <AuthCallback />;
   }
-  return <Landing />
+  return <Landing />;
 }
 
 const router = createBrowserRouter([
@@ -76,7 +86,8 @@ const router = createBrowserRouter([
   { path: '/terms', element: <Terms /> },
   { path: '/success', element: <Success /> },
   {
-    path: '/app', element: <Protected />,
+    path: '/app',
+    element: <Protected />,
     children: [
       {
         element: <AppShell />,
@@ -86,12 +97,12 @@ const router = createBrowserRouter([
           { path: 'invoices', element: <InvoicesPage /> },
           { path: 'leads', element: <LeadsPage /> },
           { path: 'schedule', element: <SchedulePage /> },
-        ]
-      }
-    ]
-  }
-])
+        ],
+      },
+    ],
+  },
+]);
 
 export default function AppRouter() {
-  return <RouterProvider router={router} />
+  return <RouterProvider router={router} />;
 }

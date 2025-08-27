@@ -1,9 +1,21 @@
-@use "../../styles/mixins.scss" as *;
+@use '../../styles/mixins.scss' as *;
 
 .badge {
-  display: inline-flex; align-items: center; gap: 6px;
-  padding: 4px 8px; border-radius: 999px; font-size: var(--fs-xs);
-  border: 1px solid var(--stroke); color: var(--muted); background: transparent;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  border-radius: 999px;
+  font-size: var(--fs-xs);
+  border: 1px solid var(--stroke);
+  color: var(--muted);
+  background: transparent;
 }
-.brand { border-color: color-mix(in oklab, var(--brand) 50%, var(--stroke)); color: var(--brand); }
-.ghost { border-color: var(--stroke); color: var(--muted); }
+.brand {
+  border-color: color-mix(in oklab, var(--brand) 50%, var(--stroke));
+  color: var(--brand);
+}
+.ghost {
+  border-color: var(--stroke);
+  color: var(--muted);
+}

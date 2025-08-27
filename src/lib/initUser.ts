@@ -1,23 +1,27 @@
-import { useEffect } from 'react'
-import { supabase } from './supabase'
+import { useEffect } from 'react';
+import { supabase } from './supabase';
 
 export function useInitUser(fullName?: string) {
   useEffect(() => {
     (async () => {
       try {
-        const { data: { user } } = await supabase.auth.getUser()
-        if (!user) return
-        
+        const {
+          data: { user },
+        } = await supabase.auth.getUser();
+        if (!user) return;
+
         // Try to initialize user profile
-        const { error } = await supabase.rpc('init_user', { p_full_name: fullName ?? null })
+        const { error } = await supabase.rpc('init_user', {
+          p_full_name: fullName ?? null,
+        });
         if (error) {
-          console.warn('Failed to initialize user profile:', error)
+          console.warn('Failed to initialize user profile:', error);
           // Don't throw error - user can still use the app
         }
       } catch (error) {
-        console.warn('Error in useInitUser:', error)
+        console.warn('Error in useInitUser:', error);
         // Don't throw error - user can still use the app
       }
-    })()
-  }, [fullName])
+    })();
+  }, [fullName]);
 }

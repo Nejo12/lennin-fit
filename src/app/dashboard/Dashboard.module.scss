@@ -1,4 +1,4 @@
-@use "../../styles/mixins.scss" as *;
+@use '../../styles/mixins.scss' as *;
 
 .dashboard {
   display: grid;
@@ -33,7 +33,9 @@
   @include card;
   padding: var(--space-5);
   text-align: center;
-  transition: transform var(--anim-fast) ease, box-shadow var(--anim-fast) ease;
+  transition:
+    transform var(--anim-fast) ease,
+    box-shadow var(--anim-fast) ease;
 }
 
 .metricCard:hover {
@@ -133,10 +135,22 @@
   letter-spacing: 0.5px;
 }
 
-.statusTodo { background: color-mix(in oklab, #fbbf24 20%, transparent); color: #fbbf24; }
-.statusDoing { background: color-mix(in oklab, #3b82f6 20%, transparent); color: #3b82f6; }
-.statusDone { background: color-mix(in oklab, #10b981 20%, transparent); color: #10b981; }
-.statusBlocked { background: color-mix(in oklab, #ef4444 20%, transparent); color: #ef4444; }
+.statusTodo {
+  background: color-mix(in oklab, #fbbf24 20%, transparent);
+  color: #fbbf24;
+}
+.statusDoing {
+  background: color-mix(in oklab, #3b82f6 20%, transparent);
+  color: #3b82f6;
+}
+.statusDone {
+  background: color-mix(in oklab, #10b981 20%, transparent);
+  color: #10b981;
+}
+.statusBlocked {
+  background: color-mix(in oklab, #ef4444 20%, transparent);
+  color: #ef4444;
+}
 
 .loadingState {
   text-align: center;
@@ -152,8 +166,12 @@
 }
 
 @keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .emptyState {
@@ -221,16 +239,16 @@
     grid-template-columns: 1fr;
     gap: var(--space-4);
   }
-  
+
   .metricsGrid {
     grid-template-columns: 1fr;
     gap: var(--space-4);
   }
-  
+
   .actionsGrid {
     grid-template-columns: 1fr;
   }
-  
+
   .title {
     font-size: var(--fs-xl);
   }

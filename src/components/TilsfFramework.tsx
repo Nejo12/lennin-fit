@@ -8,8 +8,8 @@ export const TilsfFramework: React.FC = () => {
         <div className={s.header}>
           <h2>Built on TILSF</h2>
           <p className={s.subtitle}>
-            More than just another app. Lennin is built on a proven framework that helps freelancers 
-            work smarter, not harder.
+            More than just another app. Lennin is built on a proven framework
+            that helps freelancers work smarter, not harder.
           </p>
         </div>
 
@@ -47,7 +47,8 @@ export const TilsfFramework: React.FC = () => {
 
         <div className={s.footer}>
           <p className={s.frameworkNote}>
-            TILSF isn't just a methodology—it's your roadmap to freelance success.
+            TILSF isn't just a methodology—it's your roadmap to freelance
+            success.
           </p>
         </div>
       </div>

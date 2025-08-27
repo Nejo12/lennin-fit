@@ -1,13 +1,13 @@
-import { useState } from 'react'
-import styles from './Invoices.module.scss'
+import { useState } from 'react';
+import styles from './Invoices.module.scss';
 
 interface Invoice {
-  id: string
-  clientName: string
-  amount: number
-  status: 'draft' | 'sent' | 'paid' | 'overdue'
-  dueDate: string
-  description: string
+  id: string;
+  clientName: string;
+  amount: number;
+  status: 'draft' | 'sent' | 'paid' | 'overdue';
+  dueDate: string;
+  description: string;
 }
 
 export default function InvoicesPage() {
@@ -18,7 +18,7 @@ export default function InvoicesPage() {
       amount: 2500,
       status: 'sent',
       dueDate: '2024-02-15',
-      description: 'Website redesign project'
+      description: 'Website redesign project',
     },
     {
       id: '2',
@@ -26,26 +26,30 @@ export default function InvoicesPage() {
       amount: 1800,
       status: 'draft',
       dueDate: '2024-02-20',
-      description: 'Mobile app development'
-    }
-  ])
+      description: 'Mobile app development',
+    },
+  ]);
 
-  const [showCreateForm, setShowCreateForm] = useState(false)
+  const [showCreateForm, setShowCreateForm] = useState(false);
   const [newInvoice, setNewInvoice] = useState({
     clientName: '',
     amount: '',
     dueDate: '',
-    description: ''
-  })
+    description: '',
+  });
 
   const getStatusClass = (status: Invoice['status']) => {
     switch (status) {
-      case 'paid': return styles.statusPaid
-      case 'sent': return styles.statusSent
-      case 'overdue': return styles.statusOverdue
-      default: return styles.statusDraft
+      case 'paid':
+        return styles.statusPaid;
+      case 'sent':
+        return styles.statusSent;
+      case 'overdue':
+        return styles.statusOverdue;
+      default:
+        return styles.statusDraft;
     }
-  }
+  };
 
   const handleCreateInvoice = () => {
     const invoice: Invoice = {
@@ -54,20 +58,20 @@ export default function InvoicesPage() {
       amount: parseFloat(newInvoice.amount),
       status: 'draft',
       dueDate: newInvoice.dueDate,
-      description: newInvoice.description
-    }
-    setInvoices([...invoices, invoice])
-    setNewInvoice({ clientName: '', amount: '', dueDate: '', description: '' })
-    setShowCreateForm(false)
-  }
+      description: newInvoice.description,
+    };
+    setInvoices([...invoices, invoice]);
+    setNewInvoice({ clientName: '', amount: '', dueDate: '', description: '' });
+    setShowCreateForm(false);
+  };
 
   const getAISuggestions = () => {
     return [
       'Create invoice for "Website Maintenance" - €500',
       'Follow up on overdue invoice from "Design Studio"',
-      'Send reminder for "Consulting Services" - €1200'
-    ]
-  }
+      'Send reminder for "Consulting Services" - €1200',
+    ];
+  };
 
   return (
     <div className={styles.invoices}>
@@ -77,7 +81,7 @@ export default function InvoicesPage() {
       </div>
 
       {/* Create Invoice Button */}
-      <button 
+      <button
         onClick={() => setShowCreateForm(!showCreateForm)}
         className={styles.submitButton}
         style={{ marginBottom: '20px' }}
@@ -103,33 +107,39 @@ export default function InvoicesPage() {
         <div className={styles.form}>
           <div className={styles.formTitle}>Create New Invoice</div>
           <div className={styles.formGrid}>
-          <input 
-            type="text"
-            placeholder="Client name"
-            value={newInvoice.clientName}
-            onChange={(e) => setNewInvoice({...newInvoice, clientName: e.target.value})}
-            className={styles.formInput}
-          />
-          <input 
-            type="number"
-            placeholder="Amount"
-            value={newInvoice.amount}
-            onChange={(e) => setNewInvoice({...newInvoice, amount: e.target.value})}
-            className={styles.formInput}
-          />
-          <input 
-            type="date"
-            value={newInvoice.dueDate}
-            onChange={(e) => setNewInvoice({...newInvoice, dueDate: e.target.value})}
-            className={styles.formInput}
-          />
-          <button 
-            onClick={handleCreateInvoice}
-            className={styles.submitButton}
-          >
-            Create Invoice
-          </button>
-        </div>
+            <input
+              type="text"
+              placeholder="Client name"
+              value={newInvoice.clientName}
+              onChange={e =>
+                setNewInvoice({ ...newInvoice, clientName: e.target.value })
+              }
+              className={styles.formInput}
+            />
+            <input
+              type="number"
+              placeholder="Amount"
+              value={newInvoice.amount}
+              onChange={e =>
+                setNewInvoice({ ...newInvoice, amount: e.target.value })
+              }
+              className={styles.formInput}
+            />
+            <input
+              type="date"
+              value={newInvoice.dueDate}
+              onChange={e =>
+                setNewInvoice({ ...newInvoice, dueDate: e.target.value })
+              }
+              className={styles.formInput}
+            />
+            <button
+              onClick={handleCreateInvoice}
+              className={styles.submitButton}
+            >
+              Create Invoice
+            </button>
+          </div>
         </div>
       )}
 
@@ -142,13 +152,17 @@ export default function InvoicesPage() {
               <div className={styles.invoiceNumber}>{invoice.clientName}</div>
               <div className={styles.invoiceClient}>{invoice.description}</div>
             </div>
-            <div className={styles.invoiceAmount}>€{invoice.amount.toLocaleString()}</div>
-            <div className={`${styles.invoiceStatus} ${getStatusClass(invoice.status)}`}>
+            <div className={styles.invoiceAmount}>
+              €{invoice.amount.toLocaleString()}
+            </div>
+            <div
+              className={`${styles.invoiceStatus} ${getStatusClass(invoice.status)}`}
+            >
               {invoice.status}
             </div>
           </div>
         ))}
       </div>
     </div>
-  )
+  );
 }

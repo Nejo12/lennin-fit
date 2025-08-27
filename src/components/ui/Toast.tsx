@@ -15,13 +15,16 @@ export function ToastProvider({ children }: React.PropsWithChildren) {
     delete timers.current[id];
   }, []);
 
-  const add = useCallback((t: Omit<ToastItem,'id'>) => {
-    const id = Math.random().toString(36).slice(2);
-    const item: ToastItem = { id, duration: 3500, kind: 'default', ...t };
-    setItems(prev => [...prev, item]);
-    timers.current[id] = setTimeout(() => remove(id), item.duration);
-    return id;
-  }, [remove]);
+  const add = useCallback(
+    (t: Omit<ToastItem, 'id'>) => {
+      const id = Math.random().toString(36).slice(2);
+      const item: ToastItem = { id, duration: 3500, kind: 'default', ...t };
+      setItems(prev => [...prev, item]);
+      timers.current[id] = setTimeout(() => remove(id), item.duration);
+      return id;
+    },
+    [remove]
+  );
 
   const value = useMemo(() => ({ add, remove }), [add, remove]);
 
@@ -31,11 +34,18 @@ export function ToastProvider({ children }: React.PropsWithChildren) {
       {createPortal(
         <div className={s.viewport} role="region" aria-label="Notifications">
           {items.map(i => (
-            <div key={i.id} className={s.toast} role="status" aria-live="polite">
+            <div
+              key={i.id}
+              className={s.toast}
+              role="status"
+              aria-live="polite"
+            >
               {i.title && <div className={s.title}>{i.title}</div>}
               {i.description && <div className={s.desc}>{i.description}</div>}
               <div className={s.row}>
-                <Button variant="ghost" size="sm" onClick={() => remove(i.id)}>Close</Button>
+                <Button variant="ghost" size="sm" onClick={() => remove(i.id)}>
+                  Close
+                </Button>
               </div>
             </div>
           ))}
@@ -45,5 +55,3 @@ export function ToastProvider({ children }: React.PropsWithChildren) {
     </Ctx.Provider>
   );
 }
-
-

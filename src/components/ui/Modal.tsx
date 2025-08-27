@@ -8,7 +8,7 @@ interface Props {
   children: React.ReactNode;
 }
 
-export default function Modal({ open, title, onClose, children }: Props){
+export default function Modal({ open, title, onClose, children }: Props) {
   useEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => e.key === 'Escape' && onClose();
@@ -18,11 +18,18 @@ export default function Modal({ open, title, onClose, children }: Props){
 
   if (!open) return null;
   return (
-    <div className={s.backdrop} role="dialog" aria-modal="true" aria-label={title}>
+    <div
+      className={s.backdrop}
+      role="dialog"
+      aria-modal="true"
+      aria-label={title}
+    >
       <div className={s.panel}>
         <div className={s.header}>
           <div className={s.title}>{title}</div>
-          <button className={s.close} aria-label="Close" onClick={onClose}>✕</button>
+          <button className={s.close} aria-label="Close" onClick={onClose}>
+            ✕
+          </button>
         </div>
         {children}
       </div>

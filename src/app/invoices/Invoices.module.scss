@@ -1,4 +1,4 @@
-@use "../../styles/mixins.scss" as *;
+@use '../../styles/mixins.scss' as *;
 
 .invoices {
   display: grid;
@@ -69,7 +69,7 @@
   font-size: var(--fs-sm);
   font-weight: 600;
   transition: transform var(--anim-fast) ease;
-  
+
   &:hover {
     transform: translateY(-1px);
   }
@@ -107,7 +107,7 @@
   border-radius: var(--radius-md);
   font-weight: 600;
   transition: transform var(--anim-fast) ease;
-  
+
   &:hover {
     transform: translateY(-1px);
   }
@@ -164,7 +164,19 @@
   font-weight: 600;
 }
 
-.statusDraft { background: color-mix(in oklab, var(--muted) 20%, transparent); color: var(--muted); }
-.statusSent { background: color-mix(in oklab, var(--brand) 20%, transparent); color: var(--brand); }
-.statusPaid { background: color-mix(in oklab, #22c55e 20%, transparent); color: #22c55e; }
-.statusOverdue { background: color-mix(in oklab, var(--danger) 20%, transparent); color: var(--danger); }
+.statusDraft {
+  background: color-mix(in oklab, var(--muted) 20%, transparent);
+  color: var(--muted);
+}
+.statusSent {
+  background: color-mix(in oklab, var(--brand) 20%, transparent);
+  color: var(--brand);
+}
+.statusPaid {
+  background: color-mix(in oklab, #22c55e 20%, transparent);
+  color: #22c55e;
+}
+.statusOverdue {
+  background: color-mix(in oklab, var(--danger) 20%, transparent);
+  color: var(--danger);
+}

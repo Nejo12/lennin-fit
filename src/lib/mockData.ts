@@ -8,7 +8,7 @@ export const mockData = {
       email: 'contact@acme.com',
       phone: null,
       notes: null,
-      created_at: '2024-02-01T10:00:00Z'
+      created_at: '2024-02-01T10:00:00Z',
     },
     {
       id: '2',
@@ -17,10 +17,10 @@ export const mockData = {
       email: 'hello@techstart.com',
       phone: null,
       notes: null,
-      created_at: '2024-02-05T14:30:00Z'
-    }
+      created_at: '2024-02-05T14:30:00Z',
+    },
   ],
-  
+
   tasks: [
     {
       id: '1',
@@ -35,7 +35,7 @@ export const mockData = {
       estimate_minutes: null,
       position: 0,
       created_at: '2024-02-10T09:00:00Z',
-      updated_at: '2024-02-10T09:00:00Z'
+      updated_at: '2024-02-10T09:00:00Z',
     },
     {
       id: '2',
@@ -50,7 +50,7 @@ export const mockData = {
       estimate_minutes: null,
       position: 1,
       created_at: '2024-02-11T11:00:00Z',
-      updated_at: '2024-02-11T11:00:00Z'
+      updated_at: '2024-02-11T11:00:00Z',
     },
     {
       id: '3',
@@ -65,10 +65,10 @@ export const mockData = {
       estimate_minutes: null,
       position: 2,
       created_at: '2024-02-12T15:00:00Z',
-      updated_at: '2024-02-12T15:00:00Z'
-    }
+      updated_at: '2024-02-12T15:00:00Z',
+    },
   ],
-  
+
   invoices: [
     {
       id: '1',
@@ -77,7 +77,7 @@ export const mockData = {
       amount_total: 2500,
       status: 'sent' as const,
       due_date: '2024-02-15',
-      created_at: '2024-02-01T10:00:00Z'
+      created_at: '2024-02-01T10:00:00Z',
     },
     {
       id: '2',
@@ -86,7 +86,7 @@ export const mockData = {
       amount_total: 1800,
       status: 'overdue' as const,
       due_date: '2024-02-10',
-      created_at: '2024-02-05T14:30:00Z'
-    }
-  ]
-}
+      created_at: '2024-02-05T14:30:00Z',
+    },
+  ],
+};

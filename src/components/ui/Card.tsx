@@ -1,11 +1,22 @@
 import React from 'react';
 import s from './Card.module.scss';
 
-export function Card({ children, className }: React.PropsWithChildren<{ className?: string }>) {
+export function Card({
+  children,
+  className,
+}: React.PropsWithChildren<{ className?: string }>) {
   return <div className={`${s.card} ${className ?? ''}`}>{children}</div>;
 }
 
-export function CardHeader({ title, sub, right }: { title: string; sub?: string; right?: React.ReactNode; }) {
+export function CardHeader({
+  title,
+  sub,
+  right,
+}: {
+  title: string;
+  sub?: string;
+  right?: React.ReactNode;
+}) {
   return (
     <div className={s.header}>
       <div>

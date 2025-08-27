@@ -1,7 +1,21 @@
-@use "../../styles/mixins.scss" as *;
+@use '../../styles/mixins.scss' as *;
 
-.root { display: grid; gap: 6px; }
-.label { font-size: var(--fs-sm); color: var(--muted); }
-.input { @include control; }
-.hint  { font-size: var(--fs-xs); color: var(--muted); }
-.error { font-size: var(--fs-xs); color: var(--danger); }
+.root {
+  display: grid;
+  gap: 6px;
+}
+.label {
+  font-size: var(--fs-sm);
+  color: var(--muted);
+}
+.input {
+  @include control;
+}
+.hint {
+  font-size: var(--fs-xs);
+  color: var(--muted);
+}
+.error {
+  font-size: var(--fs-xs);
+  color: var(--danger);
+}

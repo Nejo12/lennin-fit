@@ -15,21 +15,25 @@ lennin-fit/
 ## 🌐 Domain Strategy
 
 ### Primary Domains
+
 - **Main Site**: `https://lennin.fit`
 - **Brand Domain**: `https://tilsf.com`
 
 ### Redirects
+
 - `www.lennin.fit` → `lennin.fit`
 - `www.tilsf.com` → `tilsf.com`
 
 ## 🚀 Quick Deployment
 
 ### Option 1: Using the Deployment Script (Recommended)
+
 ```bash
 ./scripts/deploy.sh
 ```
 
 ### Option 2: Manual Deployment
+
 ```bash
 npm run build
 git add .
@@ -40,6 +44,7 @@ git push origin main
 ## 🔧 Domain Management
 
 ### Adding a New Domain
+
 1. **In Netlify Dashboard**:
    - Go to Domain Management
    - Click "Add domain alias"
@@ -54,6 +59,7 @@ git push origin main
    - Update Supabase authentication settings
 
 ### Removing a Domain
+
 1. **In Netlify Dashboard**:
    - Go to Domain Management
    - Click "Options" on the domain
@@ -66,6 +72,7 @@ git push origin main
 ## 🔐 Authentication Setup
 
 ### Supabase Configuration
+
 1. **Site URL**: `https://tilsf.com`
 2. **Redirect URLs**:
    - `https://tilsf.com`
@@ -75,6 +82,7 @@ git push origin main
    - `https://lennin.fit/verify` (backup)
 
 ### Environment Variables
+
 ```bash
 VITE_APP_URL=https://tilsf.com
 VITE_SUPABASE_URL=your_supabase_url
@@ -84,17 +92,20 @@ VITE_SUPABASE_ANON_KEY=your_supabase_key
 ## 🛠️ Troubleshooting
 
 ### Domain Not Working
+
 1. **Check DNS propagation**: `dig A yourdomain.com`
 2. **Verify Netlify status**: Check domain management dashboard
 3. **Check SSL certificate**: Should be automatic with Let's Encrypt
 4. **Test redirects**: `curl -I https://yourdomain.com`
 
 ### Build Failures
+
 1. **Check logs**: Netlify dashboard → Deploys
 2. **Test locally**: `npm run build`
 3. **Check dependencies**: `npm install`
 
 ### Authentication Issues
+
 1. **Verify Supabase settings**: Check URL configuration
 2. **Test redirect URLs**: Ensure they match exactly
 3. **Check environment variables**: Verify VITE_APP_URL
@@ -102,16 +113,19 @@ VITE_SUPABASE_ANON_KEY=your_supabase_key
 ## 📋 Maintenance Checklist
 
 ### Weekly
+
 - [ ] Check deployment status
 - [ ] Monitor domain health
 - [ ] Review error logs
 
 ### Monthly
+
 - [ ] Update dependencies
 - [ ] Review SSL certificates
 - [ ] Check domain renewals
 
 ### Quarterly
+
 - [ ] Review domain strategy
 - [ ] Update documentation
 - [ ] Security audit
@@ -119,12 +133,14 @@ VITE_SUPABASE_ANON_KEY=your_supabase_key
 ## 🆘 Emergency Procedures
 
 ### Site Down
+
 1. **Check Netlify status**: https://status.netlify.com
 2. **Verify DNS**: `dig A yourdomain.com`
 3. **Check deployment**: Netlify dashboard
 4. **Rollback if needed**: Previous deployment
 
 ### Domain Issues
+
 1. **Check registrar**: Domain renewal status
 2. **Verify DNS**: Nameserver configuration
 3. **Contact support**: If DNS issues persist

@@ -4,7 +4,12 @@
 }
 
 @mixin button-reset {
-  border: 0; background: none; padding: 0; font: inherit; color: inherit; cursor: pointer;
+  border: 0;
+  background: none;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
 }
 
 @mixin control {
@@ -14,9 +19,16 @@
   border: 1px solid var(--stroke);
   background: #0f1113;
   color: var(--text);
-  transition: border-color var(--anim-fast) ease, box-shadow var(--anim-fast) ease;
-  &:focus-visible { @include focus-ring; border-color: var(--brand); }
-  &::placeholder { color: color-mix(in oklab, var(--muted) 70%, transparent); }
+  transition:
+    border-color var(--anim-fast) ease,
+    box-shadow var(--anim-fast) ease;
+  &:focus-visible {
+    @include focus-ring;
+    border-color: var(--brand);
+  }
+  &::placeholder {
+    color: color-mix(in oklab, var(--muted) 70%, transparent);
+  }
 }
 
 @mixin card {

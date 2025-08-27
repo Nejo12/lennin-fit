@@ -1,24 +1,30 @@
-import { useUnpaidTotal, useThisWeekTasks } from './api'
-import styles from './Dashboard.module.scss'
+import { useUnpaidTotal, useThisWeekTasks } from './api';
+import styles from './Dashboard.module.scss';
 
 export default function DashboardPage() {
-  const { data: unpaidTotal, isLoading: unpaidLoading } = useUnpaidTotal()
-  const { data: thisWeekTasks, isLoading: tasksLoading } = useThisWeekTasks()
+  const { data: unpaidTotal, isLoading: unpaidLoading } = useUnpaidTotal();
+  const { data: thisWeekTasks, isLoading: tasksLoading } = useThisWeekTasks();
 
   const getStatusClass = (status: string) => {
     switch (status) {
-      case 'done': return styles.statusDone
-      case 'doing': return styles.statusDoing
-      case 'blocked': return styles.statusBlocked
-      default: return styles.statusTodo
+      case 'done':
+        return styles.statusDone;
+      case 'doing':
+        return styles.statusDoing;
+      case 'blocked':
+        return styles.statusBlocked;
+      default:
+        return styles.statusTodo;
     }
-  }
+  };
 
   return (
     <div className={styles.dashboard}>
       <div className={styles.header}>
         <h1 className={styles.title}>Focus Dashboard</h1>
-        <p className={styles.subtitle}>Your TILSF overview - Tasks, Invoices, Leads, Schedule, Focus</p>
+        <p className={styles.subtitle}>
+          Your TILSF overview - Tasks, Invoices, Leads, Schedule, Focus
+        </p>
       </div>
 
       {/* Key Metrics */}
@@ -30,21 +36,21 @@ export default function DashboardPage() {
           </div>
           <div className={styles.metricSubtext}>pending</div>
         </div>
-        
+
         <div className={styles.metricCard}>
           <div className={styles.metricLabel}>This Week's Tasks</div>
           <div className={styles.metricValue}>
-            {tasksLoading ? '...' : (thisWeekTasks?.length || 0)}
+            {tasksLoading ? '...' : thisWeekTasks?.length || 0}
           </div>
           <div className={styles.metricSubtext}>due soon</div>
         </div>
-        
+
         <div className={styles.metricCard}>
           <div className={styles.metricLabel}>Active Leads</div>
           <div className={styles.metricValue}>-</div>
           <div className={styles.metricSubtext}>in pipeline</div>
         </div>
-        
+
         <div className={styles.metricCard}>
           <div className={styles.metricLabel}>Today's Events</div>
           <div className={styles.metricValue}>-</div>
@@ -61,7 +67,7 @@ export default function DashboardPage() {
             <span className={styles.sectionIcon}>🌱</span>
             Unpaid Invoices
           </div>
-          
+
           {unpaidLoading ? (
             <div className={styles.loadingState}>
               <span className={styles.loadingIcon}>⏳</span>
@@ -70,7 +76,9 @@ export default function DashboardPage() {
           ) : unpaidTotal && unpaidTotal > 0 ? (
             <div className={styles.emptyState}>
               <span className={styles.emptyIcon}>💸</span>
-              <div className={styles.metricValue}>€{unpaidTotal.toLocaleString()}</div>
+              <div className={styles.metricValue}>
+                €{unpaidTotal.toLocaleString()}
+              </div>
               <div>Total unpaid</div>
             </div>
           ) : (
@@ -89,7 +97,7 @@ export default function DashboardPage() {
             <span className={styles.sectionIcon}>✨</span>
             This Week's Tasks
           </div>
-          
+
           {tasksLoading ? (
             <div className={styles.loadingState}>
               <span className={styles.loadingIcon}>⏳</span>
@@ -97,13 +105,15 @@ export default function DashboardPage() {
             </div>
           ) : thisWeekTasks && thisWeekTasks.length > 0 ? (
             <div>
-              {thisWeekTasks.map((task) => (
+              {thisWeekTasks.map(task => (
                 <div key={task.id} className={styles.taskItem}>
                   <div className={styles.taskInfo}>
                     <div className={styles.taskTitle}>{task.title}</div>
                     <div className={styles.taskDate}>Due: {task.due_date}</div>
                   </div>
-                  <div className={`${styles.taskStatus} ${getStatusClass(task.status)}`}>
+                  <div
+                    className={`${styles.taskStatus} ${getStatusClass(task.status)}`}
+                  >
                     {task.status.charAt(0).toUpperCase() + task.status.slice(1)}
                   </div>
                 </div>
@@ -129,5 +139,5 @@ export default function DashboardPage() {
         </div>
       </div>
     </div>
-  )
+  );
 }
