@@ -18,6 +18,8 @@
     "deploy": "./scripts/deploy.sh",
     "deploy:tilsf": "npm run build:tilsf && echo '🚀 TILSF microsite ready for deployment'",
     "deploy:tilsf:netlify": "./scripts/deploy-tilsf.sh",
+    "redirect:tilsf": "node scripts/redirect-tilsf-to-lennin.js",
+    "redirect:tilsf:deploy": "npm run redirect:tilsf && cd dist-tilsf && netlify deploy --prod",
     "deploy:quick": "npm run build && git add . && git commit -m 'Quick deploy' && git push origin main",
     "check:domains": "echo 'Checking domain...' && curl -I https://tilsf.com",
     "test": "vitest",

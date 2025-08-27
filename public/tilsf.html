@@ -1,460 +1,185 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TILSF — Tasks, Invoices, Leads, Schedule, Focus</title>
-
-    <!-- SEO -->
-    <meta
-      name="description"
-      content="The five pillars freelancers need. Learn TILSF and use Lennin to fit it all in one app."
-    />
-    <link rel="canonical" href="https://tilsf.com/" />
-
+    <meta name="description" content="The five pillars freelancers need: Tasks, Invoices, Leads, Schedule, Focus. Try Lennin Free.">
+    <link rel="canonical" href="https://tilsf.com/">
+    
     <!-- Open Graph -->
-    <meta
-      property="og:title"
-      content="TILSF — Tasks, Invoices, Leads, Schedule, Focus"
-    />
-    <meta
-      property="og:description"
-      content="The five pillars freelancers need. Learn TILSF and use Lennin to fit it all in one app."
-    />
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://tilsf.com/" />
-    <meta property="og:image" content="https://tilsf.com/og.jpg" />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
-
+    <meta property="og:title" content="TILSF — Tasks, Invoices, Leads, Schedule, Focus">
+    <meta property="og:description" content="The five pillars freelancers need: Tasks, Invoices, Leads, Schedule, Focus. Try Lennin Free.">
+    <meta property="og:url" content="https://tilsf.com/">
+    <meta property="og:image" content="https://tilsf.com/og.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:type" content="website">
+    
     <!-- Twitter -->
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta
-      name="twitter:title"
-      content="TILSF — Tasks, Invoices, Leads, Schedule, Focus"
-    />
-    <meta
-      name="twitter:description"
-      content="The five pillars freelancers need. Learn TILSF and use Lennin to fit it all in one app."
-    />
-    <meta name="twitter:image" content="https://tilsf.com/og.jpg" />
-
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="TILSF — Tasks, Invoices, Leads, Schedule, Focus">
+    <meta name="twitter:description" content="The five pillars freelancers need: Tasks, Invoices, Leads, Schedule, Focus. Try Lennin Free.">
+    <meta name="twitter:image" content="https://tilsf.com/og.jpg">
+    
     <!-- Favicon -->
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <link rel="apple-touch-icon" href="/favicon.svg" />
-
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/favicon.svg">
+    
     <!-- Preconnect for performance -->
-    <link rel="preconnect" href="https://plausible.io" />
-    <link rel="preconnect" href="https://lennin.fit" />
-    <link rel="dns-prefetch" href="https://plausible.io" />
-    <link rel="dns-prefetch" href="https://lennin.fit" />
-
-    <!-- Analytics -->
-    <script
-      defer
-      data-domain="tilsf.com"
-      src="https://plausible.io/js/script.js"
-    ></script>
-
-    <!-- Critical CSS Inlined -->
+    <link rel="preconnect" href="https://plausible.io">
+    <link rel="dns-prefetch" href="https://plausible.io">
+    
+    <!-- Critical CSS Inlined for instant loading -->
     <style>
-      /* Critical CSS - Above the fold styles only */
-      :root {
-        /* Essential colors only */
-        --bg: #0b0b0b;
-        --panel: #111214;
-        --text: #e7e7ea;
-        --muted: #b5b6bc;
-        --brand: #65d46e;
-        --brand-ink: #0e3513;
-        --brand-hover: #7de085;
-        --stroke: #1e1f23;
-        --stroke-hover: #2a2b30;
+        /* Reset */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         
-        /* Essential typography only */
-        --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Inter, Roboto, 'Helvetica Neue', Arial, sans-serif;
-        --fs-md: clamp(1rem, 0.9rem + 0.5vw, 1.125rem);
-        --fs-2xl: clamp(1.5rem, 1.3rem + 1vw, 2rem);
-        --fs-3xl: clamp(2rem, 1.8rem + 1.25vw, 2.5rem);
-        --fs-4xl: clamp(2.5rem, 2.2rem + 1.5vw, 3rem);
+        /* Base */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #fff;
+            padding: 20px;
+        }
         
-        /* Essential spacing only */
-        --space-3: 0.75rem;
-        --space-4: 1rem;
-        --space-6: 1.5rem;
-        
-        /* Essential radius only */
-        --radius-md: 0.5rem;
-        
-        /* Essential shadows only */
-        --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-        
-        /* Essential animations only */
-        --anim-fast: 150ms ease;
-        --anim-med: 200ms ease;
-        
-        /* Essential tap target */
-        --tap-target: 2.75rem;
-        
-        /* Essential containers */
-        --container-lg: 1024px;
-        --container-xl: 1280px;
-        
-        /* Essential focus ring */
-        --focus-ring: 0 0 0 3px rgba(101, 212, 110, 0.35);
-      }
-
-      /* Critical reset */
-      * {
-        box-sizing: border-box;
-      }
-
-      html {
-        scroll-behavior: smooth;
-      }
-
-      body {
-        margin: 0;
-        font-family: var(--font-sans);
-        font-size: var(--fs-md);
-        line-height: 1.5;
-        background: radial-gradient(1000px 600px at 20% -10%, #12151a, transparent),
-                    radial-gradient(1000px 600px at 100% 10%, #0f1316, transparent), 
-                    var(--bg);
-        color: var(--text);
-        overflow-x: hidden;
-        max-width: 100vw;
-        text-rendering: optimizeLegibility;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-      }
-
-      /* Critical typography */
-      h1, h2, h3, h4, h5, h6 {
-        margin: 0;
-        font-weight: 700;
-        line-height: 1.2;
-        color: var(--text);
-      }
-
-      h1 { font-size: var(--fs-4xl); }
-      h2 { font-size: var(--fs-3xl); }
-      h3 { font-size: var(--fs-2xl); }
-
-      p {
-        margin: 0 0 var(--space-4) 0;
-        line-height: 1.75;
-      }
-
-      /* Critical links */
-      a {
-        color: var(--brand);
-        text-decoration: none;
-        transition: color var(--anim-fast);
-      }
-
-      a:hover {
-        color: var(--brand-hover);
-      }
-
-      /* Critical buttons */
-      .btn {
-        border: 0;
-        background: none;
-        padding: 0;
-        margin: 0;
-        font: inherit;
-        color: inherit;
-        cursor: pointer;
-        text-decoration: none;
-        display: inline-block;
-        min-height: var(--tap-target);
-        padding: var(--space-3) var(--space-6);
-        border-radius: var(--radius-md);
-        font-size: var(--fs-md);
-        font-weight: 600;
-        line-height: 1.2;
-        text-align: center;
-        transition: all var(--anim-fast), transform var(--anim-med);
-        user-select: none;
-        white-space: nowrap;
-        min-width: var(--tap-target);
-      }
-
-      .btn-primary {
-        background: var(--brand);
-        color: var(--brand-ink);
-        border: 1px solid var(--brand);
-      }
-
-      .btn-primary:hover {
-        background: var(--brand-hover);
-        border-color: var(--brand-hover);
-        transform: translateY(-2px);
-        box-shadow: var(--shadow-md);
-      }
-
-      .btn-secondary {
-        background: transparent;
-        color: var(--text);
-        border: 1px solid var(--stroke);
-      }
-
-      .btn-secondary:hover {
-        background: var(--panel);
-        border-color: var(--stroke-hover);
-        transform: translateY(-2px);
-        box-shadow: var(--shadow-md);
-      }
-
-      /* Critical container */
-      .container {
-        width: 100%;
-        max-width: var(--container-lg);
-        margin: 0 auto;
-        padding: 0 var(--space-4);
-      }
-
-      /* Critical grid */
-      .grid {
-        display: grid;
-        gap: var(--space-6);
-      }
-
-      .grid-cols-1 { grid-template-columns: repeat(1, 1fr); }
-      .grid-cols-2 { grid-template-columns: repeat(2, 1fr); }
-      .grid-cols-3 { grid-template-columns: repeat(3, 1fr); }
-
-      /* Critical flexbox */
-      .flex { display: flex; }
-      .flex-center {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-
-      .flex-between {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-      }
-
-      /* Critical spacing utilities */
-      .m-0 { margin: 0; }
-      .m-4 { margin: var(--space-4); }
-      .m-6 { margin: var(--space-6); }
-
-      .mt-0 { margin-top: 0; }
-      .mt-4 { margin-top: var(--space-4); }
-      .mt-6 { margin-top: var(--space-6); }
-
-      .mb-0 { margin-bottom: 0; }
-      .mb-4 { margin-bottom: var(--space-4); }
-      .mb-6 { margin-bottom: var(--space-6); }
-
-      .p-0 { padding: 0; }
-      .p-4 { padding: var(--space-4); }
-      .p-6 { padding: var(--space-6); }
-
-      .pt-0 { padding-top: 0; }
-      .pt-4 { padding-top: var(--space-4); }
-      .pt-6 { padding-top: var(--space-6); }
-
-      .pb-0 { padding-bottom: 0; }
-      .pb-4 { padding-bottom: var(--space-4); }
-      .pb-6 { padding-bottom: var(--space-6); }
-
-      /* Critical text utilities */
-      .text-center { text-align: center; }
-      .text-muted { color: var(--muted); }
-      .font-bold { font-weight: 700; }
-
-      /* Critical responsive */
-      @media (max-width: 767px) {
+        /* Container */
         .container {
-          padding: 0 var(--space-3);
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
         }
         
-        .grid-cols-2,
-        .grid-cols-3 {
-          grid-template-columns: repeat(1, 1fr);
-        }
-      }
-
-      @media (min-width: 1024px) {
-        .container {
-          max-width: var(--container-xl);
-          padding: 0 var(--space-6);
-        }
-      }
-
-      /* Critical focus styles */
-      .btn:focus-visible {
-        outline: none;
-        box-shadow: var(--focus-ring);
-      }
-
-      a:focus-visible {
-        outline: none;
-        box-shadow: var(--focus-ring);
-      }
-
-      /* Critical reduced motion */
-      @media (prefers-reduced-motion: reduce) {
-        html {
-          scroll-behavior: auto;
+        /* Typography */
+        h1 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: #1a1a1a;
         }
         
-        .btn {
-          transition: none;
+        .subtitle {
+            font-size: clamp(1.1rem, 3vw, 1.5rem);
+            color: #666;
+            margin-bottom: 2rem;
+            font-weight: 400;
         }
         
-        .btn:hover {
-          transform: none;
+        /* CTA Button */
+        .cta {
+            display: inline-block;
+            background: #007bff;
+            color: white;
+            padding: 16px 32px;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            transition: background 0.2s;
+            margin: 2rem 0;
         }
-      }
-
-      /* TILSF specific styles */
-      .hero {
-        padding: var(--space-16) 0;
-        text-align: center;
-      }
-
-      .hero h1 {
-        font-size: clamp(2.5rem, 4vw, 4rem);
-        margin-bottom: var(--space-6);
-        background: linear-gradient(135deg, var(--brand), var(--brand-hover));
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-      }
-
-      .hero p {
-        font-size: var(--fs-xl);
-        color: var(--muted);
-        max-width: 600px;
-        margin: 0 auto var(--space-8) auto;
-      }
-
-      .framework-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-        gap: var(--space-6);
-        margin: var(--space-12) 0;
-      }
-
-      .framework-card {
-        background: var(--panel);
-        border: 1px solid var(--stroke);
-        border-radius: var(--radius-md);
-        padding: var(--space-6);
-        transition: all var(--anim-fast);
-      }
-
-      .framework-card:hover {
-        border-color: var(--stroke-hover);
-        transform: translateY(-2px);
-        box-shadow: var(--shadow-md);
-      }
-
-      .framework-card h3 {
-        color: var(--brand);
-        margin-bottom: var(--space-3);
-        font-size: var(--fs-xl);
-      }
-
-      .framework-card p {
-        color: var(--muted);
-        margin-bottom: var(--space-4);
-      }
-
-      .cta-section {
-        text-align: center;
-        padding: var(--space-12) 0;
-        background: var(--panel);
-        margin: var(--space-12) 0;
-        border-radius: var(--radius-md);
-      }
-
-      .footer {
-        text-align: center;
-        padding: var(--space-8) 0;
-        color: var(--muted);
-        border-top: 1px solid var(--stroke);
-        margin-top: var(--space-12);
-      }
+        
+        .cta:hover {
+            background: #0056b3;
+        }
+        
+        /* Framework Grid */
+        .framework {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 3rem 0;
+        }
+        
+        .pillar {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
+        }
+        
+        .pillar h3 {
+            color: #007bff;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+        
+        .pillar p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        /* Footer */
+        .footer {
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid #e9ecef;
+            color: #999;
+            font-size: 0.9rem;
+        }
+        
+        /* Mobile */
+        @media (max-width: 600px) {
+            body { padding: 15px; }
+            .framework { grid-template-columns: 1fr; }
+        }
     </style>
-  </head>
-  <body>
+    
+    <!-- Analytics -->
+    <script defer data-domain="tilsf.com" src="https://plausible.io/js/script.js"></script>
+</head>
+<body>
     <div class="container">
-      <!-- Hero Section -->
-      <section class="hero">
         <h1>TILSF</h1>
-        <p>Tasks, Invoices, Leads, Schedule, Focus</p>
-        <p class="text-muted">The five pillars freelancers need. Learn TILSF and use Lennin to fit it all in one app.</p>
-        <div class="flex-center" style="margin-top: var(--space-6);">
-          <a href="https://lennin.fit?utm_source=tilsf&utm_medium=website&utm_campaign=hero_cta" class="btn btn-primary">
-            Try Lennin Free
-          </a>
-        </div>
-      </section>
-
-      <!-- Framework Cards -->
-      <div class="framework-grid">
-        <div class="framework-card">
-          <h3>Tasks</h3>
-          <p>Organize your work with smart task management. Track progress, set priorities, and never miss a deadline.</p>
-        </div>
+        <p class="subtitle">The five pillars freelancers need to succeed</p>
         
-        <div class="framework-card">
-          <h3>Invoices</h3>
-          <p>Get paid faster with professional invoicing. Create, send, and track payments all in one place.</p>
-        </div>
-        
-        <div class="framework-card">
-          <h3>Leads</h3>
-          <p>Convert prospects into clients. Manage your sales pipeline and nurture relationships effectively.</p>
-        </div>
-        
-        <div class="framework-card">
-          <h3>Schedule</h3>
-          <p>Optimize your time with intelligent scheduling. Balance work, meetings, and personal time.</p>
-        </div>
-        
-        <div class="framework-card">
-          <h3>Focus</h3>
-          <p>Eliminate distractions and boost productivity. Stay focused on what matters most to your business.</p>
-        </div>
-      </div>
-
-      <!-- CTA Section -->
-      <section class="cta-section">
-        <h2>Ready to master TILSF?</h2>
-        <p class="text-muted">Join thousands of freelancers who've transformed their business with Lennin.</p>
-        <div class="flex-center" style="margin-top: var(--space-6);">
-          <a href="https://lennin.fit?utm_source=tilsf&utm_medium=website&utm_campaign=cta_section" class="btn btn-primary">
-            Start Your Free Trial
-          </a>
-        </div>
-      </section>
-
-      <!-- Footer -->
-      <footer class="footer">
-        <p>&copy; 2024 TILSF. Built with ❤️ for freelancers.</p>
-        <p class="text-muted">Learn more at <a href="https://lennin.fit">lennin.fit</a></p>
-      </footer>
-    </div>
-
-    <!-- NoScript Fallback -->
-    <noscript>
-      <div style="text-align: center; padding: 2rem; background: var(--panel); color: var(--text);">
-        <h2>TILSF — Tasks, Invoices, Leads, Schedule, Focus</h2>
-        <p>The five pillars freelancers need. Learn TILSF and use Lennin to fit it all in one app.</p>
-        <a href="https://lennin.fit?utm_source=tilsf&utm_medium=website&utm_campaign=noscript" 
-           style="display: inline-block; background: var(--brand); color: var(--brand-ink); padding: 0.75rem 1.5rem; border-radius: 0.5rem; text-decoration: none; margin-top: 1rem;">
-          Try Lennin Free
+        <a href="https://lennin.fit?utm_source=tilsf&utm_medium=website&utm_campaign=hero_cta" class="cta">
+            Try Lennin Free →
         </a>
-      </div>
+        
+        <div class="framework">
+            <div class="pillar">
+                <h3>Tasks</h3>
+                <p>Track projects, deadlines, and progress</p>
+            </div>
+            <div class="pillar">
+                <h3>Invoices</h3>
+                <p>Get paid faster with professional billing</p>
+            </div>
+            <div class="pillar">
+                <h3>Leads</h3>
+                <p>Capture and nurture potential clients</p>
+            </div>
+            <div class="pillar">
+                <h3>Schedule</h3>
+                <p>Manage time and appointments</p>
+            </div>
+            <div class="pillar">
+                <h3>Focus</h3>
+                <p>Stay productive and organized</p>
+            </div>
+        </div>
+        
+        <a href="https://lennin.fit?utm_source=tilsf&utm_medium=website&utm_campaign=bottom_cta" class="cta">
+            Start Your Free Trial →
+        </a>
+        
+        <div class="footer">
+            Built for freelancers • Powered by <a href="https://lennin.fit" style="color: #007bff;">Lennin</a>
+        </div>
+    </div>
+    
+    <!-- NoScript fallback -->
+    <noscript>
+        <div style="text-align: center; padding: 40px 20px;">
+            <h1>TILSF</h1>
+            <p>The five pillars freelancers need: Tasks, Invoices, Leads, Schedule, Focus.</p>
+            <a href="https://lennin.fit?utm_source=tilsf&utm_medium=website&utm_campaign=noscript" 
+               style="background: #007bff; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; display: inline-block; margin: 20px 0;">
+                Try Lennin Free →
+            </a>
+        </div>
     </noscript>
-  </body>
+</body>
 </html>
