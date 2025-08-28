@@ -35,18 +35,18 @@
   status = 301
   force = true
 
-# Handle client-side routing for SPA
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
-
-# Serve TILSF static page for tilsf.com domain
+# Serve TILSF static page for tilsf.com domain (must come before catch-all)
 [[redirects]]
   from = "/"
   to = "/tilsf.html"
   status = 200
   conditions = {Host = "tilsf.com"}
+
+# Handle client-side routing for SPA (catch-all)
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
 
 # Custom 404 page
 [[redirects]]
