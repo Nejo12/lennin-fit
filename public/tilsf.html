@@ -1,185 +1,236 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>TILSF — Tasks, Invoices, Leads, Schedule, Focus</title>
-    <meta name="description" content="The five pillars freelancers need. See how Lennin fits TILSF into one app.">
-    <link rel="canonical" href="https://tilsf.com/">
-    
+    <meta
+      name="description"
+      content="The five pillars freelancers need. See how Lennin fits TILSF into one app."
+    />
+    <link rel="canonical" href="https://tilsf.com/" />
+
     <!-- Open Graph -->
-    <meta property="og:title" content="TILSF — Tasks, Invoices, Leads, Schedule, Focus">
-    <meta property="og:description" content="The five pillars freelancers need. See how Lennin fits TILSF into one app.">
-    <meta property="og:url" content="https://tilsf.com/">
-    <meta property="og:image" content="https://tilsf.com/og.jpg">
-    <meta property="og:image:width" content="1200">
-    <meta property="og:image:height" content="630">
-    <meta property="og:type" content="website">
-    
+    <meta
+      property="og:title"
+      content="TILSF — Tasks, Invoices, Leads, Schedule, Focus"
+    />
+    <meta
+      property="og:description"
+      content="The five pillars freelancers need. See how Lennin fits TILSF into one app."
+    />
+    <meta property="og:url" content="https://tilsf.com/" />
+    <meta property="og:image" content="https://tilsf.com/og.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:type" content="website" />
+
     <!-- Twitter -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="TILSF — Tasks, Invoices, Leads, Schedule, Focus">
-    <meta name="twitter:description" content="The five pillars freelancers need. See how Lennin fits TILSF into one app.">
-    <meta name="twitter:image" content="https://tilsf.com/og.jpg">
-    
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content="TILSF — Tasks, Invoices, Leads, Schedule, Focus"
+    />
+    <meta
+      name="twitter:description"
+      content="The five pillars freelancers need. See how Lennin fits TILSF into one app."
+    />
+    <meta name="twitter:image" content="https://tilsf.com/og.jpg" />
+
     <!-- Favicon -->
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-    <link rel="apple-touch-icon" href="/favicon.svg">
-    
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/favicon.svg" />
+
     <!-- Preconnect for performance -->
-    <link rel="preconnect" href="https://plausible.io">
-    <link rel="dns-prefetch" href="https://plausible.io">
-    
+    <link rel="preconnect" href="https://plausible.io" />
+    <link rel="dns-prefetch" href="https://plausible.io" />
+
     <!-- Critical CSS Inlined for instant loading -->
     <style>
-        /* Reset */
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
-        /* Base */
+      /* Reset */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      /* Base */
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        line-height: 1.6;
+        color: #333;
+        background: #fff;
+        padding: 20px;
+      }
+
+      /* Container */
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+        text-align: center;
+      }
+
+      /* Typography */
+      h1 {
+        font-size: clamp(2rem, 5vw, 3.5rem);
+        font-weight: 700;
+        margin-bottom: 1rem;
+        color: #1a1a1a;
+      }
+
+      .subtitle {
+        font-size: clamp(1.1rem, 3vw, 1.5rem);
+        color: #666;
+        margin-bottom: 2rem;
+        font-weight: 400;
+      }
+
+      /* CTA Button */
+      .cta {
+        display: inline-block;
+        background: #007bff;
+        color: white;
+        padding: 16px 32px;
+        text-decoration: none;
+        border-radius: 8px;
+        font-size: 1.2rem;
+        font-weight: 600;
+        transition: background 0.2s;
+        margin: 2rem 0;
+      }
+
+      .cta:hover {
+        background: #0056b3;
+      }
+
+      /* Framework Grid */
+      .framework {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 20px;
+        margin: 3rem 0;
+      }
+
+      .pillar {
+        background: #f8f9fa;
+        padding: 20px;
+        border-radius: 8px;
+        border: 1px solid #e9ecef;
+      }
+
+      .pillar h3 {
+        color: #007bff;
+        margin-bottom: 10px;
+        font-size: 1.1rem;
+      }
+
+      .pillar p {
+        color: #666;
+        font-size: 0.9rem;
+      }
+
+      /* Footer */
+      .footer {
+        margin-top: 3rem;
+        padding-top: 2rem;
+        border-top: 1px solid #e9ecef;
+        color: #999;
+        font-size: 0.9rem;
+      }
+
+      /* Mobile */
+      @media (max-width: 600px) {
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background: #fff;
-            padding: 20px;
+          padding: 15px;
         }
-        
-        /* Container */
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            text-align: center;
-        }
-        
-        /* Typography */
-        h1 {
-            font-size: clamp(2rem, 5vw, 3.5rem);
-            font-weight: 700;
-            margin-bottom: 1rem;
-            color: #1a1a1a;
-        }
-        
-        .subtitle {
-            font-size: clamp(1.1rem, 3vw, 1.5rem);
-            color: #666;
-            margin-bottom: 2rem;
-            font-weight: 400;
-        }
-        
-        /* CTA Button */
-        .cta {
-            display: inline-block;
-            background: #007bff;
-            color: white;
-            padding: 16px 32px;
-            text-decoration: none;
-            border-radius: 8px;
-            font-size: 1.2rem;
-            font-weight: 600;
-            transition: background 0.2s;
-            margin: 2rem 0;
-        }
-        
-        .cta:hover {
-            background: #0056b3;
-        }
-        
-        /* Framework Grid */
         .framework {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin: 3rem 0;
+          grid-template-columns: 1fr;
         }
-        
-        .pillar {
-            background: #f8f9fa;
-            padding: 20px;
-            border-radius: 8px;
-            border: 1px solid #e9ecef;
-        }
-        
-        .pillar h3 {
-            color: #007bff;
-            margin-bottom: 10px;
-            font-size: 1.1rem;
-        }
-        
-        .pillar p {
-            color: #666;
-            font-size: 0.9rem;
-        }
-        
-        /* Footer */
-        .footer {
-            margin-top: 3rem;
-            padding-top: 2rem;
-            border-top: 1px solid #e9ecef;
-            color: #999;
-            font-size: 0.9rem;
-        }
-        
-        /* Mobile */
-        @media (max-width: 600px) {
-            body { padding: 15px; }
-            .framework { grid-template-columns: 1fr; }
-        }
+      }
     </style>
-    
+
     <!-- Analytics -->
-    <script defer data-domain="tilsf.com" src="https://plausible.io/js/script.js"></script>
-</head>
-<body>
+    <script
+      defer
+      data-domain="tilsf.com"
+      src="https://plausible.io/js/script.js"
+    ></script>
+  </head>
+  <body>
     <div class="container">
-        <h1>Master your TILSF</h1>
-        <p class="subtitle">The 5 pillars of a calm, profitable freelance business. See how Lennin fits them in one app.</p>
-        
-        <a href="https://lennin.fit?utm_source=tilsf&utm_medium=website&utm_campaign=hero_cta" class="cta">
-            Try Lennin Free →
-        </a>
-        
-        <div class="framework">
-            <div class="pillar">
-                <h3>Tasks</h3>
-                <p>Organize and finish work with clarity and purpose</p>
-            </div>
-            <div class="pillar">
-                <h3>Invoices</h3>
-                <p>Get paid faster with streamlined billing and tracking</p>
-            </div>
-            <div class="pillar">
-                <h3>Leads</h3>
-                <p>Manage your clients and nurture relationships effectively</p>
-            </div>
-            <div class="pillar">
-                <h3>Schedule</h3>
-                <p>Plan your time and respect your boundaries</p>
-            </div>
-            <div class="pillar">
-                <h3>Focus</h3>
-                <p>Stress less, achieve more with intentional work</p>
-            </div>
+      <h1>Master your TILSF</h1>
+      <p class="subtitle">
+        The 5 pillars of a calm, profitable freelance business. See how Lennin
+        fits them in one app.
+      </p>
+
+      <a
+        href="https://lennin.fit?utm_source=tilsf&utm_medium=website&utm_campaign=hero_cta"
+        class="cta"
+      >
+        Try Lennin Free →
+      </a>
+
+      <div class="framework">
+        <div class="pillar">
+          <h3>Tasks</h3>
+          <p>Organize and finish work with clarity and purpose</p>
         </div>
-        
-        <a href="https://lennin.fit?utm_source=tilsf&utm_medium=website&utm_campaign=bottom_cta" class="cta">
-            Start Your Free Trial →
-        </a>
-        
-        <div class="footer">
-            TILSF is the framework behind <a href="https://lennin.fit" style="color: #007bff;">Lennin</a>
+        <div class="pillar">
+          <h3>Invoices</h3>
+          <p>Get paid faster with streamlined billing and tracking</p>
         </div>
+        <div class="pillar">
+          <h3>Leads</h3>
+          <p>Manage your clients and nurture relationships effectively</p>
+        </div>
+        <div class="pillar">
+          <h3>Schedule</h3>
+          <p>Plan your time and respect your boundaries</p>
+        </div>
+        <div class="pillar">
+          <h3>Focus</h3>
+          <p>Stress less, achieve more with intentional work</p>
+        </div>
+      </div>
+
+      <a
+        href="https://lennin.fit?utm_source=tilsf&utm_medium=website&utm_campaign=bottom_cta"
+        class="cta"
+      >
+        Start Your Free Trial →
+      </a>
+
+      <div class="footer">
+        TILSF is the framework behind
+        <a href="https://lennin.fit" style="color: #007bff">Lennin</a>
+      </div>
     </div>
-    
+
     <!-- NoScript fallback -->
     <noscript>
-        <div style="text-align: center; padding: 40px 20px;">
-            <h1>TILSF</h1>
-            <p>The five pillars freelancers need: Tasks, Invoices, Leads, Schedule, Focus.</p>
-            <a href="https://lennin.fit?utm_source=tilsf&utm_medium=website&utm_campaign=noscript" 
-               style="background: #007bff; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; display: inline-block; margin: 20px 0;">
-                Try Lennin Free →
-            </a>
-        </div>
+      <div style="text-align: center; padding: 40px 20px">
+        <h1>TILSF</h1>
+        <p>
+          The five pillars freelancers need: Tasks, Invoices, Leads, Schedule,
+          Focus.
+        </p>
+        <a
+          href="https://lennin.fit?utm_source=tilsf&utm_medium=website&utm_campaign=noscript"
+          style="
+            background: #007bff;
+            color: white;
+            padding: 12px 24px;
+            text-decoration: none;
+            border-radius: 6px;
+            display: inline-block;
+            margin: 20px 0;
+          "
+        >
+          Try Lennin Free →
+        </a>
+      </div>
     </noscript>
-</body>
+  </body>
 </html>

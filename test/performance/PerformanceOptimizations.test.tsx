@@ -40,36 +40,28 @@ describe('Performance Optimizations', () => {
     it('handles image load events', () => {
       const onLoad = vi.fn();
       render(
-        <LazyImage
-          src="/test-image.jpg"
-          alt="Test image"
-          onLoad={onLoad}
-        />
+        <LazyImage src="/test-image.jpg" alt="Test image" onLoad={onLoad} />
       );
 
       const img = screen.getByAltText('Test image');
-      
+
       // Simulate image load
       fireEvent.load(img);
-      
+
       expect(onLoad).toHaveBeenCalled();
     });
 
     it('handles image error events', () => {
       const onError = vi.fn();
       render(
-        <LazyImage
-          src="/test-image.jpg"
-          alt="Test image"
-          onError={onError}
-        />
+        <LazyImage src="/test-image.jpg" alt="Test image" onError={onError} />
       );
 
       const img = screen.getByAltText('Test image');
-      
+
       // Simulate image error
       fireEvent.error(img);
-      
+
       expect(onError).toHaveBeenCalled();
     });
 
@@ -99,10 +91,19 @@ describe('Performance Optimizations', () => {
         </div>
       );
 
-      expect(screen.getByText('Primary Button')).toHaveClass('btn', 'btn-primary');
-      expect(screen.getByText('Secondary Button')).toHaveClass('btn', 'btn-secondary');
+      expect(screen.getByText('Primary Button')).toHaveClass(
+        'btn',
+        'btn-primary'
+      );
+      expect(screen.getByText('Secondary Button')).toHaveClass(
+        'btn',
+        'btn-secondary'
+      );
       expect(screen.getByText('Ghost Button')).toHaveClass('btn', 'btn-ghost');
-      expect(screen.getByText('Danger Button')).toHaveClass('btn', 'btn-danger');
+      expect(screen.getByText('Danger Button')).toHaveClass(
+        'btn',
+        'btn-danger'
+      );
     });
 
     it('renders card components with proper classes', () => {
@@ -116,8 +117,14 @@ describe('Performance Optimizations', () => {
       );
 
       expect(screen.getByText('Basic Card')).toHaveClass('card');
-      expect(screen.getByText('Elevated Card')).toHaveClass('card', 'card-elevated');
-      expect(screen.getByText('Interactive Card')).toHaveClass('card', 'card-interactive');
+      expect(screen.getByText('Elevated Card')).toHaveClass(
+        'card',
+        'card-elevated'
+      );
+      expect(screen.getByText('Interactive Card')).toHaveClass(
+        'card',
+        'card-interactive'
+      );
       expect(screen.getByText('Flat Card')).toHaveClass('card', 'card-flat');
     });
 
@@ -138,7 +145,7 @@ describe('Performance Optimizations', () => {
 
       const grid2 = screen.getByText('Grid Item 1').parentElement;
       const grid3 = screen.getByText('Grid Item C').parentElement;
-      
+
       expect(grid2).toHaveClass('grid', 'grid-cols-2');
       expect(grid3).toHaveClass('grid', 'grid-cols-3', 'grid-gap-4');
     });
@@ -181,8 +188,14 @@ describe('Performance Optimizations', () => {
         </div>
       );
 
-      expect(screen.getByText('Flex Center')).toHaveClass('flex', 'flex-center');
-      expect(screen.getByText('Flex Between')).toHaveClass('flex', 'flex-between');
+      expect(screen.getByText('Flex Center')).toHaveClass(
+        'flex',
+        'flex-center'
+      );
+      expect(screen.getByText('Flex Between')).toHaveClass(
+        'flex',
+        'flex-between'
+      );
     });
   });
 
@@ -191,13 +204,15 @@ describe('Performance Optimizations', () => {
       render(
         <div>
           <button className="btn btn-primary">Focusable Button</button>
-          <a href="#" className="focus-visible">Focusable Link</a>
+          <a href="#" className="focus-visible">
+            Focusable Link
+          </a>
         </div>
       );
 
       const button = screen.getByText('Focusable Button');
       const link = screen.getByText('Focusable Link');
-      
+
       expect(button).toBeInTheDocument();
       expect(link).toBeInTheDocument();
     });

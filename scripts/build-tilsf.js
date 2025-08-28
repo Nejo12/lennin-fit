@@ -35,13 +35,13 @@ const assetsToCopy = [
   'og.jpg',
   'robots.txt',
   'sitemap.xml',
-  '404.html'
+  '404.html',
 ];
 
 assetsToCopy.forEach(asset => {
   const source = path.join(PUBLIC_DIR, asset);
   const dest = path.join(TILSF_DIR, asset);
-  
+
   if (fs.existsSync(source)) {
     fs.copyFileSync(source, dest);
     console.log(`✅ Copied ${asset}`);
@@ -128,7 +128,7 @@ if (fs.existsSync(netlifyConfig)) {
   console.log('✅ Copied netlify.toml configuration');
 } else {
   console.warn('⚠️  netlify.toml not found, creating basic config...');
-  
+
   const basicNetlifyConfig = `[build]
   publish = "."
 
@@ -137,7 +137,7 @@ if (fs.existsSync(netlifyConfig)) {
   to = "/index.html"
   status = 200
 `;
-  
+
   fs.writeFileSync(path.join(TILSF_DIR, 'netlify.toml'), basicNetlifyConfig);
   console.log('✅ Created basic netlify.toml');
 }

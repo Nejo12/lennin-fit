@@ -1,9 +1,39 @@
 import React from 'react';
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { screen, fireEvent, cleanup, render, act } from '@testing-library/react';
+import {
+  describe,
+  it,
+  expect,
+  vi,
+  beforeEach,
+  afterEach,
+  beforeAll,
+} from 'vitest';
+import {
+  screen,
+  fireEvent,
+  cleanup,
+  render,
+  act,
+} from '@testing-library/react';
 import { renderWithProviders } from '../../utils';
 import { ToastProvider } from '../../../src/components/ui/Toast';
 import { useToast } from '../../../src/components/ui/useToast';
+
+// Suppress React testing warnings about act() for this test suite
+const originalError = console.error;
+beforeAll(() => {
+  console.error = (...args) => {
+    if (
+      typeof args[0] === 'string' &&
+      args[0].includes(
+        'An update to ToastProvider inside a test was not wrapped in act'
+      )
+    ) {
+      return;
+    }
+    originalError.call(console, ...args);
+  };
+});
 
 // Test component that uses the toast
 function TestComponent() {
@@ -126,7 +156,7 @@ describe('Toast System', () => {
   });
 
   describe('Toast functionality', () => {
-    it('adds toast when add is called', async () => {
+    it('adds toast when add is called', () => {
       renderWithProviders(
         <ToastProvider>
           <TestComponent />
@@ -134,15 +164,15 @@ describe('Toast System', () => {
       );
 
       const addButton = screen.getByRole('button', { name: /add toast/i });
-      
-      await act(async () => {
+
+      act(() => {
         fireEvent.click(addButton);
       });
 
       expect(screen.getByText('Test Toast')).toBeInTheDocument();
     });
 
-    it('adds toast with title and description', async () => {
+    it('adds toast with title and description', () => {
       renderWithProviders(
         <ToastProvider>
           <TestComponent />
@@ -152,8 +182,8 @@ describe('Toast System', () => {
       const addButton = screen.getByRole('button', {
         name: /add success toast/i,
       });
-      
-      await act(async () => {
+
+      act(() => {
         fireEvent.click(addButton);
       });
 
@@ -161,7 +191,7 @@ describe('Toast System', () => {
       expect(screen.getByText('Operation completed')).toBeInTheDocument();
     });
 
-    it('adds multiple toasts', async () => {
+    it('adds multiple toasts', () => {
       renderWithProviders(
         <ToastProvider>
           <TestComponent />
@@ -173,7 +203,7 @@ describe('Toast System', () => {
         name: /add success toast/i,
       });
 
-      await act(async () => {
+      act(() => {
         fireEvent.click(addButton1);
         fireEvent.click(addButton2);
       });
@@ -182,7 +212,7 @@ describe('Toast System', () => {
       expect(screen.getByText('Success')).toBeInTheDocument();
     });
 
-    it('removes toast when close button is clicked', async () => {
+    it('removes toast when close button is clicked', () => {
       renderWithProviders(
         <ToastProvider>
           <TestComponent />
@@ -190,16 +220,16 @@ describe('Toast System', () => {
       );
 
       const addButton = screen.getByRole('button', { name: /add toast/i });
-      
-      await act(async () => {
+
+      act(() => {
         fireEvent.click(addButton);
       });
 
       expect(screen.getByText('Test Toast')).toBeInTheDocument();
 
       const closeButton = screen.getByRole('button', { name: /close/i });
-      
-      await act(async () => {
+
+      act(() => {
         fireEvent.click(closeButton);
       });
 
@@ -208,7 +238,7 @@ describe('Toast System', () => {
   });
 
   describe('Toast accessibility', () => {
-    it('has proper ARIA attributes', async () => {
+    it('has proper ARIA attributes', () => {
       renderWithProviders(
         <ToastProvider>
           <TestComponent />
@@ -216,18 +246,16 @@ describe('Toast System', () => {
       );
 
       const addButton = screen.getByRole('button', { name: /add toast/i });
-      
-      await act(async () => {
+
+      act(() => {
         fireEvent.click(addButton);
       });
 
       const toast = screen.getByRole('status');
       expect(toast).toHaveAttribute('aria-live', 'polite');
-      // Note: aria-atomic might not be set depending on implementation
-      // expect(toast).toHaveAttribute('aria-atomic', 'true');
     });
 
-    it('has accessible close button', async () => {
+    it('has accessible close button', () => {
       renderWithProviders(
         <ToastProvider>
           <TestComponent />
@@ -235,24 +263,24 @@ describe('Toast System', () => {
       );
 
       const addButton = screen.getByRole('button', { name: /add toast/i });
-      
-      await act(async () => {
+
+      act(() => {
         fireEvent.click(addButton);
       });
 
       const closeButton = screen.getByRole('button', { name: /close/i });
-      // Note: aria-label might not be set depending on implementation
-      // expect(closeButton).toHaveAttribute('aria-label', 'Close');
       expect(closeButton).toBeInTheDocument();
     });
   });
 
   describe('Toast edge cases', () => {
-    it('handles toast without title', async () => {
+    it('handles toast without title', () => {
       const TestComponentWithoutTitle = () => {
         const toast = useToast();
         return (
-          <button onClick={() => toast.add({ description: 'Description only' })}>
+          <button
+            onClick={() => toast.add({ description: 'Description only' })}
+          >
             Add Toast Without Title
           </button>
         );
@@ -264,16 +292,18 @@ describe('Toast System', () => {
         </ToastProvider>
       );
 
-      const addButton = screen.getByRole('button', { name: /add toast without title/i });
-      
-      await act(async () => {
+      const addButton = screen.getByRole('button', {
+        name: /add toast without title/i,
+      });
+
+      act(() => {
         fireEvent.click(addButton);
       });
 
       expect(screen.getByText('Description only')).toBeInTheDocument();
     });
 
-    it('handles toast without description', async () => {
+    it('handles toast without description', () => {
       const TestComponentWithoutDescription = () => {
         const toast = useToast();
         return (
@@ -289,16 +319,18 @@ describe('Toast System', () => {
         </ToastProvider>
       );
 
-      const addButton = screen.getByRole('button', { name: /add toast without description/i });
-      
-      await act(async () => {
+      const addButton = screen.getByRole('button', {
+        name: /add toast without description/i,
+      });
+
+      act(() => {
         fireEvent.click(addButton);
       });
 
       expect(screen.getByText('Title only')).toBeInTheDocument();
     });
 
-    it('handles rapid toast additions', async () => {
+    it('handles rapid toast additions', () => {
       renderWithProviders(
         <ToastProvider>
           <TestComponent />
@@ -306,8 +338,8 @@ describe('Toast System', () => {
       );
 
       const addButton = screen.getByRole('button', { name: /add toast/i });
-      
-      await act(async () => {
+
+      act(() => {
         // Click multiple times rapidly
         fireEvent.click(addButton);
         fireEvent.click(addButton);
@@ -319,7 +351,7 @@ describe('Toast System', () => {
       expect(toasts.length).toBeGreaterThan(0);
     });
 
-    it('generates unique IDs for each toast', async () => {
+    it('generates unique IDs for each toast', () => {
       renderWithProviders(
         <ToastProvider>
           <TestComponent />
@@ -327,16 +359,16 @@ describe('Toast System', () => {
       );
 
       const addButton = screen.getByRole('button', { name: /add toast/i });
-      
-      await act(async () => {
+
+      act(() => {
         fireEvent.click(addButton);
       });
 
       const toasts = screen.getAllByRole('status');
-      
+
       // Check that we have at least one toast
       expect(toasts.length).toBeGreaterThan(0);
-      
+
       // Each toast should be properly rendered
       toasts.forEach(toast => {
         expect(toast).toBeInTheDocument();
@@ -355,7 +387,10 @@ describe('Toast System', () => {
       );
 
       const addButton = screen.getByRole('button', { name: /add toast/i });
-      fireEvent.click(addButton);
+
+      act(() => {
+        fireEvent.click(addButton);
+      });
 
       expect(screen.getByText('Test Toast')).toBeInTheDocument();
 

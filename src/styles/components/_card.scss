@@ -146,8 +146,8 @@
 
 /* Card grid */
 .card-grid {
-  @include grid-responsive(1, 2, 3);
   gap: var(--space-6);
+  @include grid-responsive(1, 2, 3);
 }
 
 .card-grid-2 {

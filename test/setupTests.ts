@@ -5,6 +5,22 @@ import { server } from './testServer';
 // polyfill fetch
 import 'whatwg-fetch';
 
+// Suppress React testing warnings about act() for portal-based components
+const originalError = console.error;
+beforeAll(() => {
+  console.error = (...args) => {
+    if (
+      typeof args[0] === 'string' &&
+      args[0].includes(
+        'An update to ToastProvider inside a test was not wrapped in act'
+      )
+    ) {
+      return;
+    }
+    originalError.call(console, ...args);
+  };
+});
+
 // Mock SCSS modules so imports work
 vi.mock('*.module.scss', () => {
   const generateClassName = (baseName: string) => {

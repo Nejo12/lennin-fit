@@ -243,9 +243,9 @@ describe('TextField', () => {
     it('handles controlled input', () => {
       const handleChange = vi.fn();
       renderWithProviders(
-        <TextField 
-          name="test" 
-          value="controlled value" 
+        <TextField
+          name="test"
+          value="controlled value"
           onChange={handleChange}
         />
       );
