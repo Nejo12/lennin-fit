@@ -19,7 +19,7 @@ export const Hero: React.FC = () => {
             Start Free
           </Link>
           <a
-            href="https://lennin.fit?utm_source=tilsf&utm_medium=website&utm_campaign=hero_cta"
+            href="https://lennin.fit/?utm_source=tilsf&utm_medium=referral&utm_campaign=tilsf_microsite"
             className={s.btnSecondary}
           >
             Try Lennin Free

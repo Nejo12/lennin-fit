@@ -62,7 +62,7 @@ export const CTA: React.FC = () => {
       </div>
       <div className={s.tryLenninLink}>
         <a
-          href="https://lennin.fit?utm_source=tilsf&utm_medium=website&utm_campaign=cta_section"
+          href="https://lennin.fit/?utm_source=tilsf&utm_medium=referral&utm_campaign=tilsf_microsite"
           className={s.tryLenninButton}
         >
           Try Lennin Free
