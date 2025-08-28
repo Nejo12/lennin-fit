@@ -8,17 +8,18 @@ export const handler: Handler = async event => {
   if (!OPENAI_API_KEY)
     return { statusCode: 500, body: 'OPENAI_API_KEY missing' };
 
-  const body = JSON.parse(event.body || '{}');
   const {
     clientName,
     previousItems = [],
     recentTasks = [],
     currency = 'EUR',
-  } = body;
+  } = JSON.parse(event.body || '{}');
 
   const prompt = `
-Return ONLY JSON for an invoice draft:
-{ "due_in_days": number, "items":[{"description":string,"quantity":number,"unit_price":number}], "notes": string }
+Return ONLY JSON:
+{ "due_in_days": number,
+  "items":[{"description":string,"quantity":number,"unit_price":number}],
+  "notes": string }
 Client: ${clientName}
 Previous items: ${previousItems.map((i: { description: string; unit_price: number }) => `${i.description}:${i.unit_price}`).join(', ')}
 Recent tasks: ${recentTasks.map((t: { title: string }) => t.title).join(', ') || 'none'}
