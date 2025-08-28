@@ -121,7 +121,9 @@ describe('SchedulePage', () => {
 
     // Should have 7 day containers
     const days = screen.getAllByText(/Mon|Tue|Wed|Thu|Fri|Sat|Sun/);
-    expect(days).toHaveLength(7);
+    // Filter to only include weekday elements (not navigation buttons)
+    const weekdayElements = days.filter(day => day.closest('.weekday'));
+    expect(weekdayElements).toHaveLength(7);
   });
 
   it('should display tasks under the correct days', () => {
@@ -286,26 +288,18 @@ describe('SchedulePage', () => {
     expect(thisWeekButton).toBeInTheDocument();
   });
 
-  it('should display ICS subscription link when org is available', async () => {
+  it('should display Month and Agenda navigation links', async () => {
     render(<SchedulePage />, { wrapper });
 
     await waitFor(() => {
-      expect(screen.getByText('Subscribe (ICS)')).toBeInTheDocument();
+      expect(screen.getByText('Month')).toBeInTheDocument();
+      expect(screen.getByText('Agenda')).toBeInTheDocument();
     });
 
-    const icsLink = screen.getByText('Subscribe (ICS)') as HTMLAnchorElement;
-    expect(icsLink.href).toContain(
-      '/.netlify/functions/ics-tasks?org=test-org-id'
-    );
-  });
-
-  it('should handle missing org gracefully', async () => {
-    vi.mocked(currentOrgId).mockRejectedValue(new Error('No workspace'));
-
-    render(<SchedulePage />, { wrapper });
-
-    // Should not show ICS link if org is not available
-    expect(screen.queryByText('Subscribe (ICS)')).not.toBeInTheDocument();
+    const monthLink = screen.getByText('Month') as HTMLAnchorElement;
+    const agendaLink = screen.getByText('Agenda') as HTMLAnchorElement;
+    expect(monthLink.href).toContain('/app/schedule/month');
+    expect(agendaLink.href).toContain('/app/schedule/agenda');
   });
 
   it('should apply correct CSS classes for task statuses', () => {
