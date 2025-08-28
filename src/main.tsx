@@ -6,6 +6,7 @@ import AppRouter from './app/AppRouter';
 import { initPerformanceOptimizations } from '@/lib/performance';
 import '@/styles/globals.scss';
 import '@/styles/print.scss';
+import '@/styles/schedule.scss';
 
 // Initialize performance optimizations
 initPerformanceOptimizations();
