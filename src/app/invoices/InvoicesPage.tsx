@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useInvoices, useCreateInvoice } from './api';
+import { useInvoices, useCreateInvoice, suggestInvoice } from './api';
 import styles from './Invoices.module.scss';
 
 export default function InvoicesPage() {
@@ -40,12 +40,35 @@ export default function InvoicesPage() {
     }
   };
 
-  const getAISuggestions = () => {
-    return [
-      'Create invoice for "Website Maintenance" - €500',
-      'Follow up on overdue invoice from "Design Studio"',
-      'Send reminder for "Consulting Services" - €1200',
-    ];
+  const [aiSuggestions, setAiSuggestions] = useState<string[]>([]);
+  const [isLoadingSuggestions, setIsLoadingSuggestions] = useState(false);
+
+  const getAISuggestions = async () => {
+    setIsLoadingSuggestions(true);
+    try {
+      const suggestion = await suggestInvoice({
+        clientName: 'Sample Client',
+        previousItems: [],
+        recentTasks: [],
+        currency: 'EUR',
+      });
+
+      const suggestions = [
+        `Create invoice for "${suggestion.items[0]?.description || 'New Project'}" - €${suggestion.items[0]?.unit_price || 500}`,
+        `Due in ${suggestion.due_in_days} days`,
+        suggestion.notes || 'AI-generated suggestion',
+      ];
+      setAiSuggestions(suggestions);
+    } catch (error) {
+      console.error('Failed to get AI suggestions:', error);
+      setAiSuggestions([
+        'Create invoice for "Website Maintenance" - €500',
+        'Follow up on overdue invoice from "Design Studio"',
+        'Send reminder for "Consulting Services" - €1200',
+      ]);
+    } finally {
+      setIsLoadingSuggestions(false);
+    }
   };
 
   if (isLoading) {
@@ -89,8 +112,16 @@ export default function InvoicesPage() {
       {/* AI Suggestions */}
       <div className={styles.aiSuggestions}>
         <div className={styles.suggestionsTitle}>AI Suggestions</div>
+        <button
+          onClick={getAISuggestions}
+          disabled={isLoadingSuggestions}
+          className={styles.submitButton}
+          style={{ marginBottom: '10px' }}
+        >
+          {isLoadingSuggestions ? 'Loading...' : 'Get AI Suggestions'}
+        </button>
         <div className={styles.suggestionsList}>
-          {getAISuggestions().map((suggestion, index) => (
+          {aiSuggestions.map((suggestion: string, index: number) => (
             <div key={index} className={styles.suggestionItem}>
               <div className={styles.suggestionText}>{suggestion}</div>
               <button className={styles.useButton}>Use</button>

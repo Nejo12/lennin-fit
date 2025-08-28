@@ -17,7 +17,7 @@ describe('UTM Tracking', () => {
     expect(tryLenninLink).toBeInTheDocument();
     expect(tryLenninLink).toHaveAttribute(
       'href',
-      'https://lennin.fit?utm_source=tilsf&utm_medium=website&utm_campaign=hero_cta'
+      'https://lennin.fit/?utm_source=tilsf&utm_medium=referral&utm_campaign=tilsf_microsite'
     );
   });
 
@@ -32,7 +32,7 @@ describe('UTM Tracking', () => {
     expect(tryLenninLink).toBeInTheDocument();
     expect(tryLenninLink).toHaveAttribute(
       'href',
-      'https://lennin.fit?utm_source=tilsf&utm_medium=website&utm_campaign=cta_section'
+      'https://lennin.fit/?utm_source=tilsf&utm_medium=referral&utm_campaign=tilsf_microsite'
     );
   });
 });

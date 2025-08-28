@@ -1,6 +1,7 @@
 [build]
   command = "npm run build:prerender"
   publish = "dist"
+  functions = "netlify/functions"
 
 # Environment variables for different contexts
 [build.environment]

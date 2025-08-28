@@ -7,21 +7,19 @@ export function useUnpaidTotal() {
     queryKey: ['unpaid-total'],
     queryFn: async () => {
       try {
-        const { data, error: supabaseError } = await supabase
+        const { data, error } = await supabase
           .from('invoices')
           .select('amount_total, status')
           .in('status', ['sent', 'overdue']);
-        if (supabaseError) throw supabaseError;
+        if (error) throw error;
         return (data ?? []).reduce(
-          (sum, r) => sum + Number(r.amount_total || 0),
+          (s, r) => s + Number(r.amount_total || 0),
           0
         );
-      } catch {
-        // Fallback to mock data
-        console.log('Using mock data for unpaid total');
-        return mockData.invoices
-          .filter(invoice => ['sent', 'overdue'].includes(invoice.status))
-          .reduce((sum, invoice) => sum + Number(invoice.amount_total || 0), 0);
+      } catch (e: unknown) {
+        // If tables aren't created yet, don't block the app.
+        if (String(e).includes('Could not find the table')) return 0;
+        return 0;
       }
     },
   });

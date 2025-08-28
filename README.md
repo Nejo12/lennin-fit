@@ -18,6 +18,21 @@ Lennin Fit is a comprehensive fitness platform designed to help users achieve th
 - **Linting**: ESLint with TypeScript support
 - **Domain**: [lennin.fit](https://lennin.fit)
 
+## 🤖 AI Features
+
+### Invoice AI Suggestions
+
+The application includes AI-powered invoice suggestions using OpenAI's GPT-4o-mini model. The AI functionality is implemented securely with:
+
+- **Server-side API key**: OpenAI API key is kept secure in Netlify environment variables
+- **Netlify Functions**: AI processing happens server-side via `netlify/functions/ai-suggest-invoice.ts`
+- **Type-safe integration**: Full TypeScript support for AI suggestions
+
+To enable AI features:
+
+1. Set `OPENAI_API_KEY` in your Netlify environment variables
+2. The AI will suggest invoice items, due dates, and notes based on client context
+
 ## 🛠️ Development
 
 ### Prerequisites
@@ -61,6 +76,7 @@ lennin-fit/
 │   │   ├── auth/      # Authentication pages
 │   │   ├── clients/   # Client management
 │   │   ├── dashboard/ # Dashboard page
+│   │   ├── invoices/  # Invoice management with AI
 │   │   ├── layout/    # App layout components
 │   │   ├── projects/  # Project management
 │   │   └── tasks/     # Task management
@@ -72,6 +88,8 @@ lennin-fit/
 │   ├── utils/         # Utility functions
 │   ├── types/         # TypeScript type definitions
 │   └── assets/        # Static assets
+├── netlify/
+│   └── functions/     # Serverless functions (AI)
 ├── public/            # Public assets
 └── dist/              # Build output
 ```
