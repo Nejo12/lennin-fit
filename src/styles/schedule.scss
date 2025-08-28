@@ -86,14 +86,27 @@
 }
 
 .task {
+  position: relative;
   display: grid;
-  grid-template-columns: 1fr auto;
+  grid-template-columns: auto 1fr auto;
   align-items: center;
   background: var(--elev);
   border: 1px solid var(--stroke);
   border-radius: var(--radius-lg);
   padding: var(--space-1) var(--space-2);
   gap: var(--space-1);
+}
+
+.task .handle {
+  cursor: grab;
+  margin-right: 6px;
+  opacity: 0.6;
+  user-select: none;
+}
+
+.task.overdue {
+  border-color: #7a1b1b;
+  background: #1a0f10;
 }
 
 .task .title {
@@ -197,7 +210,7 @@
   }
 
   .task {
-    grid-template-columns: 1fr;
+    grid-template-columns: auto 1fr auto;
     gap: var(--space-1);
   }
 

@@ -8,6 +8,7 @@ import {
   useTasksInRange,
   useCreateTaskQuick,
   useUpdateTaskQuick,
+  useReorderDay,
 } from '../../../src/app/schedule/api';
 import { currentOrgId } from '../../../src/lib/workspace';
 // Mock the dependencies
@@ -32,6 +33,7 @@ const mockTasks = [
     status: 'todo' as const,
     priority: 'medium',
     due_date: '2025-08-25',
+    position: 0,
   },
   {
     id: '2',
@@ -39,6 +41,7 @@ const mockTasks = [
     status: 'doing' as const,
     priority: 'high',
     due_date: '2025-08-26',
+    position: 1,
   },
   {
     id: '3',
@@ -46,6 +49,7 @@ const mockTasks = [
     status: 'done' as const,
     priority: 'low',
     due_date: '2025-08-27',
+    position: 2,
   },
 ];
 
@@ -83,6 +87,15 @@ describe('SchedulePage', () => {
       error: null,
       reset: vi.fn(),
     } as unknown as ReturnType<typeof useUpdateTaskQuick>);
+
+    vi.mocked(useReorderDay).mockReturnValue({
+      mutate: vi.fn(),
+      isPending: false,
+      isSuccess: false,
+      isError: false,
+      error: null,
+      reset: vi.fn(),
+    } as unknown as ReturnType<typeof useReorderDay>);
 
     vi.mocked(currentOrgId).mockResolvedValue('test-org-id');
   });
@@ -317,6 +330,49 @@ describe('SchedulePage', () => {
       statusDropdowns.forEach(dropdown => {
         expect(dropdown).toHaveAttribute('aria-label');
       });
+    });
+  });
+
+  it('should render drag handles for tasks', () => {
+    render(<SchedulePage />, { wrapper });
+
+    waitFor(() => {
+      const handles = screen.getAllByText('⋮⋮');
+      expect(handles.length).toBe(3); // One for each task
+      handles.forEach(handle => {
+        expect(handle).toHaveClass('handle');
+      });
+    });
+  });
+
+  it('should apply overdue styling for overdue tasks', () => {
+    const overdueTasks = [
+      {
+        id: '1',
+        title: 'Overdue Task',
+        status: 'todo' as const,
+        priority: 'medium',
+        due_date: '2020-01-01', // Past date
+        position: 0,
+      },
+    ];
+
+    vi.mocked(useTasksInRange).mockReturnValue({
+      data: overdueTasks,
+      isLoading: false,
+      isError: false,
+      error: null,
+      isSuccess: true,
+      isFetching: false,
+      isRefetching: false,
+      refetch: vi.fn(),
+    } as unknown as ReturnType<typeof useTasksInRange>);
+
+    render(<SchedulePage />, { wrapper });
+
+    waitFor(() => {
+      const overdueTask = screen.getByText('Overdue Task');
+      expect(overdueTask.closest('li')).toHaveClass('overdue');
     });
   });
 });

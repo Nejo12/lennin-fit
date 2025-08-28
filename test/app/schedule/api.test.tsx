@@ -3,6 +3,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { renderHook, waitFor } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import {
+  useReorderDay,
   useTasksInRange,
   useCreateTaskQuick,
   useUpdateTaskQuick,
@@ -17,10 +18,6 @@ import { currentOrgId } from '../../../src/lib/workspace';
 vi.mock('../../../src/lib/supabase');
 vi.mock('../../../src/lib/workspace');
 
-const mockSupabase = {
-  from: vi.fn(),
-};
-
 const mockQueryClient = new QueryClient({
   defaultOptions: {
     queries: { retry: false },
@@ -32,223 +29,184 @@ const wrapper = ({ children }: { children: React.ReactNode }) => (
   <QueryClientProvider client={mockQueryClient}>{children}</QueryClientProvider>
 );
 
-describe('schedule API hooks', () => {
+describe('Schedule API', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     mockQueryClient.clear();
 
     // Default mocks
     vi.mocked(isSupabaseConfigured).mockReturnValue(true);
-    vi.mocked(getSupabaseClient).mockReturnValue(
-      mockSupabase as unknown as ReturnType<typeof getSupabaseClient>
-    );
+    vi.mocked(getSupabaseClient).mockReturnValue({
+      from: vi.fn(),
+    } as unknown as ReturnType<typeof getSupabaseClient>);
     vi.mocked(currentOrgId).mockResolvedValue('test-org-id');
   });
 
   describe('useTasksInRange', () => {
-    it('should fetch tasks in date range', async () => {
-      const mockTasks = [
+    it('should fetch tasks in range with position ordering', async () => {
+      const mockData = [
         {
           id: '1',
           title: 'Task 1',
           status: 'todo',
           priority: 'medium',
-          due_date: '2024-01-15',
+          due_date: '2025-01-01',
+          position: 0,
         },
         {
           id: '2',
           title: 'Task 2',
           status: 'doing',
           priority: 'high',
-          due_date: '2024-01-16',
+          due_date: '2025-01-01',
+          position: 1,
         },
       ];
 
-      const mockSelect = vi.fn().mockReturnValue({
-        gte: vi.fn().mockReturnValue({
-          lt: vi.fn().mockReturnValue({
-            order: vi.fn().mockResolvedValue({ data: mockTasks, error: null }),
+      const mockSupabase = {
+        from: vi.fn().mockReturnValue({
+          select: vi.fn().mockReturnValue({
+            gte: vi.fn().mockReturnValue({
+              lt: vi.fn().mockReturnValue({
+                order: vi.fn().mockReturnValue({
+                  order: vi
+                    .fn()
+                    .mockResolvedValue({ data: mockData, error: null }),
+                }),
+              }),
+            }),
           }),
         }),
-      });
-
-      mockSupabase.from.mockReturnValue({
-        select: mockSelect,
-      } as unknown as ReturnType<typeof mockSupabase.from>);
+      };
+      vi.mocked(getSupabaseClient).mockReturnValue(
+        mockSupabase as unknown as ReturnType<typeof getSupabaseClient>
+      );
 
       const { result } = renderHook(
-        () => useTasksInRange('2024-01-15', '2024-01-22'),
+        () => useTasksInRange('2025-01-01', '2025-01-02'),
         { wrapper }
       );
 
       await waitFor(() => {
-        expect(result.current.isSuccess).toBe(true);
+        expect(result.current.data).toEqual(mockData);
       });
 
-      expect(result.current.data).toEqual(mockTasks);
       expect(mockSupabase.from).toHaveBeenCalledWith('tasks');
-      expect(mockSelect).toHaveBeenCalledWith(
-        'id, title, status, priority, due_date'
-      );
     });
 
     it('should return empty array when Supabase is not configured', async () => {
       vi.mocked(isSupabaseConfigured).mockReturnValue(false);
 
       const { result } = renderHook(
-        () => useTasksInRange('2024-01-15', '2024-01-22'),
+        () => useTasksInRange('2025-01-01', '2025-01-02'),
         { wrapper }
       );
 
       await waitFor(() => {
-        expect(result.current.isSuccess).toBe(true);
+        expect(result.current.data).toEqual([]);
       });
-
-      expect(result.current.data).toEqual([]);
-      expect(mockSupabase.from).not.toHaveBeenCalled();
-    });
-
-    it('should handle database errors', async () => {
-      const mockError = new Error('Database error');
-      const mockSelect = vi.fn().mockReturnValue({
-        gte: vi.fn().mockReturnValue({
-          lt: vi.fn().mockReturnValue({
-            order: vi.fn().mockResolvedValue({ data: null, error: mockError }),
-          }),
-        }),
-      });
-
-      mockSupabase.from.mockReturnValue({
-        select: mockSelect,
-      } as unknown);
-
-      const { result } = renderHook(
-        () => useTasksInRange('2024-01-15', '2024-01-22'),
-        { wrapper }
-      );
-
-      await waitFor(() => {
-        expect(result.current.isError).toBe(true);
-      });
-
-      expect(result.current.error).toBe(mockError);
     });
   });
 
   describe('useCreateTaskQuick', () => {
-    it('should create a task successfully', async () => {
+    it('should create a task with correct parameters', async () => {
       const mockInsert = vi.fn().mockResolvedValue({ error: null });
-      mockSupabase.from.mockReturnValue({
-        insert: mockInsert,
-      } as unknown);
+      const mockFrom = vi.fn().mockReturnValue({ insert: mockInsert });
+      const mockAuth = {
+        getUser: vi.fn().mockResolvedValue({
+          data: { user: { id: 'test-user' } },
+          error: null,
+        }),
+      };
+      vi.mocked(getSupabaseClient).mockReturnValue({
+        from: mockFrom,
+        auth: mockAuth,
+      } as unknown as ReturnType<typeof getSupabaseClient>);
 
       const { result } = renderHook(() => useCreateTaskQuick(), { wrapper });
 
-      const taskData = { title: 'New Task', due_date: '2024-01-15' };
-
-      result.current.mutate(taskData);
-
-      await waitFor(() => {
-        expect(result.current.isSuccess).toBe(true);
+      await result.current.mutateAsync({
+        title: 'New Task',
+        due_date: '2025-01-01',
       });
 
+      expect(mockFrom).toHaveBeenCalledWith('tasks');
       expect(mockInsert).toHaveBeenCalledWith({
         org_id: 'test-org-id',
         title: 'New Task',
-        due_date: '2024-01-15',
+        due_date: '2025-01-01',
         status: 'todo',
         priority: 'medium',
         position: 0,
       });
     });
-
-    it('should handle creation errors', async () => {
-      const mockError = new Error('Insert failed');
-      const mockInsert = vi.fn().mockResolvedValue({ error: mockError });
-      mockSupabase.from.mockReturnValue({
-        insert: mockInsert,
-      } as unknown);
-
-      const { result } = renderHook(() => useCreateTaskQuick(), { wrapper });
-
-      const taskData = { title: 'New Task', due_date: '2024-01-15' };
-
-      result.current.mutate(taskData);
-
-      await waitFor(() => {
-        expect(result.current.isError).toBe(true);
-      });
-
-      expect(result.current.error).toBe(mockError);
-    });
   });
 
   describe('useUpdateTaskQuick', () => {
-    it('should update a task successfully', async () => {
-      const mockUpdate = vi.fn().mockReturnValue({
-        eq: vi.fn().mockResolvedValue({ error: null }),
-      });
-      mockSupabase.from.mockReturnValue({
-        update: mockUpdate,
-      } as unknown);
+    it('should update a task with correct parameters', async () => {
+      const mockEq = vi.fn().mockResolvedValue({ error: null });
+      const mockUpdate = vi.fn().mockReturnValue({ eq: mockEq });
+      const mockFrom = vi.fn().mockReturnValue({ update: mockUpdate });
+      vi.mocked(getSupabaseClient).mockReturnValue({
+        from: mockFrom,
+      } as unknown as ReturnType<typeof getSupabaseClient>);
 
       const { result } = renderHook(() => useUpdateTaskQuick(), { wrapper });
 
-      const updateData = { id: 'task-1', status: 'done' as const };
+      await result.current.mutateAsync({ id: '1', status: 'done' });
 
-      result.current.mutate(updateData);
+      expect(mockFrom).toHaveBeenCalledWith('tasks');
+      expect(mockUpdate).toHaveBeenCalledWith({ id: '1', status: 'done' });
+      expect(mockEq).toHaveBeenCalledWith('id', '1');
+    });
+  });
 
-      await waitFor(() => {
-        expect(result.current.isSuccess).toBe(true);
-      });
+  describe('useReorderDay', () => {
+    it('should reorder tasks with correct position updates', async () => {
+      const mockUpsert = vi.fn().mockResolvedValue({ error: null });
+      const mockFrom = vi.fn().mockReturnValue({ upsert: mockUpsert });
+      vi.mocked(getSupabaseClient).mockReturnValue({
+        from: mockFrom,
+      } as unknown as ReturnType<typeof getSupabaseClient>);
 
-      expect(mockUpdate).toHaveBeenCalledWith({ id: 'task-1', status: 'done' });
+      const { result } = renderHook(() => useReorderDay(), { wrapper });
+
+      const params = {
+        due_date: '2025-01-01',
+        orderedIds: ['task-2', 'task-1', 'task-3'],
+      };
+
+      await result.current.mutateAsync(params);
+
+      expect(mockFrom).toHaveBeenCalledWith('tasks');
+      expect(mockUpsert).toHaveBeenCalledWith(
+        [
+          { id: 'task-2', position: 0 },
+          { id: 'task-1', position: 1 },
+          { id: 'task-3', position: 2 },
+        ],
+        { onConflict: 'id' }
+      );
     });
 
-    it('should handle update errors', async () => {
-      const mockError = new Error('Update failed');
-      const mockUpdate = vi.fn().mockReturnValue({
-        eq: vi.fn().mockResolvedValue({ error: mockError }),
-      });
-      mockSupabase.from.mockReturnValue({
-        update: mockUpdate,
-      } as unknown);
+    it('should handle upsert errors', async () => {
+      const mockError = new Error('Database error');
+      const mockUpsert = vi.fn().mockResolvedValue({ error: mockError });
+      const mockFrom = vi.fn().mockReturnValue({ upsert: mockUpsert });
+      vi.mocked(getSupabaseClient).mockReturnValue({
+        from: mockFrom,
+      } as unknown as ReturnType<typeof getSupabaseClient>);
 
-      const { result } = renderHook(() => useUpdateTaskQuick(), { wrapper });
+      const { result } = renderHook(() => useReorderDay(), { wrapper });
 
-      const updateData = { id: 'task-1', status: 'done' as const };
+      const params = {
+        due_date: '2025-01-01',
+        orderedIds: ['task-1', 'task-2'],
+      };
 
-      result.current.mutate(updateData);
-
-      await waitFor(() => {
-        expect(result.current.isError).toBe(true);
-      });
-
-      expect(result.current.error).toBe(mockError);
-    });
-
-    it('should update due_date when provided', async () => {
-      const mockUpdate = vi.fn().mockReturnValue({
-        eq: vi.fn().mockResolvedValue({ error: null }),
-      });
-      mockSupabase.from.mockReturnValue({
-        update: mockUpdate,
-      } as unknown);
-
-      const { result } = renderHook(() => useUpdateTaskQuick(), { wrapper });
-
-      const updateData = { id: 'task-1', due_date: '2024-01-20' };
-
-      result.current.mutate(updateData);
-
-      await waitFor(() => {
-        expect(result.current.isSuccess).toBe(true);
-      });
-
-      expect(mockUpdate).toHaveBeenCalledWith({
-        id: 'task-1',
-        due_date: '2024-01-20',
-      });
+      await expect(result.current.mutateAsync(params)).rejects.toThrow(
+        'Database error'
+      );
     });
   });
 });

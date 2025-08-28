@@ -22,10 +22,10 @@ const queryClient = new QueryClient({
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <ToastProvider>
-      <QueryClientProvider client={queryClient}>
+    <QueryClientProvider client={queryClient}>
+      <ToastProvider>
         <AppRouter />
-      </QueryClientProvider>
-    </ToastProvider>
+      </ToastProvider>
+    </QueryClientProvider>
   </React.StrictMode>
 );

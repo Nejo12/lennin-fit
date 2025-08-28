@@ -1,6 +1,19 @@
 import React, { useMemo, useState } from 'react';
+import { DndContext, closestCenter } from '@dnd-kit/core';
+import {
+  arrayMove,
+  SortableContext,
+  verticalListSortingStrategy,
+  useSortable,
+} from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 import { buildWeek, toISODate, fmtDay, addDays } from './date';
-import { useTasksInRange, useCreateTaskQuick, useUpdateTaskQuick } from './api';
+import {
+  useTasksInRange,
+  useCreateTaskQuick,
+  useUpdateTaskQuick,
+  useReorderDay,
+} from './api';
 import { currentOrgId } from '@/lib/workspace';
 
 interface Task {
@@ -9,6 +22,46 @@ interface Task {
   status: 'todo' | 'doing' | 'done' | 'blocked';
   priority: string;
   due_date: string;
+  position: number;
+}
+
+function SortableTaskRow({
+  task,
+  onStatus,
+}: {
+  task: Task;
+  onStatus: (id: string, status: Task['status']) => void;
+}) {
+  const { attributes, listeners, setNodeRef, transform, transition } =
+    useSortable({ id: task.id });
+  const style = { transform: CSS.Transform.toString(transform), transition };
+  const overdue =
+    task.due_date &&
+    new Date(task.due_date) < new Date() &&
+    task.status !== 'done';
+
+  return (
+    <li
+      ref={setNodeRef}
+      style={style}
+      className={`task ${task.status} ${overdue ? 'overdue' : ''}`}
+      {...attributes}
+      {...listeners}
+    >
+      <span className="handle">⋮⋮</span>
+      <span className="title">{task.title}</span>
+      <select
+        value={task.status}
+        onChange={e => onStatus(task.id, e.target.value as Task['status'])}
+        className="status"
+      >
+        <option value="todo">todo</option>
+        <option value="doing">doing</option>
+        <option value="done">done</option>
+        <option value="blocked">blocked</option>
+      </select>
+    </li>
+  );
 }
 
 export default function SchedulePage() {
@@ -20,6 +73,7 @@ export default function SchedulePage() {
   );
   const createTask = useCreateTaskQuick();
   const updateTask = useUpdateTaskQuick();
+  const reorderDay = useReorderDay();
   const [subscribeHref, setSubscribeHref] = useState<string>('');
 
   React.useEffect(() => {
@@ -91,29 +145,37 @@ export default function SchedulePage() {
                   onAdd={title => createTask.mutate({ title, due_date: key })}
                 />
               </div>
-              <ul className="tasks">
-                {list.map(t => (
-                  <li key={t.id} className={`task ${t.status}`}>
-                    <span className="title">{t.title}</span>
-                    <select
-                      value={t.status}
-                      onChange={e =>
-                        updateTask.mutate({
-                          id: t.id,
-                          status: e.target.value as Task['status'],
-                        })
-                      }
-                      className="status"
-                    >
-                      <option value="todo">todo</option>
-                      <option value="doing">doing</option>
-                      <option value="done">done</option>
-                      <option value="blocked">blocked</option>
-                    </select>
-                  </li>
-                ))}
-                {!list.length && <li className="empty">No tasks</li>}
-              </ul>
+              <DndContext
+                collisionDetection={closestCenter}
+                onDragEnd={ev => {
+                  const fromId = ev.active.id as string;
+                  const toId = (ev.over?.id as string) || fromId;
+                  const ids = list.map(t => t.id);
+                  const fromIdx = ids.indexOf(fromId);
+                  const toIdx = ids.indexOf(toId);
+                  if (fromIdx < 0 || toIdx < 0 || fromIdx === toIdx) return;
+                  const next = arrayMove(ids, fromIdx, toIdx);
+                  reorderDay.mutate({ due_date: key, orderedIds: next });
+                }}
+              >
+                <SortableContext
+                  items={list.map(t => t.id)}
+                  strategy={verticalListSortingStrategy}
+                >
+                  <ul className="tasks">
+                    {list.map(t => (
+                      <SortableTaskRow
+                        key={t.id}
+                        task={t}
+                        onStatus={(id, status) =>
+                          updateTask.mutate({ id, status })
+                        }
+                      />
+                    ))}
+                    {!list.length && <li className="empty">No tasks</li>}
+                  </ul>
+                </SortableContext>
+              </DndContext>
             </div>
           );
         })}

@@ -1,5 +1,4 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
-import { createPortal } from 'react-dom';
 import s from './Toast.module.scss';
 import Button from './Button';
 import type { ToastItem } from './Toast.constants';
@@ -31,27 +30,20 @@ export function ToastProvider({ children }: React.PropsWithChildren) {
   return (
     <Ctx.Provider value={value}>
       {children}
-      {createPortal(
-        <div className={s.viewport} role="region" aria-label="Notifications">
-          {items.map(i => (
-            <div
-              key={i.id}
-              className={s.toast}
-              role="status"
-              aria-live="polite"
-            >
-              {i.title && <div className={s.title}>{i.title}</div>}
-              {i.description && <div className={s.desc}>{i.description}</div>}
-              <div className={s.row}>
-                <Button variant="ghost" size="sm" onClick={() => remove(i.id)}>
-                  Close
-                </Button>
-              </div>
+      {/* Simple inline toasts without portal for now */}
+      <div className={s.viewport} role="region" aria-label="Notifications">
+        {items.map(i => (
+          <div key={i.id} className={s.toast} role="status" aria-live="polite">
+            {i.title && <div className={s.title}>{i.title}</div>}
+            {i.description && <div className={s.desc}>{i.description}</div>}
+            <div className={s.row}>
+              <Button variant="ghost" size="sm" onClick={() => remove(i.id)}>
+                Close
+              </Button>
             </div>
-          ))}
-        </div>,
-        document.body
-      )}
+          </div>
+        ))}
+      </div>
     </Ctx.Provider>
   );
 }

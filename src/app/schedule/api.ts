@@ -8,6 +8,7 @@ interface Task {
   status: 'todo' | 'doing' | 'done' | 'blocked';
   priority: string;
   due_date: string;
+  position: number;
 }
 
 interface CreateTaskParams {
@@ -21,6 +22,11 @@ interface UpdateTaskParams {
   due_date?: string;
 }
 
+interface ReorderDayParams {
+  due_date: string;
+  orderedIds: string[];
+}
+
 export function useTasksInRange(startISO: string, endISO: string) {
   return useQuery({
     queryKey: ['tasks-range', startISO, endISO],
@@ -29,10 +35,11 @@ export function useTasksInRange(startISO: string, endISO: string) {
       const db = getSupabaseClient();
       const { data, error } = await db
         .from('tasks')
-        .select('id, title, status, priority, due_date')
+        .select('id, title, status, priority, due_date, position')
         .gte('due_date', startISO)
         .lt('due_date', endISO)
-        .order('due_date', { ascending: true });
+        .order('due_date', { ascending: true })
+        .order('position', { ascending: true });
       if (error) throw error;
       return data ?? [];
     },
@@ -44,6 +51,17 @@ export function useCreateTaskQuick() {
   return useMutation({
     mutationFn: async (params: CreateTaskParams): Promise<void> => {
       const db = getSupabaseClient();
+
+      // Check if user is authenticated
+      const {
+        data: { user },
+        error: authError,
+      } = await db.auth.getUser();
+      if (authError || !user) {
+        console.error('User not authenticated:', authError);
+        throw new Error('Please sign in to create tasks');
+      }
+
       const org_id = await currentOrgId();
       const { error } = await db.from('tasks').insert({
         org_id,
@@ -68,6 +86,24 @@ export function useUpdateTaskQuick() {
         .from('tasks')
         .update(params)
         .eq('id', params.id);
+      if (error) throw error;
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['tasks-range'] }),
+  });
+}
+
+export function useReorderDay() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (params: ReorderDayParams): Promise<void> => {
+      const db = getSupabaseClient();
+      const updates = params.orderedIds.map((id, idx) => ({
+        id,
+        position: idx,
+      }));
+      const { error } = await db
+        .from('tasks')
+        .upsert(updates, { onConflict: 'id' });
       if (error) throw error;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ['tasks-range'] }),

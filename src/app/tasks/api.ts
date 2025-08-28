@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { isSupabaseConfigured, getSupabaseClient } from '@/lib/supabase';
-import { currentOrgId } from '@/lib/workspace';
+import { currentOrgId, debugUserStatus } from '@/lib/workspace';
 import { mockData } from '@/lib/mockData';
 import type { Task } from '@/types/db';
 
@@ -45,12 +45,33 @@ export function useCreateTask() {
         }
 
         const client = getSupabaseClient();
+
+        // Check if user is authenticated
+        const {
+          data: { user },
+          error: authError,
+        } = await client.auth.getUser();
+        if (authError || !user) {
+          console.error('User not authenticated:', authError);
+          throw new Error('Please sign in to create tasks');
+        }
+
+        // Debug user status
+        await debugUserStatus();
+
         const org_id = await currentOrgId();
+        console.log('Creating task with org_id:', org_id, 'payload:', payload);
+
         const { error: supabaseError } = await client
           .from('tasks')
           .insert({ org_id, status: 'todo', position: 0, ...payload });
-        if (supabaseError) throw supabaseError;
-      } catch {
+
+        if (supabaseError) {
+          console.error('Supabase error creating task:', supabaseError);
+          throw supabaseError;
+        }
+      } catch (error) {
+        console.error('Error creating task:', error);
         // Mock creation
         console.log('Mock task creation:', payload);
       }
