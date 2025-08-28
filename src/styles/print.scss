@@ -1,7 +1,8 @@
+/* Keep this separate and import once in your app entry */
 @media print {
   body {
-    background: white;
-    color: black;
+    background: #fff;
+    color: #000;
   }
 
   .app-nav,
@@ -17,32 +18,20 @@
     margin: 0 auto;
   }
 
-  .invoice .card {
+  .invoice.card {
     box-shadow: none;
     border: 1px solid #ddd;
   }
 
-  /* Ensure proper page breaks */
-  .invoice-item {
-    page-break-inside: avoid;
+  table {
+    width: 100%;
+    border-collapse: collapse;
   }
 
-  /* Hide interactive elements */
-  button,
-  input,
-  select,
-  textarea {
-    display: none !important;
-  }
-
-  /* Show only content */
-  .invoice-content {
-    display: block !important;
-  }
-
-  /* Optimize for printing */
-  * {
-    -webkit-print-color-adjust: exact !important;
-    print-color-adjust: exact !important;
+  th,
+  td {
+    border: 1px solid #ddd;
+    padding: 6px 8px;
+    text-align: left;
   }
 }

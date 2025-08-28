@@ -5,44 +5,95 @@
   gap: var(--space-6);
   max-width: 1200px;
   margin: 0 auto;
+  padding: var(--space-4);
+}
+
+.grid2col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-6);
+
+  @media (max-width: 1024px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.card {
+  @include card;
+  padding: var(--space-5);
+  transition:
+    transform var(--anim-fast) ease,
+    box-shadow var(--anim-fast) ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+  }
 }
 
 .header {
-  text-align: center;
-  margin-bottom: var(--space-6);
-}
-
-.title {
-  font-size: var(--fs-2xl);
-  font-weight: 800;
-  color: var(--text);
-  margin-bottom: var(--space-2);
-}
-
-.subtitle {
-  color: var(--muted);
-  font-size: var(--fs-lg);
-}
-
-.aiSuggestions {
-  @include card;
-  padding: var(--space-5);
-  margin-bottom: var(--space-6);
-}
-
-.suggestionsTitle {
-  font-size: var(--fs-lg);
-  font-weight: 700;
-  color: var(--text);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   margin-bottom: var(--space-4);
-}
-
-.suggestionsList {
-  display: grid;
+  flex-wrap: wrap;
   gap: var(--space-3);
 }
 
-.suggestionItem {
+.actions {
+  display: flex;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.btn {
+  @include button-reset;
+  background: var(--brand);
+  color: var(--brand-ink);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: var(--fs-sm);
+  transition: all var(--anim-fast) ease;
+  border: 1px solid transparent;
+
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+  }
+}
+
+.btnGhost {
+  background: transparent;
+  color: var(--text);
+  border-color: var(--stroke);
+
+  &:hover {
+    background: var(--elev);
+    border-color: var(--brand);
+  }
+}
+
+.list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.listRow {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -50,122 +101,160 @@
   border-radius: var(--radius-md);
   background: var(--elev);
   border: 1px solid var(--stroke);
-}
-
-.suggestionText {
-  color: var(--text);
-  font-weight: 500;
-}
-
-.suggestionAmount {
-  color: var(--brand);
-  font-weight: 600;
-}
-
-.useButton {
-  @include button-reset;
-  background: var(--brand);
-  color: var(--brand-ink);
-  padding: var(--space-2) var(--space-3);
-  border-radius: var(--radius-sm);
-  font-size: var(--fs-sm);
-  font-weight: 600;
-  transition: transform var(--anim-fast) ease;
-
-  &:hover {
-    transform: translateY(-1px);
-  }
-}
-
-.form {
-  @include card;
-  padding: var(--space-5);
-  margin-bottom: var(--space-6);
-}
-
-.formTitle {
-  font-size: var(--fs-lg);
-  font-weight: 700;
-  color: var(--text);
-  margin-bottom: var(--space-4);
-}
-
-.formGrid {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr auto;
+  cursor: pointer;
+  transition: all var(--anim-fast) ease;
   gap: var(--space-3);
-  align-items: end;
-}
-
-.formInput {
-  @include control;
-}
-
-.submitButton {
-  @include button-reset;
-  background: var(--brand);
-  color: var(--brand-ink);
-  padding: var(--space-3) var(--space-4);
-  border-radius: var(--radius-md);
-  font-weight: 600;
-  transition: transform var(--anim-fast) ease;
 
   &:hover {
-    transform: translateY(-1px);
+    background: var(--elev-hover);
+    border-color: var(--brand);
+    transform: translateX(2px);
+  }
+
+  &.active {
+    background: color-mix(in oklab, var(--brand) 10%, var(--elev));
+    border-color: var(--brand);
+    box-shadow: var(--shadow-sm);
   }
 }
 
-.invoicesList {
-  @include card;
-  padding: var(--space-5);
-}
-
-.invoicesTitle {
-  font-size: var(--fs-lg);
-  font-weight: 700;
-  color: var(--text);
-  margin-bottom: var(--space-4);
-}
-
-.invoiceItem {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: var(--space-3);
-  border-radius: var(--radius-md);
-  background: var(--elev);
-  margin-bottom: var(--space-2);
-}
-
-.invoiceInfo {
+.col {
   display: flex;
   flex-direction: column;
   gap: var(--space-1);
+  flex: 1;
 }
 
-.invoiceNumber {
+.title {
   color: var(--text);
   font-weight: 600;
-}
-
-.invoiceClient {
-  color: var(--muted);
   font-size: var(--fs-sm);
 }
 
-.invoiceAmount {
+.muted {
+  color: var(--muted);
+  font-size: var(--fs-xs);
+}
+
+.amount {
   color: var(--brand);
   font-weight: 600;
-  font-size: var(--fs-lg);
+  font-size: var(--fs-md);
+  min-width: 80px;
+  text-align: right;
 }
 
-.invoiceStatus {
-  padding: var(--space-1) var(--space-2);
-  border-radius: var(--radius-sm);
+.select {
+  @include control;
   font-size: var(--fs-xs);
-  font-weight: 600;
+  padding: var(--space-1) var(--space-2);
+  min-width: 100px;
 }
 
+.loading {
+  text-align: center;
+  color: var(--muted);
+  padding: var(--space-4);
+}
+
+.error {
+  color: var(--danger);
+  text-align: center;
+  padding: var(--space-4);
+  background: color-mix(in oklab, var(--danger) 10%, transparent);
+  border-radius: var(--radius-md);
+}
+
+// Invoice Detail Styles
+.invoiceDetail {
+  animation: slideIn var(--anim-normal) ease;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.tableWrap {
+  overflow-x: auto;
+  margin-bottom: var(--space-4);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--fs-sm);
+}
+
+.table th {
+  background: var(--elev);
+  padding: var(--space-2);
+  text-align: left;
+  font-weight: 600;
+  color: var(--text);
+  border-bottom: 1px solid var(--stroke);
+}
+
+.tableRow {
+  transition: background-color var(--anim-fast) ease;
+
+  &:hover {
+    background: var(--elev-hover);
+  }
+}
+
+.table td {
+  padding: var(--space-2);
+  border-bottom: 1px solid var(--stroke);
+  vertical-align: top;
+}
+
+.tableInput {
+  @include control;
+  width: 100%;
+  font-size: var(--fs-sm);
+  padding: var(--space-1) var(--space-2);
+  border: 1px solid transparent;
+  background: transparent;
+  transition: all var(--anim-fast) ease;
+
+  &:focus {
+    border-color: var(--brand);
+    background: var(--elev);
+    outline: none;
+  }
+
+  &:hover {
+    background: var(--elev);
+  }
+}
+
+.actions {
+  display: flex;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.emptyState {
+  text-align: center;
+  color: var(--muted);
+  padding: var(--space-4);
+  font-style: italic;
+}
+
+.noPrint {
+  @media print {
+    display: none !important;
+  }
+}
+
+// Status styles
 .statusDraft {
   background: color-mix(in oklab, var(--muted) 20%, transparent);
   color: var(--muted);
@@ -185,67 +274,62 @@
 
 /* Mobile Responsiveness */
 @media (max-width: 768px) {
-  .formGrid {
-    grid-template-columns: 1fr;
-    gap: var(--space-2);
+  .invoices {
+    padding: var(--space-2);
   }
 
-  .suggestionItem {
+  .header {
     flex-direction: column;
+    align-items: stretch;
     gap: var(--space-2);
-    align-items: flex-start;
   }
 
-  .invoiceItem {
+  .actions {
+    justify-content: center;
+  }
+
+  .listRow {
     flex-direction: column;
+    align-items: stretch;
     gap: var(--space-2);
-    align-items: flex-start;
   }
 
-  .submitButton {
-    padding: var(--space-2) var(--space-3);
-    font-size: var(--fs-sm);
+  .col {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
   }
 
-  .useButton {
-    padding: var(--space-1) var(--space-2);
+  .amount {
+    text-align: left;
+  }
+
+  .tableWrap {
     font-size: var(--fs-xs);
   }
 
-  .title {
-    font-size: var(--fs-xl);
+  .table th,
+  .table td {
+    padding: var(--space-1);
   }
 
-  .subtitle {
-    font-size: var(--fs-md);
-  }
-
-  .formTitle,
-  .suggestionsTitle,
-  .invoicesTitle {
-    font-size: var(--fs-md);
+  .btn {
+    padding: var(--space-1) var(--space-2);
+    font-size: var(--fs-xs);
   }
 }
 
 @media (max-width: 480px) {
-  .form,
-  .aiSuggestions,
-  .invoicesList {
+  .card {
     padding: var(--space-3);
   }
 
-  .suggestionItem,
-  .invoiceItem {
+  .listRow {
     padding: var(--space-2);
   }
 
-  .submitButton {
-    padding: var(--space-1) var(--space-2);
+  .tableInput {
     font-size: var(--fs-xs);
-  }
-
-  .useButton {
-    padding: var(--space-1) var(--space-2);
-    font-size: var(--fs-xs);
+    padding: var(--space-1);
   }
 }

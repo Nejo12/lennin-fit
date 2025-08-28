@@ -11,7 +11,7 @@ export function useInvoices() {
       const { data, error } = await db
         .from('invoices')
         .select(
-          'id, client_id, due_date, status, amount_total, notes, created_at'
+          'id, client_id, issue_date, due_date, status, amount_total, notes, created_at'
         )
         .order('created_at', { ascending: false });
       if (error) throw error;
@@ -37,6 +37,24 @@ export function useCreateInvoice() {
         .single();
       if (error) throw error;
       return data!.id as string;
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['invoices'] }),
+  });
+}
+
+export function useSetInvoiceStatus() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (p: {
+      id: string;
+      status: 'draft' | 'sent' | 'paid' | 'overdue';
+    }) => {
+      const db = getSupabaseClient();
+      const { error } = await db
+        .from('invoices')
+        .update({ status: p.status })
+        .eq('id', p.id);
+      if (error) throw error;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ['invoices'] }),
   });
@@ -79,6 +97,40 @@ export function useAddItem() {
   });
 }
 
+export function useUpdateItem() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (p: {
+      id: string;
+      fields: Partial<{
+        description: string;
+        quantity: number;
+        unit_price: number;
+      }>;
+    }) => {
+      const db = getSupabaseClient();
+      const { error } = await db
+        .from('invoice_items')
+        .update(p.fields)
+        .eq('id', p.id);
+      if (error) throw error;
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['invoice_items'] }),
+  });
+}
+
+export function useDeleteItem() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (p: { id: string }) => {
+      const db = getSupabaseClient();
+      const { error } = await db.from('invoice_items').delete().eq('id', p.id);
+      if (error) throw error;
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['invoice_items'] }),
+  });
+}
+
 interface InvoiceSuggestionContext {
   clientName: string;
   previousItems?: Array<{ description: string; unit_price: number }>;
@@ -92,5 +144,13 @@ export async function suggestInvoice(ctx: InvoiceSuggestionContext) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(ctx),
   });
-  return await res.json();
+  if (!res.ok) throw new Error('AI suggest failed');
+  const data = await res.json();
+  if (!Array.isArray(data.items)) data.items = [];
+  if (typeof data.due_in_days !== 'number') data.due_in_days = 14;
+  return data as {
+    due_in_days: number;
+    items: Array<{ description: string; quantity: number; unit_price: number }>;
+    notes: string;
+  };
 }
