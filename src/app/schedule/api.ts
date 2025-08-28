@@ -62,6 +62,12 @@ export function useCreateTaskQuick() {
         throw new Error('Please sign in to create tasks');
       }
 
+      // Ensure user has membership
+      const { error: membershipError } = await db.rpc('ensure_membership');
+      if (membershipError) {
+        console.error('Failed to ensure membership:', membershipError);
+      }
+
       const org_id = await currentOrgId();
       const { error } = await db.from('tasks').insert({
         org_id,

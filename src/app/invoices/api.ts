@@ -29,6 +29,13 @@ export function useCreateInvoice() {
       notes?: string | null;
     }) => {
       const db = getSupabaseClient();
+
+      // Ensure user has membership
+      const { error: membershipError } = await db.rpc('ensure_membership');
+      if (membershipError) {
+        console.error('Failed to ensure membership:', membershipError);
+      }
+
       const org_id = await currentOrgId();
       const { data, error } = await db
         .from('invoices')
@@ -88,6 +95,13 @@ export function useAddItem() {
       unit_price?: number;
     }) => {
       const db = getSupabaseClient();
+
+      // Ensure user has membership
+      const { error: membershipError } = await db.rpc('ensure_membership');
+      if (membershipError) {
+        console.error('Failed to ensure membership:', membershipError);
+      }
+
       const org_id = await currentOrgId();
       const { error } = await db.from('invoice_items').insert({ org_id, ...p });
       if (error) throw error;

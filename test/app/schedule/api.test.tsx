@@ -112,6 +112,7 @@ describe('Schedule API', () => {
     it('should create a task with correct parameters', async () => {
       const mockInsert = vi.fn().mockResolvedValue({ error: null });
       const mockFrom = vi.fn().mockReturnValue({ insert: mockInsert });
+      const mockRpc = vi.fn().mockResolvedValue({ error: null });
       const mockAuth = {
         getUser: vi.fn().mockResolvedValue({
           data: { user: { id: 'test-user' } },
@@ -121,6 +122,7 @@ describe('Schedule API', () => {
       vi.mocked(getSupabaseClient).mockReturnValue({
         from: mockFrom,
         auth: mockAuth,
+        rpc: mockRpc,
       } as unknown as ReturnType<typeof getSupabaseClient>);
 
       const { result } = renderHook(() => useCreateTaskQuick(), { wrapper });

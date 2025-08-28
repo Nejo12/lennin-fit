@@ -31,6 +31,13 @@ export function useCreateClient() {
       payload: Pick<Client, 'name' | 'email' | 'phone' | 'notes'>
     ) => {
       try {
+        // Ensure user has membership
+        const { error: membershipError } =
+          await supabase.rpc('ensure_membership');
+        if (membershipError) {
+          console.error('Failed to ensure membership:', membershipError);
+        }
+
         const org_id = await currentOrgId();
         const { error: supabaseError } = await supabase
           .from('clients')

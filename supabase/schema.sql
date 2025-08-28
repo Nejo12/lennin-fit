@@ -23,6 +23,26 @@ create table if not exists memberships (
   created_at timestamptz default now()
 );
 
+-- Ensure user has membership for their default org
+create or replace function ensure_membership()
+returns void language plpgsql security definer as $$
+declare
+  v_profile profiles%rowtype;
+  v_membership memberships%rowtype;
+begin
+  -- Get user's profile
+  select * into v_profile from profiles where id = auth.uid();
+  
+  if v_profile.default_org_id is not null then
+    -- Check if membership exists
+    select * into v_membership from memberships where user_id = auth.uid() and org_id = v_profile.default_org_id;
+    if v_membership.user_id is null then
+      -- Create missing membership
+      insert into memberships(user_id, org_id, role) values (auth.uid(), v_profile.default_org_id, 'owner');
+    end if;
+  end if;
+end$$;
+
 create or replace function is_member(check_org uuid)
 returns boolean language sql stable as $$
   select exists(
@@ -154,11 +174,22 @@ returns void language plpgsql security definer as $$
 declare
   v_profile profiles%rowtype;
   v_org organizations%rowtype;
+  v_membership memberships%rowtype;
 begin
+  -- Check if profile exists
   select * into v_profile from profiles where id = auth.uid();
+  
   if v_profile.id is null then
+    -- Create organization and profile
     insert into organizations(name) values (coalesce(p_full_name, 'My Workspace')) returning * into v_org;
     insert into profiles(id, full_name, default_org_id) values (auth.uid(), p_full_name, v_org.id);
     insert into memberships(user_id, org_id, role) values (auth.uid(), v_org.id, 'owner');
+  else
+    -- Profile exists, check if membership exists
+    select * into v_membership from memberships where user_id = auth.uid() and org_id = v_profile.default_org_id;
+    if v_membership.user_id is null then
+      -- Create missing membership
+      insert into memberships(user_id, org_id, role) values (auth.uid(), v_profile.default_org_id, 'owner');
+    end if;
   end if;
 end$$;
