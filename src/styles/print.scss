@@ -1,0 +1,48 @@
+@media print {
+  body {
+    background: white;
+    color: black;
+  }
+
+  .app-nav,
+  .site-header,
+  .site-footer,
+  .btn,
+  .no-print {
+    display: none !important;
+  }
+
+  .invoice {
+    width: 210mm;
+    margin: 0 auto;
+  }
+
+  .invoice .card {
+    box-shadow: none;
+    border: 1px solid #ddd;
+  }
+
+  /* Ensure proper page breaks */
+  .invoice-item {
+    page-break-inside: avoid;
+  }
+
+  /* Hide interactive elements */
+  button,
+  input,
+  select,
+  textarea {
+    display: none !important;
+  }
+
+  /* Show only content */
+  .invoice-content {
+    display: block !important;
+  }
+
+  /* Optimize for printing */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+}

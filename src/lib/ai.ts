@@ -42,70 +42,24 @@ class MockProvider implements AiProvider {
   }
 }
 
-// OpenAI Provider Implementation
+// OpenAI Provider Implementation (via Netlify Function)
 class OpenAIProvider implements AiProvider {
   async suggestInvoice(ctx: InvoiceContext): Promise<SuggestedInvoice> {
-    const prompt = `
-You generate concise invoice suggestions. Use ${ctx.currency}.
-Client: ${ctx.clientName}
-Payment pattern: ${ctx.paymentPattern}
-Previous items: ${ctx.previousItems.map(i => `${i.description} - ${i.unit_price}`).join('; ')}
-Recent tasks: ${ctx.recentTasks?.map(t => t.title).join('; ') || 'none'}
-
-Return JSON: { due_in_days, items:[{description, quantity, unit_price}], notes }.
-Keep items 1–4 lines, no fluff.
-`;
-
     try {
-      const response = await fetch(
-        'https://api.openai.com/v1/chat/completions',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${import.meta.env.VITE_OPENAI_KEY}`,
-          },
-          body: JSON.stringify({
-            model: 'gpt-3.5-turbo',
-            messages: [
-              {
-                role: 'system',
-                content:
-                  'You are an AI assistant that generates invoice suggestions for freelancers. Return only valid JSON.',
-              },
-              {
-                role: 'user',
-                content: prompt,
-              },
-            ],
-            temperature: 0.3,
-            max_tokens: 500,
-          }),
-        }
-      );
+      const res = await fetch('/.netlify/functions/ai-suggest-invoice', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(ctx),
+      });
+      const data = await res.json();
 
-      if (!response.ok) {
-        throw new Error(`OpenAI API error: ${response.status}`);
-      }
+      // Validate
+      if (!Array.isArray(data.items)) data.items = [];
+      if (typeof data.due_in_days !== 'number') data.due_in_days = 14;
 
-      const data = await response.json();
-      const content = data.choices[0]?.message?.content;
-
-      if (!content) {
-        throw new Error('No content received from OpenAI');
-      }
-
-      // Parse JSON safely
-      const parsed = JSON.parse(content);
-
-      // Validate and apply fallback defaults
-      return {
-        due_in_days: parsed.due_in_days || 14,
-        items: Array.isArray(parsed.items) ? parsed.items : [],
-        notes: parsed.notes || 'Thank you for your business!',
-      };
+      return data as SuggestedInvoice;
     } catch (error) {
-      console.error('OpenAI API error:', error);
+      console.error('AI suggestion error:', error);
       // Fallback to mock provider
       return new MockProvider().suggestInvoice(ctx);
     }

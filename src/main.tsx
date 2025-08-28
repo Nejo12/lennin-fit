@@ -5,6 +5,7 @@ import { ToastProvider } from '@/components/ui/Toast';
 import AppRouter from './app/AppRouter';
 import { initPerformanceOptimizations } from '@/lib/performance';
 import '@/styles/globals.scss';
+import '@/styles/print.scss';
 
 // Initialize performance optimizations
 initPerformanceOptimizations();

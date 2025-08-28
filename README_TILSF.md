@@ -21,12 +21,14 @@ The five pillars freelancers need to build a successful business. This microsite
 ## 🏗️ Architecture
 
 ### Static Site Generation
+
 - **Single HTML file** with critical CSS inlined
 - **No JavaScript dependencies** (except analytics)
 - **Optimized for speed** (< 1s load time)
 - **SEO-first** design with proper meta tags
 
 ### Performance Features
+
 - ✅ **Critical CSS inlined** (~11KB)
 - ✅ **System fonts** for fast loading
 - ✅ **Optimized images** (WebP when possible)
@@ -35,6 +37,7 @@ The five pillars freelancers need to build a successful business. This microsite
 - ✅ **Caching strategies** implemented
 
 ### SEO Optimization
+
 - ✅ **Semantic HTML** structure
 - ✅ **Open Graph** and **Twitter Cards**
 - ✅ **Structured data** ready
@@ -69,16 +72,19 @@ scripts/
 ## 🚀 Deployment Options
 
 ### 1. Netlify CLI (Recommended)
+
 ```bash
 npm run deploy:tilsf:netlify
 ```
 
 ### 2. Netlify Dashboard
+
 1. Build: `npm run build:tilsf`
 2. Drag `dist-tilsf` to Netlify
 3. Configure custom domain
 
 ### 3. GitHub Actions
+
 ```yaml
 - run: npm run build:tilsf
 - uses: nwtgck/actions-netlify@v2
@@ -89,6 +95,7 @@ npm run deploy:tilsf:netlify
 ## 🔧 Configuration
 
 ### Domain Setup
+
 1. **Add domain in Netlify**: `tilsf.com`
 2. **Configure DNS**:
    ```
@@ -98,11 +105,13 @@ npm run deploy:tilsf:netlify
 3. **SSL certificate** auto-provisioned
 
 ### Analytics
+
 - **Plausible Analytics** configured
 - **UTM tracking** on all CTAs
 - **Privacy-focused** analytics
 
 ### Security
+
 - **HTTPS enforced**
 - **Security headers** configured
 - **Content Security Policy** ready
@@ -111,12 +120,14 @@ npm run deploy:tilsf:netlify
 ## 📊 Performance Metrics
 
 ### Expected Scores
+
 - **Lighthouse Performance**: 95-100
 - **Lighthouse Accessibility**: 95-100
 - **Lighthouse Best Practices**: 95-100
 - **Lighthouse SEO**: 95-100
 
 ### Load Times
+
 - **First Contentful Paint**: < 0.5s
 - **Largest Contentful Paint**: < 1s
 - **Cumulative Layout Shift**: 0
@@ -125,17 +136,20 @@ npm run deploy:tilsf:netlify
 ## 🎨 Design System
 
 ### Colors
+
 - **Primary**: `#65d46e` (Brand green)
 - **Background**: `#0b0b0b` (Dark)
 - **Text**: `#e7e7ea` (Light)
 - **Muted**: `#b5b6bc` (Gray)
 
 ### Typography
+
 - **System fonts** for performance
 - **Fluid typography** with clamp()
 - **Responsive scaling** across devices
 
 ### Components
+
 - **Hero section** with gradient text
 - **Framework cards** with hover effects
 - **CTA sections** with clear hierarchy
@@ -144,6 +158,7 @@ npm run deploy:tilsf:netlify
 ## 🔄 Development
 
 ### Local Development
+
 ```bash
 # Build and serve locally
 npm run build:tilsf
@@ -152,12 +167,14 @@ python -m http.server 8000
 ```
 
 ### Making Changes
+
 1. Edit `public/tilsf.html`
 2. Run `npm run build:tilsf`
 3. Test locally
 4. Deploy with `npm run deploy:tilsf:netlify`
 
 ### Content Updates
+
 - **Hero text**: Update in `public/tilsf.html`
 - **Framework descriptions**: Modify card content
 - **CTAs**: Update links and UTM parameters
@@ -166,11 +183,13 @@ python -m http.server 8000
 ## 📈 Analytics & Tracking
 
 ### UTM Parameters
+
 - **Hero CTA**: `utm_campaign=hero_cta`
 - **Section CTA**: `utm_campaign=cta_section`
 - **NoScript fallback**: `utm_campaign=noscript`
 
 ### Conversion Tracking
+
 - **Plausible Analytics** for page views
 - **UTM tracking** for traffic sources
 - **Goal tracking** ready for setup
@@ -180,6 +199,7 @@ python -m http.server 8000
 ### Common Issues
 
 **Build fails:**
+
 ```bash
 # Check Node.js version
 node --version  # Should be 18+
@@ -190,6 +210,7 @@ npm run build:tilsf
 ```
 
 **Domain not working:**
+
 ```bash
 # Check DNS propagation
 dig tilsf.com
@@ -200,6 +221,7 @@ netlify status
 ```
 
 **Performance issues:**
+
 - Run Lighthouse audit
 - Check image optimization
 - Verify critical CSS is inlined
@@ -214,6 +236,7 @@ netlify status
 ## 🎉 Success Metrics
 
 Once deployed, you'll have:
+
 - ✅ **Live at tilsf.com**
 - ✅ **< 1s load time**
 - ✅ **95+ Lighthouse scores**

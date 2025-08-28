@@ -1,44 +1,19 @@
 import { useState } from 'react';
+import { useInvoices, useCreateInvoice } from './api';
 import styles from './Invoices.module.scss';
 
-interface Invoice {
-  id: string;
-  clientName: string;
-  amount: number;
-  status: 'draft' | 'sent' | 'paid' | 'overdue';
-  dueDate: string;
-  description: string;
-}
-
 export default function InvoicesPage() {
-  const [invoices, setInvoices] = useState<Invoice[]>([
-    {
-      id: '1',
-      clientName: 'Acme Corp',
-      amount: 2500,
-      status: 'sent',
-      dueDate: '2024-02-15',
-      description: 'Website redesign project',
-    },
-    {
-      id: '2',
-      clientName: 'TechStart Inc',
-      amount: 1800,
-      status: 'draft',
-      dueDate: '2024-02-20',
-      description: 'Mobile app development',
-    },
-  ]);
+  const { data: invoices = [], isLoading, error } = useInvoices();
+  const createInvoice = useCreateInvoice();
 
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [newInvoice, setNewInvoice] = useState({
-    clientName: '',
-    amount: '',
-    dueDate: '',
-    description: '',
+    client_id: '',
+    due_date: '',
+    notes: '',
   });
 
-  const getStatusClass = (status: Invoice['status']) => {
+  const getStatusClass = (status: string) => {
     switch (status) {
       case 'paid':
         return styles.statusPaid;
@@ -51,18 +26,18 @@ export default function InvoicesPage() {
     }
   };
 
-  const handleCreateInvoice = () => {
-    const invoice: Invoice = {
-      id: Date.now().toString(),
-      clientName: newInvoice.clientName,
-      amount: parseFloat(newInvoice.amount),
-      status: 'draft',
-      dueDate: newInvoice.dueDate,
-      description: newInvoice.description,
-    };
-    setInvoices([...invoices, invoice]);
-    setNewInvoice({ clientName: '', amount: '', dueDate: '', description: '' });
-    setShowCreateForm(false);
+  const handleCreateInvoice = async () => {
+    try {
+      await createInvoice.mutateAsync({
+        client_id: newInvoice.client_id || null,
+        due_date: newInvoice.due_date || null,
+        notes: newInvoice.notes || null,
+      });
+      setNewInvoice({ client_id: '', due_date: '', notes: '' });
+      setShowCreateForm(false);
+    } catch (error) {
+      console.error('Failed to create invoice:', error);
+    }
   };
 
   const getAISuggestions = () => {
@@ -72,6 +47,28 @@ export default function InvoicesPage() {
       'Send reminder for "Consulting Services" - €1200',
     ];
   };
+
+  if (isLoading) {
+    return (
+      <div className={styles.invoices}>
+        <div className={styles.header}>
+          <h1 className={styles.title}>Invoices</h1>
+          <p className={styles.subtitle}>Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className={styles.invoices}>
+        <div className={styles.header}>
+          <h1 className={styles.title}>Invoices</h1>
+          <p className={styles.subtitle}>Error loading invoices</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className={styles.invoices}>
@@ -109,35 +106,35 @@ export default function InvoicesPage() {
           <div className={styles.formGrid}>
             <input
               type="text"
-              placeholder="Client name"
-              value={newInvoice.clientName}
+              placeholder="Client ID (optional)"
+              value={newInvoice.client_id}
               onChange={e =>
-                setNewInvoice({ ...newInvoice, clientName: e.target.value })
-              }
-              className={styles.formInput}
-            />
-            <input
-              type="number"
-              placeholder="Amount"
-              value={newInvoice.amount}
-              onChange={e =>
-                setNewInvoice({ ...newInvoice, amount: e.target.value })
+                setNewInvoice({ ...newInvoice, client_id: e.target.value })
               }
               className={styles.formInput}
             />
             <input
               type="date"
-              value={newInvoice.dueDate}
+              value={newInvoice.due_date}
               onChange={e =>
-                setNewInvoice({ ...newInvoice, dueDate: e.target.value })
+                setNewInvoice({ ...newInvoice, due_date: e.target.value })
+              }
+              className={styles.formInput}
+            />
+            <textarea
+              placeholder="Notes (optional)"
+              value={newInvoice.notes}
+              onChange={e =>
+                setNewInvoice({ ...newInvoice, notes: e.target.value })
               }
               className={styles.formInput}
             />
             <button
               onClick={handleCreateInvoice}
+              disabled={createInvoice.isPending}
               className={styles.submitButton}
             >
-              Create Invoice
+              {createInvoice.isPending ? 'Creating...' : 'Create Invoice'}
             </button>
           </div>
         </div>
@@ -146,22 +143,32 @@ export default function InvoicesPage() {
       {/* Invoices List */}
       <div className={styles.invoicesList}>
         <div className={styles.invoicesTitle}>All Invoices</div>
-        {invoices.map(invoice => (
-          <div key={invoice.id} className={styles.invoiceItem}>
-            <div className={styles.invoiceInfo}>
-              <div className={styles.invoiceNumber}>{invoice.clientName}</div>
-              <div className={styles.invoiceClient}>{invoice.description}</div>
-            </div>
-            <div className={styles.invoiceAmount}>
-              €{invoice.amount.toLocaleString()}
-            </div>
-            <div
-              className={`${styles.invoiceStatus} ${getStatusClass(invoice.status)}`}
-            >
-              {invoice.status}
-            </div>
+        {invoices.length === 0 ? (
+          <div className={styles.emptyState}>
+            <p>No invoices yet. Create your first invoice to get started.</p>
           </div>
-        ))}
+        ) : (
+          invoices.map(invoice => (
+            <div key={invoice.id} className={styles.invoiceItem}>
+              <div className={styles.invoiceInfo}>
+                <div className={styles.invoiceNumber}>
+                  Invoice #{invoice.id.slice(0, 8)}
+                </div>
+                <div className={styles.invoiceClient}>
+                  {invoice.notes || 'No description'}
+                </div>
+              </div>
+              <div className={styles.invoiceAmount}>
+                €{(invoice.amount_total || 0).toLocaleString()}
+              </div>
+              <div
+                className={`${styles.invoiceStatus} ${getStatusClass(invoice.status)}`}
+              >
+                {invoice.status}
+              </div>
+            </div>
+          ))
+        )}
       </div>
     </div>
   );
