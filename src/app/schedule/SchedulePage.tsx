@@ -28,6 +28,7 @@ function SortRow({
   t,
   onStatus,
   onOpen,
+  onQuickActions,
 }: {
   t: {
     id: string;
@@ -37,6 +38,7 @@ function SortRow({
   };
   onStatus: (id: string, s: string) => void;
   onOpen: (id: string) => void;
+  onQuickActions: (id: string, action: 'today' | 'tomorrow' | 'toggle') => void;
 }) {
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id: t.id });
@@ -52,13 +54,41 @@ function SortRow({
       {...listeners}
     >
       <span className="handle">⋮⋮</span>
-      <button
-        className="task-link"
-        onClick={() => onOpen(t.id)}
-        title="Open details"
-      >
-        {t.title}
-      </button>
+      <label className="row gap center">
+        <input
+          type="checkbox"
+          checked={t.status === 'done'}
+          onChange={() => onQuickActions(t.id, 'toggle')}
+          aria-label="Mark done"
+        />
+        <button
+          className="task-link"
+          onClick={() => onOpen(t.id)}
+          title="Open details"
+        >
+          {t.title}
+        </button>
+      </label>
+      <div className="row gap">
+        <button
+          className="btn btn-ghost"
+          onClick={e => {
+            e.stopPropagation();
+            onQuickActions(t.id, 'today');
+          }}
+        >
+          Today
+        </button>
+        <button
+          className="btn btn-ghost"
+          onClick={e => {
+            e.stopPropagation();
+            onQuickActions(t.id, 'tomorrow');
+          }}
+        >
+          Tomorrow
+        </button>
+      </div>
       <select
         value={t.status}
         onChange={e => onStatus(t.id, e.target.value)}
@@ -86,6 +116,11 @@ export default function SchedulePage() {
   const moveAcross = useMoveTaskAcrossDays();
 
   const [selectedTaskId, setSelectedTaskId] = useState<string | null>(null);
+
+  const todayISO = new Date().toISOString().slice(0, 10);
+  const tomorrowISO = new Date(Date.now() + 86400000)
+    .toISOString()
+    .slice(0, 10);
 
   // Filters state
   const [filters, setFilters] = useState<Filters>({
@@ -213,6 +248,25 @@ export default function SchedulePage() {
   const nextWeek = () => setAnchor(addDays(week.start, 7));
   const thisWeek = () => setAnchor(new Date());
 
+  const handleQuickActions = (
+    id: string,
+    action: 'today' | 'tomorrow' | 'toggle'
+  ) => {
+    if (action === 'toggle') {
+      const task = tasks.find(t => t.id === id);
+      if (task) {
+        updateTask.mutate({
+          id,
+          status: task.status === 'done' ? 'todo' : 'done',
+        });
+      }
+    } else if (action === 'today') {
+      updateTask.mutate({ id, due_date: todayISO });
+    } else if (action === 'tomorrow') {
+      updateTask.mutate({ id, due_date: tomorrowISO });
+    }
+  };
+
   return (
     <div className="schedule-page">
       <div className="row between center header">
@@ -281,6 +335,7 @@ export default function SchedulePage() {
                           })
                         }
                         onOpen={id => setSelectedTaskId(id)}
+                        onQuickActions={handleQuickActions}
                       />
                     ))}
                     {!list.length && <li className="empty">No tasks</li>}

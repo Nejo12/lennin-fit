@@ -1,6 +1,7 @@
 @use './tokens.scss' as *;
 @use './mixins.scss' as *;
 @use './components/_index.scss' as *;
+@use './focus.scss' as *;
 
 /* Reset and base styles */
 * {

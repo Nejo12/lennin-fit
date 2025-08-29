@@ -5,6 +5,7 @@
 Your Supabase local development environment is now fully configured and running!
 
 ### Current Status
+
 - ✅ Supabase CLI installed (v2.39.2)
 - ✅ Local Supabase instance running
 - ✅ Database schema applied
@@ -14,14 +15,14 @@ Your Supabase local development environment is now fully configured and running!
 
 ## 🔗 Access URLs
 
-| Service | URL | Description |
-|---------|-----|-------------|
-| **Supabase Studio** | http://127.0.0.1:54323 | Database dashboard and management |
-| **API** | http://127.0.0.1:54321 | REST API endpoint |
-| **GraphQL** | http://127.0.0.1:54321/graphql/v1 | GraphQL endpoint |
-| **Database** | postgresql://postgres:postgres@127.0.0.1:54322/postgres | Direct database connection |
-| **Storage** | http://127.0.0.1:54321/storage/v1/s3 | File storage API |
-| **Email Testing** | http://127.0.0.1:54324 | Email testing interface |
+| Service             | URL                                                     | Description                       |
+| ------------------- | ------------------------------------------------------- | --------------------------------- |
+| **Supabase Studio** | http://127.0.0.1:54323                                  | Database dashboard and management |
+| **API**             | http://127.0.0.1:54321                                  | REST API endpoint                 |
+| **GraphQL**         | http://127.0.0.1:54321/graphql/v1                       | GraphQL endpoint                  |
+| **Database**        | postgresql://postgres:postgres@127.0.0.1:54322/postgres | Direct database connection        |
+| **Storage**         | http://127.0.0.1:54321/storage/v1/s3                    | File storage API                  |
+| **Email Testing**   | http://127.0.0.1:54324                                  | Email testing interface           |
 
 ## 🔑 API Keys
 
@@ -41,6 +42,7 @@ super-secret-jwt-token-with-at-least-32-characters-long
 Your database includes the following tables:
 
 ### Core Tables
+
 - **organizations** - Multi-tenant organization management
 - **profiles** - User profiles with default organization
 - **memberships** - User-organization relationships
@@ -51,6 +53,7 @@ Your database includes the following tables:
 - **invoice_items** - Invoice line items
 
 ### Features
+
 - ✅ Row Level Security (RLS) policies
 - ✅ Multi-tenant architecture
 - ✅ Task scheduling and recurrence
@@ -60,6 +63,7 @@ Your database includes the following tables:
 ## 🛠️ Common Commands
 
 ### Start/Stop Supabase
+
 ```bash
 # Start local Supabase
 supabase start
@@ -72,6 +76,7 @@ supabase status
 ```
 
 ### Database Management
+
 ```bash
 # Reset database (applies all migrations)
 supabase db reset
@@ -87,6 +92,7 @@ psql postgresql://postgres:postgres@127.0.0.1:54322/postgres
 ```
 
 ### Development
+
 ```bash
 # Start development server
 npm run dev
@@ -125,6 +131,7 @@ supabase/
 ## 🚨 Troubleshooting
 
 ### Docker Issues
+
 ```bash
 # Check if Docker is running
 docker ps
@@ -134,6 +141,7 @@ open -a Docker
 ```
 
 ### Database Connection Issues
+
 ```bash
 # Check if Supabase is running
 supabase status
@@ -143,6 +151,7 @@ supabase stop && supabase start
 ```
 
 ### Migration Issues
+
 ```bash
 # Reset database completely
 supabase db reset

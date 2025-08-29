@@ -168,3 +168,29 @@ export async function suggestInvoice(ctx: InvoiceSuggestionContext) {
     notes: string;
   };
 }
+
+export function useAddManyItems() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (p: {
+      invoice_id: string;
+      items: Array<{
+        description: string;
+        quantity: number;
+        unit_price: number;
+      }>;
+    }) => {
+      const db = getSupabaseClient();
+      const org_id = await currentOrgId();
+      const rows = p.items.map(i => ({
+        org_id,
+        invoice_id: p.invoice_id,
+        ...i,
+      }));
+      const { error } = await db.from('invoice_items').insert(rows);
+      if (error) throw error;
+    },
+    onSuccess: (_r, p) =>
+      qc.invalidateQueries({ queryKey: ['invoice_items', p.invoice_id] }),
+  });
+}

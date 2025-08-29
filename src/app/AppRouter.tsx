@@ -12,6 +12,7 @@ import Verify from './auth/Verify';
 import AuthCallback from './auth/AuthCallback';
 import AppShell from './layout/AppShell';
 import DashboardPage from './dashboard/DashboardPage';
+import FocusPage from './focus/FocusPage';
 import TasksPage from './tasks/TasksPage';
 import InvoicesPage from './invoices/InvoicesPage';
 import LeadsPage from './leads/LeadsPage';
@@ -93,6 +94,7 @@ const router = createBrowserRouter([
         element: <AppShell />,
         children: [
           { index: true, element: <DashboardPage /> },
+          { path: 'focus', element: <FocusPage /> },
           { path: 'tasks', element: <TasksPage /> },
           { path: 'invoices', element: <InvoicesPage /> },
           { path: 'leads', element: <LeadsPage /> },
