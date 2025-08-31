@@ -11,7 +11,7 @@ export function useClients() {
       try {
         const { data, error: supabaseError } = await supabase
           .from('clients')
-          .select('id, org_id, name, email, phone, notes, created_at')
+          .select('id, org_id, name, email, notes, created_at')
           .order('created_at', { ascending: false });
         if (supabaseError) throw supabaseError;
         return data as Client[];
@@ -28,7 +28,9 @@ export function useCreateClient() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (
-      payload: Pick<Client, 'name' | 'email' | 'phone' | 'notes'>
+      payload: Pick<Client, 'name' | 'email' | 'notes'> & {
+        phone?: string | null;
+      }
     ) => {
       try {
         // Ensure user has membership
