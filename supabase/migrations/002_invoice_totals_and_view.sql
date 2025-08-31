@@ -1,6 +1,6 @@
 -- Keep invoice totals in sync with items
 create or replace function update_invoice_totals()
-returns trigger language plpgsql as $$
+returns trigger language plpgsql set search_path = public as $$
 declare v_inv uuid;
 begin
   v_inv := coalesce(new.invoice_id, old.invoice_id);
@@ -16,7 +16,7 @@ after insert or update or delete on invoice_items
 for each row
 execute function update_invoice_totals();
 
--- View: computed overdue status
+-- View: computed overdue status (without security definer)
 create or replace view invoice_public as
 select
   i.*,

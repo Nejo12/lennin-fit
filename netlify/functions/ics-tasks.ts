@@ -9,8 +9,13 @@ const SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY!;
  * GET /.netlify/functions/ics-tasks?org=<uuid>&status=todo,doing (optional)
  */
 export const handler: Handler = async event => {
-  if (!SUPABASE_URL || !SERVICE_KEY)
+  if (!SUPABASE_URL || !SERVICE_KEY) {
+    console.error('Missing environment variables:', {
+      SUPABASE_URL: !!SUPABASE_URL,
+      SERVICE_KEY: !!SERVICE_KEY,
+    });
     return { statusCode: 500, body: 'Missing server keys' };
+  }
   const org = (event.queryStringParameters?.org || '').trim();
   if (!org) return { statusCode: 400, body: 'org required' };
 

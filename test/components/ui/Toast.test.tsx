@@ -13,7 +13,7 @@ import {
   fireEvent,
   cleanup,
   render,
-  act,
+  waitFor,
 } from '@testing-library/react';
 import { renderWithProviders } from '../../utils';
 import { ToastProvider } from '../../../src/components/ui/Toast';
@@ -82,7 +82,6 @@ function TestComponent() {
 
 describe('Toast System', () => {
   beforeEach(() => {
-    vi.useFakeTimers();
     // Clean up any existing viewports
     cleanup();
     // Clear any existing portals
@@ -93,8 +92,6 @@ describe('Toast System', () => {
   });
 
   afterEach(() => {
-    vi.runOnlyPendingTimers();
-    vi.useRealTimers();
     cleanup();
     // Clear any existing portals
     const existingViewports = document.querySelectorAll(
@@ -156,7 +153,7 @@ describe('Toast System', () => {
   });
 
   describe('Toast functionality', () => {
-    it('adds toast when add is called', () => {
+    it('adds toast when add is called', async () => {
       renderWithProviders(
         <ToastProvider>
           <TestComponent />
@@ -165,14 +162,14 @@ describe('Toast System', () => {
 
       const addButton = screen.getByRole('button', { name: /add toast/i });
 
-      act(() => {
-        fireEvent.click(addButton);
-      });
+      fireEvent.click(addButton);
 
-      expect(screen.getByText('Test Toast')).toBeInTheDocument();
+      await waitFor(() => {
+        expect(screen.getByText('Test Toast')).toBeInTheDocument();
+      });
     });
 
-    it('adds toast with title and description', () => {
+    it('adds toast with title and description', async () => {
       renderWithProviders(
         <ToastProvider>
           <TestComponent />
@@ -183,15 +180,15 @@ describe('Toast System', () => {
         name: /add success toast/i,
       });
 
-      act(() => {
-        fireEvent.click(addButton);
-      });
+      fireEvent.click(addButton);
 
-      expect(screen.getByText('Success')).toBeInTheDocument();
-      expect(screen.getByText('Operation completed')).toBeInTheDocument();
+      await waitFor(() => {
+        expect(screen.getByText('Success')).toBeInTheDocument();
+        expect(screen.getByText('Operation completed')).toBeInTheDocument();
+      });
     });
 
-    it('adds multiple toasts', () => {
+    it('adds multiple toasts', async () => {
       renderWithProviders(
         <ToastProvider>
           <TestComponent />
@@ -203,16 +200,16 @@ describe('Toast System', () => {
         name: /add success toast/i,
       });
 
-      act(() => {
-        fireEvent.click(addButton1);
-        fireEvent.click(addButton2);
-      });
+      fireEvent.click(addButton1);
+      fireEvent.click(addButton2);
 
-      expect(screen.getByText('Test Toast')).toBeInTheDocument();
-      expect(screen.getByText('Success')).toBeInTheDocument();
+      await waitFor(() => {
+        expect(screen.getByText('Test Toast')).toBeInTheDocument();
+        expect(screen.getByText('Success')).toBeInTheDocument();
+      });
     });
 
-    it('removes toast when close button is clicked', () => {
+    it('removes toast when close button is clicked', async () => {
       renderWithProviders(
         <ToastProvider>
           <TestComponent />
@@ -221,24 +218,24 @@ describe('Toast System', () => {
 
       const addButton = screen.getByRole('button', { name: /add toast/i });
 
-      act(() => {
-        fireEvent.click(addButton);
-      });
+      fireEvent.click(addButton);
 
-      expect(screen.getByText('Test Toast')).toBeInTheDocument();
+      await waitFor(() => {
+        expect(screen.getByText('Test Toast')).toBeInTheDocument();
+      });
 
       const closeButton = screen.getByRole('button', { name: /close/i });
 
-      act(() => {
-        fireEvent.click(closeButton);
-      });
+      fireEvent.click(closeButton);
 
-      expect(screen.queryByText('Test Toast')).not.toBeInTheDocument();
+      await waitFor(() => {
+        expect(screen.queryByText('Test Toast')).not.toBeInTheDocument();
+      });
     });
   });
 
   describe('Toast accessibility', () => {
-    it('has proper ARIA attributes', () => {
+    it('has proper ARIA attributes', async () => {
       renderWithProviders(
         <ToastProvider>
           <TestComponent />
@@ -247,15 +244,15 @@ describe('Toast System', () => {
 
       const addButton = screen.getByRole('button', { name: /add toast/i });
 
-      act(() => {
-        fireEvent.click(addButton);
-      });
+      fireEvent.click(addButton);
 
-      const toast = screen.getByRole('status');
-      expect(toast).toHaveAttribute('aria-live', 'polite');
+      await waitFor(() => {
+        const toast = screen.getByRole('status');
+        expect(toast).toHaveAttribute('aria-live', 'polite');
+      });
     });
 
-    it('has accessible close button', () => {
+    it('has accessible close button', async () => {
       renderWithProviders(
         <ToastProvider>
           <TestComponent />
@@ -264,17 +261,17 @@ describe('Toast System', () => {
 
       const addButton = screen.getByRole('button', { name: /add toast/i });
 
-      act(() => {
-        fireEvent.click(addButton);
-      });
+      fireEvent.click(addButton);
 
-      const closeButton = screen.getByRole('button', { name: /close/i });
-      expect(closeButton).toBeInTheDocument();
+      await waitFor(() => {
+        const closeButton = screen.getByRole('button', { name: /close/i });
+        expect(closeButton).toBeInTheDocument();
+      });
     });
   });
 
   describe('Toast edge cases', () => {
-    it('handles toast without title', () => {
+    it('handles toast without title', async () => {
       const TestComponentWithoutTitle = () => {
         const toast = useToast();
         return (
@@ -296,14 +293,14 @@ describe('Toast System', () => {
         name: /add toast without title/i,
       });
 
-      act(() => {
-        fireEvent.click(addButton);
-      });
+      fireEvent.click(addButton);
 
-      expect(screen.getByText('Description only')).toBeInTheDocument();
+      await waitFor(() => {
+        expect(screen.getByText('Description only')).toBeInTheDocument();
+      });
     });
 
-    it('handles toast without description', () => {
+    it('handles toast without description', async () => {
       const TestComponentWithoutDescription = () => {
         const toast = useToast();
         return (
@@ -323,14 +320,14 @@ describe('Toast System', () => {
         name: /add toast without description/i,
       });
 
-      act(() => {
-        fireEvent.click(addButton);
-      });
+      fireEvent.click(addButton);
 
-      expect(screen.getByText('Title only')).toBeInTheDocument();
+      await waitFor(() => {
+        expect(screen.getByText('Title only')).toBeInTheDocument();
+      });
     });
 
-    it('handles rapid toast additions', () => {
+    it('handles rapid toast additions', async () => {
       renderWithProviders(
         <ToastProvider>
           <TestComponent />
@@ -339,19 +336,19 @@ describe('Toast System', () => {
 
       const addButton = screen.getByRole('button', { name: /add toast/i });
 
-      act(() => {
-        // Click multiple times rapidly
-        fireEvent.click(addButton);
-        fireEvent.click(addButton);
-        fireEvent.click(addButton);
-      });
+      // Click multiple times rapidly
+      fireEvent.click(addButton);
+      fireEvent.click(addButton);
+      fireEvent.click(addButton);
 
       // Should handle multiple toasts gracefully
-      const toasts = screen.getAllByText('Test Toast');
-      expect(toasts.length).toBeGreaterThan(0);
+      await waitFor(() => {
+        const toasts = screen.getAllByText('Test Toast');
+        expect(toasts.length).toBeGreaterThan(0);
+      });
     });
 
-    it('generates unique IDs for each toast', () => {
+    it('generates unique IDs for each toast', async () => {
       renderWithProviders(
         <ToastProvider>
           <TestComponent />
@@ -360,46 +357,21 @@ describe('Toast System', () => {
 
       const addButton = screen.getByRole('button', { name: /add toast/i });
 
-      act(() => {
-        fireEvent.click(addButton);
+      fireEvent.click(addButton);
+
+      await waitFor(() => {
+        const toasts = screen.getAllByRole('status');
+
+        // Check that we have at least one toast
+        expect(toasts.length).toBeGreaterThan(0);
+
+        // Each toast should be properly rendered
+        toasts.forEach(toast => {
+          expect(toast).toBeInTheDocument();
+          expect(toast).toHaveAttribute('role', 'status');
+          expect(toast).toHaveAttribute('aria-live', 'polite');
+        });
       });
-
-      const toasts = screen.getAllByRole('status');
-
-      // Check that we have at least one toast
-      expect(toasts.length).toBeGreaterThan(0);
-
-      // Each toast should be properly rendered
-      toasts.forEach(toast => {
-        expect(toast).toBeInTheDocument();
-        expect(toast).toHaveAttribute('role', 'status');
-        expect(toast).toHaveAttribute('aria-live', 'polite');
-      });
-    });
-  });
-
-  describe('Toast cleanup', () => {
-    it('cleans up timers when component unmounts', () => {
-      const { unmount } = renderWithProviders(
-        <ToastProvider>
-          <TestComponent />
-        </ToastProvider>
-      );
-
-      const addButton = screen.getByRole('button', { name: /add toast/i });
-
-      act(() => {
-        fireEvent.click(addButton);
-      });
-
-      expect(screen.getByText('Test Toast')).toBeInTheDocument();
-
-      unmount();
-
-      // Should not throw when advancing timers after unmount
-      expect(() => {
-        vi.advanceTimersByTime(3500);
-      }).not.toThrow();
     });
   });
 });

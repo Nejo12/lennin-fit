@@ -4,9 +4,8 @@
   functions = "netlify/functions"
 
 # Scheduled functions
-[[functions]]
-  function = "materialize-cron"
-  schedule = "0 2 * * *"
+[functions."materialize-cron"]
+schedule = "0 2 * * *"
 
 # Environment variables for different contexts
 [build.environment]

@@ -92,6 +92,24 @@ export const supabase = {
     signOut: async () => ({ error: null }),
     signInWithOtp: async () => ({ error: null }),
   },
-  rpc: async () => ({ data: null, error: null }),
+  rpc: async (funcName: string) => {
+    // Mock specific RPC functions
+    if (funcName === 'ensure_membership') {
+      return { data: null, error: null };
+    }
+    if (funcName === 'init_user') {
+      return { data: null, error: null };
+    }
+    if (funcName === 'is_member') {
+      return { data: true, error: null };
+    }
+    return { data: null, error: null };
+  },
   __rows: rows,
 };
+
+// Add the missing isSupabaseConfigured function
+export const isSupabaseConfigured = () => true;
+
+// Add the missing getSupabaseClient function
+export const getSupabaseClient = () => supabase;

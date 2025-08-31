@@ -25,7 +25,7 @@ create table if not exists memberships (
 
 -- Ensure user has membership for their default org
 create or replace function ensure_membership()
-returns void language plpgsql security definer as $$
+returns void language plpgsql security definer set search_path = public as $$
 declare
   v_profile profiles%rowtype;
   v_membership memberships%rowtype;
@@ -44,7 +44,7 @@ begin
 end$$;
 
 create or replace function is_member(check_org uuid)
-returns boolean language sql stable as $$
+returns boolean language sql stable set search_path = public as $$
   select exists(
     select 1 from memberships
     where user_id = auth.uid()
@@ -170,7 +170,7 @@ for all using (is_member(org_id));
 
 -- init_user RPC
 create or replace function init_user(p_full_name text default null)
-returns void language plpgsql security definer as $$
+returns void language plpgsql security definer set search_path = public as $$
 declare
   v_profile profiles%rowtype;
   v_org organizations%rowtype;
