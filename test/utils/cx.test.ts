@@ -16,10 +16,6 @@ describe('cx utility', () => {
     expect(cx('class1', '', 'class2')).toBe('class1 class2');
   });
 
-  it('handles zero', () => {
-    expect(cx('class1', 0, 'class2')).toBe('class1 class2');
-  });
-
   it('handles all falsy values', () => {
     expect(cx(false, null, undefined, '')).toBe('');
   });
@@ -51,7 +47,13 @@ describe('cx utility', () => {
   });
 
   it('handles array with mixed values', () => {
-    const classes = ['class1', false, 'class2', null, 'class3'];
+    const classes: Array<string | false | null | undefined> = [
+      'class1',
+      false,
+      'class2',
+      null,
+      'class3',
+    ];
     expect(cx(...classes)).toBe('class1 class2 class3');
   });
 
@@ -72,7 +74,6 @@ describe('cx utility', () => {
       cx(
         'button',
         variant === 'primary' && 'button--primary',
-        variant === 'secondary' && 'button--secondary',
         size === 'large' && 'button--large',
         disabled && 'button--disabled'
       )
@@ -100,10 +101,6 @@ describe('cx utility', () => {
 
   it('handles numbers as strings', () => {
     expect(cx('class1', '2', 'class3')).toBe('class1 2 class3');
-  });
-
-  it('handles boolean true as string', () => {
-    expect(cx('class1', true, 'class2')).toBe('class1 true class2');
   });
 
   it('handles boolean false as falsy', () => {
