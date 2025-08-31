@@ -52,11 +52,14 @@ export default function TasksPage() {
           setDue('');
           setOptimisticTasks(undefined); // Clear optimistic data
         },
-        onError: () => {
+        onError: error => {
           // Revert optimistic update on error
           setOptimisticTasks(
             prev => prev?.filter(task => task.id !== newTask.id) || undefined
           );
+
+          // Log the error for debugging
+          console.error('Task creation failed:', error);
         },
       }
     );
@@ -105,6 +108,31 @@ export default function TasksPage() {
   const handleRetry = useCallback(() => {
     refetch();
   }, [refetch]);
+
+  // Helper function to get user-friendly error message
+  const getErrorMessage = (error: unknown) => {
+    if (!error) return 'An unknown error occurred';
+
+    const errorMessage = String(error);
+
+    if (errorMessage.includes('row-level security policy')) {
+      return 'Access denied. Please try signing out and signing back in.';
+    }
+
+    if (errorMessage.includes('foreign key violation')) {
+      return 'Workspace configuration error. Please try refreshing the page.';
+    }
+
+    if (errorMessage.includes('No workspace')) {
+      return 'No workspace configured. Please try refreshing the page.';
+    }
+
+    if (errorMessage.includes('User not authenticated')) {
+      return 'Please sign in to create tasks.';
+    }
+
+    return errorMessage;
+  };
 
   if (isLoading && !optimisticData) {
     return (
@@ -168,12 +196,26 @@ export default function TasksPage() {
             Creating task...
           </div>
         )}
+
+        {/* Task Creation Error */}
+        {create.error && (
+          <div className={styles.errorState} role="alert">
+            <p>Failed to create task: {getErrorMessage(create.error)}</p>
+            <button
+              onClick={() => create.reset()}
+              className={styles.retryButton}
+              aria-label="Clear error and try again"
+            >
+              Try Again
+            </button>
+          </div>
+        )}
       </form>
 
       {/* Error State with Retry */}
       {error && (
         <div className={styles.errorState} role="alert">
-          <p>Error loading tasks: {String(error)}</p>
+          <p>Error loading tasks: {getErrorMessage(error)}</p>
           <button
             onClick={handleRetry}
             className={styles.retryButton}

@@ -17,6 +17,7 @@ vi.mock('@/lib/supabase', () => ({
 vi.mock('@/lib/workspace', () => ({
   currentOrgId: async () => 'org_1',
   debugUserStatus: async () => {},
+  ensureUserInitialized: async () => {},
 }));
 
 import TasksPage from '../src/app/tasks/TasksPage';

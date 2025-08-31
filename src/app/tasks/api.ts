@@ -1,6 +1,10 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { isSupabaseConfigured, getSupabaseClient } from '@/lib/supabase';
-import { currentOrgId, debugUserStatus } from '@/lib/workspace';
+import {
+  currentOrgId,
+  debugUserStatus,
+  ensureUserInitialized,
+} from '@/lib/workspace';
 import { mockData } from '@/lib/mockData';
 import type { Task } from '@/types/db';
 
@@ -56,30 +60,45 @@ export function useCreateTask() {
           throw new Error('Please sign in to create tasks');
         }
 
-        // Debug user status
+        // Ensure user is properly initialized with organization and membership
+        console.log('Ensuring user is initialized...');
+        await ensureUserInitialized();
+
+        // Debug user status for troubleshooting
         await debugUserStatus();
 
-        // Ensure user has membership
-        const { error: membershipError } =
-          await client.rpc('ensure_membership');
-        if (membershipError) {
-          console.error('Failed to ensure membership:', membershipError);
-        }
-
+        // Get the current organization ID
         const org_id = await currentOrgId();
         console.log('Creating task with org_id:', org_id, 'payload:', payload);
 
-        const { error: supabaseError } = await client
+        // Create the task
+        const { data: newTask, error: supabaseError } = await client
           .from('tasks')
-          .insert({ org_id, status: 'todo', position: 0, ...payload });
+          .insert({
+            org_id,
+            status: 'todo',
+            position: 0,
+            ...payload,
+          })
+          .select()
+          .single();
 
         if (supabaseError) {
           console.error('Supabase error creating task:', supabaseError);
           throw supabaseError;
         }
+
+        console.log('Task created successfully:', newTask);
+        return newTask;
       } catch (error) {
         console.error('Error creating task:', error);
-        // Mock creation
+
+        // If it's a database error, don't fall back to mock
+        if (isSupabaseConfigured()) {
+          throw error;
+        }
+
+        // Only use mock for non-database scenarios
         console.log('Mock task creation:', payload);
       }
     },

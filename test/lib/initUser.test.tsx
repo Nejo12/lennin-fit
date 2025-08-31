@@ -12,13 +12,18 @@ vi.mock('../../src/lib/supabase', () => ({
   },
 }));
 
+// Mock workspace functions
+vi.mock('../../src/lib/workspace', () => ({
+  ensureUserInitialized: vi.fn(),
+}));
+
 import { useInitUser } from '../../src/lib/initUser';
 
 describe('useInitUser', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    // Mock console.warn to avoid noise in tests
-    vi.spyOn(console, 'warn').mockImplementation(() => {});
+    // Mock console.error to avoid noise in tests
+    vi.spyOn(console, 'error').mockImplementation(() => {});
   });
 
   afterEach(() => {
@@ -28,10 +33,12 @@ describe('useInitUser', () => {
   it('initializes user with full name', async () => {
     const mockUser = { id: 'user-123', email: 'test@example.com' };
     const { supabase } = await import('../../src/lib/supabase');
+    const { ensureUserInitialized } = await import('../../src/lib/workspace');
+
     (supabase.auth.getUser as any).mockResolvedValue({
       data: { user: mockUser },
     });
-    (supabase.rpc as any).mockResolvedValue({ error: null });
+    (ensureUserInitialized as any).mockResolvedValue(undefined);
 
     renderHook(() => useInitUser('John Doe'));
 
@@ -39,31 +46,30 @@ describe('useInitUser', () => {
     await new Promise(resolve => setTimeout(resolve, 0));
 
     expect(supabase.auth.getUser).toHaveBeenCalled();
-    expect(supabase.rpc).toHaveBeenCalledWith('init_user', {
-      p_full_name: 'John Doe',
-    });
-    expect(supabase.rpc).toHaveBeenCalledWith('ensure_membership');
+    expect(ensureUserInitialized).toHaveBeenCalled();
   });
 
   it('handles null full name', async () => {
     const mockUser = { id: 'user-123', email: 'test@example.com' };
     const { supabase } = await import('../../src/lib/supabase');
+    const { ensureUserInitialized } = await import('../../src/lib/workspace');
+
     (supabase.auth.getUser as any).mockResolvedValue({
       data: { user: mockUser },
     });
-    (supabase.rpc as any).mockResolvedValue({ error: null });
+    (ensureUserInitialized as any).mockResolvedValue(undefined);
 
     renderHook(() => useInitUser(undefined));
 
     await new Promise(resolve => setTimeout(resolve, 0));
 
-    expect(supabase.rpc).toHaveBeenCalledWith('init_user', {
-      p_full_name: null,
-    });
+    expect(ensureUserInitialized).toHaveBeenCalled();
   });
 
   it('handles no user', async () => {
     const { supabase } = await import('../../src/lib/supabase');
+    const { ensureUserInitialized } = await import('../../src/lib/workspace');
+
     (supabase.auth.getUser as any).mockResolvedValue({
       data: { user: null },
     });
@@ -73,51 +79,29 @@ describe('useInitUser', () => {
     await new Promise(resolve => setTimeout(resolve, 0));
 
     expect(supabase.auth.getUser).toHaveBeenCalled();
-    expect(supabase.rpc).not.toHaveBeenCalled();
+    expect(ensureUserInitialized).not.toHaveBeenCalled();
   });
 
-  it('handles init_user error gracefully', async () => {
+  it('handles initialization error gracefully', async () => {
     const mockUser = { id: 'user-123', email: 'test@example.com' };
     const { supabase } = await import('../../src/lib/supabase');
+    const { ensureUserInitialized } = await import('../../src/lib/workspace');
+
     (supabase.auth.getUser as any).mockResolvedValue({
       data: { user: mockUser },
     });
-    (supabase.rpc as any)
-      .mockResolvedValueOnce({ error: new Error('Init failed') })
-      .mockResolvedValueOnce({ error: null });
+    (ensureUserInitialized as any).mockRejectedValue(new Error('Init failed'));
 
     renderHook(() => useInitUser('John Doe'));
 
     await new Promise(resolve => setTimeout(resolve, 0));
 
-    expect(supabase.rpc).toHaveBeenCalledWith('init_user', {
-      p_full_name: 'John Doe',
-    });
-    expect(supabase.rpc).toHaveBeenCalledWith('ensure_membership');
-  });
-
-  it('handles ensure_membership error gracefully', async () => {
-    const mockUser = { id: 'user-123', email: 'test@example.com' };
-    const { supabase } = await import('../../src/lib/supabase');
-    (supabase.auth.getUser as any).mockResolvedValue({
-      data: { user: mockUser },
-    });
-    (supabase.rpc as any)
-      .mockResolvedValueOnce({ error: null })
-      .mockResolvedValueOnce({ error: new Error('Membership failed') });
-
-    renderHook(() => useInitUser('John Doe'));
-
-    await new Promise(resolve => setTimeout(resolve, 0));
-
-    expect(supabase.rpc).toHaveBeenCalledWith('init_user', {
-      p_full_name: 'John Doe',
-    });
-    expect(supabase.rpc).toHaveBeenCalledWith('ensure_membership');
+    expect(ensureUserInitialized).toHaveBeenCalled();
   });
 
   it('handles general error gracefully', async () => {
     const { supabase } = await import('../../src/lib/supabase');
+
     (supabase.auth.getUser as any).mockRejectedValue(new Error('Auth failed'));
 
     renderHook(() => useInitUser('John Doe'));
@@ -125,6 +109,5 @@ describe('useInitUser', () => {
     await new Promise(resolve => setTimeout(resolve, 0));
 
     expect(supabase.auth.getUser).toHaveBeenCalled();
-    expect(supabase.rpc).not.toHaveBeenCalled();
   });
 });

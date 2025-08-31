@@ -51,7 +51,11 @@ function selectImpl<T extends keyof typeof rows>(table: T) {
     insert: (payload: Record<string, unknown>) => {
       const newItem = { id: crypto.randomUUID?.() ?? 'id', ...payload };
       (rows[table] as unknown[]).push(newItem);
-      return ok(null);
+      return {
+        select: () => ({
+          single: () => ok(newItem),
+        }),
+      };
     },
     update: (payload: Record<string, unknown>) => ({
       eq: (k: string, v: string) => {
