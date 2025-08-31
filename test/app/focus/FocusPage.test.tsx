@@ -297,13 +297,10 @@ describe('FocusPage', () => {
     const mockAiResponse = {
       headline: "Today's Focus",
       top_actions: [
-        {
-          label: 'Follow up with Acme Corp',
-          why: 'Invoice is overdue',
-          nav: 'invoices' as const,
-        },
+        { label: 'Action 1', why: 'Reason 1' },
+        { label: 'Action 2', why: 'Reason 2' },
       ],
-      followups: ['Schedule meeting'],
+      followups: ['Follow up 1', 'Follow up 2'],
     };
 
     vi.mocked(focusAi.fetchFocusPlan).mockResolvedValue(mockAiResponse);
@@ -327,7 +324,8 @@ describe('FocusPage', () => {
       expect(navigator.clipboard.writeText).toHaveBeenCalledWith(
         expect.stringContaining("Today's Focus")
       );
-      expect(global.alert).toHaveBeenCalledWith('Plan copied.');
+      // Check for modal instead of alert
+      expect(screen.getByText('Plan copied to clipboard.')).toBeInTheDocument();
     });
   });
 
@@ -342,8 +340,6 @@ describe('FocusPage', () => {
     vi.mocked(navigator.clipboard.writeText).mockRejectedValue(
       new Error('Clipboard error')
     );
-
-    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
 
     renderWithQueryClient(<FocusPage />);
 
@@ -360,13 +356,11 @@ describe('FocusPage', () => {
     fireEvent.click(copyButton);
 
     await waitFor(() => {
-      expect(consoleSpy).toHaveBeenCalledWith(
-        'Failed to copy plan:',
-        expect.any(Error)
-      );
+      // Check for error modal instead of console.error
+      expect(
+        screen.getByText('Failed to copy plan. Please try again.')
+      ).toBeInTheDocument();
     });
-
-    consoleSpy.mockRestore();
   });
 
   it('formats currency correctly', () => {

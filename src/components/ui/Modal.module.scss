@@ -1,35 +1,192 @@
 @use '../../styles/mixins.scss' as *;
 
-.backdrop {
+.overlay {
   position: fixed;
-  inset: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   background: rgba(0, 0, 0, 0.5);
-  display: grid;
-  place-items: center;
-  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
 }
-.panel {
-  @include card;
-  width: min(560px, 92vw);
-  padding: 20px;
-  display: grid;
-  gap: 12px;
+
+.modal {
+  background: white;
+  border-radius: 12px;
+  box-shadow:
+    0 20px 25px -5px rgba(0, 0, 0, 0.1),
+    0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  max-width: 90vw;
+  max-height: 90vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+
+  &.sm {
+    width: 400px;
+  }
+
+  &.md {
+    width: 600px;
+  }
+
+  &.lg {
+    width: 800px;
+  }
 }
+
 .header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem 1.5rem 0;
+  border-bottom: 1px solid #e5e7eb;
+  margin-bottom: 1rem;
 }
+
 .title {
-  font-weight: 800;
-  font-size: var(--fs-lg);
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #111827;
 }
-.close {
-  @include button-reset;
-  color: var(--muted);
-  border-radius: var(--radius-sm);
-  padding: 6px;
-  &:focus-visible {
-    @include focus-ring;
+
+.closeButton {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: #6b7280;
+  cursor: pointer;
+  padding: 0.25rem;
+  border-radius: 4px;
+  transition: all 0.2s;
+
+  &:hover {
+    background: #f3f4f6;
+    color: #374151;
+  }
+}
+
+.content {
+  padding: 0 1.5rem 1.5rem;
+  overflow-y: auto;
+}
+
+// Alert styles
+.alert {
+  text-align: center;
+
+  &.info {
+    .message {
+      color: #1f2937;
+    }
+  }
+
+  &.success {
+    .message {
+      color: #065f46;
+    }
+  }
+
+  &.warning {
+    .message {
+      color: #92400e;
+    }
+  }
+
+  &.error {
+    .message {
+      color: #dc2626;
+    }
+  }
+
+  &.danger {
+    .message {
+      color: #dc2626;
+    }
+  }
+}
+
+.message {
+  margin: 0 0 1.5rem 0;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.actions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.primaryButton {
+  background: #3b82f6;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover {
+    background: #2563eb;
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+.secondaryButton {
+  background: #f3f4f6;
+  color: #374151;
+  border: 1px solid #d1d5db;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover {
+    background: #e5e7eb;
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+// Responsive design
+@media (max-width: 640px) {
+  .modal {
+    width: 100% !important;
+    margin: 1rem;
+  }
+
+  .header {
+    padding: 1rem 1rem 0;
+  }
+
+  .content {
+    padding: 0 1rem 1rem;
+  }
+
+  .actions {
+    flex-direction: column;
+  }
+
+  .primaryButton,
+  .secondaryButton {
+    width: 100%;
   }
 }

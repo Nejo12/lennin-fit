@@ -231,9 +231,12 @@ describe('InvoicesPage', () => {
         currency: 'EUR',
       });
       expect(navigator.clipboard.writeText).toHaveBeenCalled();
-      expect(global.alert).toHaveBeenCalledWith(
-        'AI draft copied to clipboard. Paste into items, or wire auto-apply.'
-      );
+      // Check for modal instead of alert
+      expect(
+        screen.getByText(
+          'AI draft copied to clipboard. Paste into items, or wire auto-apply.'
+        )
+      ).toBeInTheDocument();
     });
   });
 

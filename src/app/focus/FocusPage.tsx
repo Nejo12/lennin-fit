@@ -7,6 +7,8 @@ import {
   useToggleTaskDone,
 } from './api';
 import { fetchFocusPlan, FocusAIResponse } from './ai';
+import { useAlert } from '@/hooks/useAlert';
+import { AlertModal } from '@/components/ui/Modal';
 import Button from '@/components/ui/Button';
 
 function formatCurrency(n: number, currency = 'EUR'): string {
@@ -27,6 +29,7 @@ export default function FocusPage() {
   const { data: week = { dueThisWeek: 0, doneThisWeek: 0 } } =
     useWeekTasksSummary();
   const toggleDone = useToggleTaskDone();
+  const { alertState, showAlert, closeAlert } = useAlert();
 
   const [ai, setAi] = useState<FocusAIResponse | null>(null);
   const [thinking, setThinking] = useState(false);
@@ -49,6 +52,11 @@ export default function FocusPage() {
         })),
       });
       setAi(plan);
+    } catch {
+      showAlert('Failed to generate focus plan. Please try again.', {
+        type: 'error',
+        title: 'Generation Failed',
+      });
     } finally {
       setThinking(false);
     }
@@ -74,9 +82,15 @@ export default function FocusPage() {
 
     try {
       await navigator.clipboard.writeText(text);
-      alert('Plan copied.');
-    } catch (error) {
-      console.error('Failed to copy plan:', error);
+      showAlert('Plan copied to clipboard.', {
+        type: 'success',
+        title: 'Plan Copied',
+      });
+    } catch {
+      showAlert('Failed to copy plan. Please try again.', {
+        type: 'error',
+        title: 'Copy Failed',
+      });
     }
   };
 
@@ -216,6 +230,15 @@ export default function FocusPage() {
           </ul>
         </section>
       </div>
+
+      {/* Alert Modal */}
+      <AlertModal
+        isOpen={alertState.isOpen}
+        onClose={closeAlert}
+        title={alertState.title}
+        message={alertState.message}
+        type={alertState.type}
+      />
     </div>
   );
 }

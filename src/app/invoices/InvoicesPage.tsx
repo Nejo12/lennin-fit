@@ -9,6 +9,8 @@ import InvoiceDetail from './InvoiceDetail';
 import { suggestInvoice } from './ai';
 import { buildReminderEmail } from '@/lib/reminders';
 import { track } from '@/lib/track';
+import { useAlert } from '@/hooks/useAlert';
+import { AlertModal, ConfirmModal } from '@/components/ui/Modal';
 import styles from './Invoices.module.scss';
 
 export default function InvoicesPage() {
@@ -18,6 +20,8 @@ export default function InvoicesPage() {
   const addMany = useAddManyItems();
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [aiLoading, setAiLoading] = useState(false);
+  const { alertState, showAlert, closeAlert, handleConfirm } = useAlert();
+
   const selected = useMemo(
     () => invoices.find(i => i.id === selectedId) || null,
     [invoices, selectedId]
@@ -43,9 +47,15 @@ export default function InvoicesPage() {
       });
       // Copy to clipboard or open a modal to accept items
       await navigator.clipboard.writeText(JSON.stringify(out, null, 2));
-      alert(
-        'AI draft copied to clipboard. Paste into items, or wire auto-apply.'
+      showAlert(
+        'AI draft copied to clipboard. Paste into items, or wire auto-apply.',
+        { type: 'success', title: 'AI Suggestion Ready' }
       );
+    } catch {
+      showAlert('Failed to generate AI suggestion. Please try again.', {
+        type: 'error',
+        title: 'AI Suggestion Failed',
+      });
     } finally {
       setAiLoading(false);
     }
@@ -58,39 +68,63 @@ export default function InvoicesPage() {
     due_date?: string | null;
     client_name?: string;
   }) {
-    const days = Math.max(
-      0,
-      Math.floor((Date.now() - +new Date(inv.due_date || '')) / 86400000)
-    );
-    const email = buildReminderEmail({
-      id: inv.id,
-      client_id: inv.client_id ?? null,
-      client_name: inv.client_name || 'Client',
-      amount_total: inv.amount_total,
-      due_date: inv.due_date || new Date().toISOString().slice(0, 10),
-      days_overdue: days,
-    });
-    await navigator.clipboard.writeText(email.body);
-    alert('Reminder copied. Paste into your email client.');
-    track('invoice_reminder_copied', { id: inv.id, days_overdue: days });
+    try {
+      const days = Math.max(
+        0,
+        Math.floor((Date.now() - +new Date(inv.due_date || '')) / 86400000)
+      );
+      const email = buildReminderEmail({
+        id: inv.id,
+        client_id: inv.client_id ?? null,
+        client_name: inv.client_name || 'Client',
+        amount_total: inv.amount_total,
+        due_date: inv.due_date || new Date().toISOString().slice(0, 10),
+        days_overdue: days,
+      });
+      await navigator.clipboard.writeText(email.body);
+      showAlert('Reminder copied. Paste into your email client.', {
+        type: 'success',
+        title: 'Reminder Copied',
+      });
+      track('invoice_reminder_copied', { id: inv.id, days_overdue: days });
+    } catch {
+      showAlert('Failed to copy reminder. Please try again.', {
+        type: 'error',
+        title: 'Copy Failed',
+      });
+    }
   }
 
   async function onAISuggestApply(invoiceId: string) {
-    const draft = await suggestInvoice({
-      clientName: 'Client',
-      previousItems: [],
-      recentTasks: [],
-      currency: 'EUR',
-    });
-    if (!draft.items?.length) {
-      alert('No items suggested.');
-      return;
+    try {
+      const draft = await suggestInvoice({
+        clientName: 'Client',
+        previousItems: [],
+        recentTasks: [],
+        currency: 'EUR',
+      });
+      if (!draft.items?.length) {
+        showAlert('No items suggested.', {
+          type: 'warning',
+          title: 'No Suggestions',
+        });
+        return;
+      }
+      addMany.mutate({ invoice_id: invoiceId, items: draft.items });
+      showAlert(`${draft.items.length} items added to invoice.`, {
+        type: 'success',
+        title: 'Items Applied',
+      });
+      track('ai_suggest_apply', {
+        invoice_id: invoiceId,
+        items: draft.items.length,
+      });
+    } catch {
+      showAlert('Failed to apply AI suggestions. Please try again.', {
+        type: 'error',
+        title: 'Application Failed',
+      });
     }
-    addMany.mutate({ invoice_id: invoiceId, items: draft.items });
-    track('ai_suggest_apply', {
-      invoice_id: invoiceId,
-      items: draft.items.length,
-    });
   }
 
   return (
@@ -187,6 +221,34 @@ export default function InvoicesPage() {
           {selected && <InvoiceDetail invoiceId={selected.id} />}
         </section>
       </div>
+
+      {/* Alert Modal */}
+      {alertState.onConfirm ? (
+        <ConfirmModal
+          isOpen={alertState.isOpen}
+          onClose={closeAlert}
+          onConfirm={handleConfirm}
+          title={alertState.title}
+          message={alertState.message}
+          type={
+            alertState.type === 'error'
+              ? 'danger'
+              : alertState.type === 'warning'
+                ? 'warning'
+                : 'info'
+          }
+          confirmText={alertState.confirmText}
+          cancelText={alertState.cancelText}
+        />
+      ) : (
+        <AlertModal
+          isOpen={alertState.isOpen}
+          onClose={closeAlert}
+          title={alertState.title}
+          message={alertState.message}
+          type={alertState.type}
+        />
+      )}
     </div>
   );
 }
