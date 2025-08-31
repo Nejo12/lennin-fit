@@ -32,7 +32,7 @@ const mockTasks = [
     title: 'Task 1',
     status: 'todo' as const,
     priority: 'medium',
-    due_date: '2025-08-25',
+    due_date: '2025-09-01',
     position: 0,
   },
   {
@@ -40,7 +40,7 @@ const mockTasks = [
     title: 'Task 2',
     status: 'doing' as const,
     priority: 'high',
-    due_date: '2025-08-26',
+    due_date: '2025-09-02',
     position: 1,
   },
   {
@@ -48,7 +48,7 @@ const mockTasks = [
     title: 'Task 3',
     status: 'done' as const,
     priority: 'low',
-    due_date: '2025-08-27',
+    due_date: '2025-09-03',
     position: 2,
   },
 ];
@@ -351,7 +351,7 @@ describe('SchedulePage', () => {
         title: 'Overdue Task',
         status: 'todo' as const,
         priority: 'medium',
-        due_date: '2020-01-01', // Past date
+        due_date: '2024-01-01', // Past date
         position: 0,
       },
     ];
