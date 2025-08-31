@@ -11,7 +11,7 @@ alter table tasks
 
 -- (Optional) helper resequencer if you ever want server-side resequence
 create or replace function clamp_task_positions(p_org uuid, p_date date)
-returns void language plpgsql as $$
+returns void language plpgsql SET search_path = public as $$
 declare rec record; i int := 0;
 begin
   for rec in

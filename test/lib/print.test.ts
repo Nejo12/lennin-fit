@@ -8,14 +8,15 @@ Object.defineProperty(window, 'print', {
   writable: true,
 });
 
-describe('Print Utilities', () => {
+
+
+describe('Print utilities', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    document.body.classList.remove('printing-invoice');
   });
 
   afterEach(() => {
-    document.body.classList.remove('printing-invoice');
+    vi.restoreAllMocks();
   });
 
   describe('printInvoice', () => {
