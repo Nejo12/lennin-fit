@@ -22,7 +22,7 @@ describe('date utilities', () => {
       const sunday = new Date('2024-01-21T12:00:00Z');
       const start = startOfWeek(sunday);
       expect(start.getDay()).toBe(1); // Monday
-      expect(toISODate(start)).toBe('2024-01-14'); // Monday of that week
+      expect(toISODate(start)).toBe('2024-01-14'); // Monday of that week (UTC)
     });
 
     it('should return Monday for Monday', () => {
@@ -30,7 +30,7 @@ describe('date utilities', () => {
       const monday = new Date('2024-01-15T12:00:00Z');
       const start = startOfWeek(monday);
       expect(start.getDay()).toBe(1); // Monday
-      expect(toISODate(start)).toBe('2024-01-14'); // Same Monday
+      expect(toISODate(start)).toBe('2024-01-14'); // Monday of that week
     });
 
     it('should set time to start of day', () => {

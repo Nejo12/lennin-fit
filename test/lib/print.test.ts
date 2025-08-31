@@ -8,8 +8,6 @@ Object.defineProperty(window, 'print', {
   writable: true,
 });
 
-
-
 describe('Print utilities', () => {
   beforeEach(() => {
     vi.clearAllMocks();

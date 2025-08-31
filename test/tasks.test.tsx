@@ -3,10 +3,21 @@ import { describe, it, expect, vi } from 'vitest';
 import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { appRender } from './render';
-import { supabase } from './mocks/supabase';
+import {
+  supabase,
+  isSupabaseConfigured,
+  getSupabaseClient,
+} from './mocks/supabase';
 
-vi.mock('@/lib/supabase', () => ({ supabase }));
-vi.mock('@/lib/workspace', () => ({ currentOrgId: async () => 'org_1' }));
+vi.mock('@/lib/supabase', () => ({
+  supabase,
+  isSupabaseConfigured,
+  getSupabaseClient,
+}));
+vi.mock('@/lib/workspace', () => ({
+  currentOrgId: async () => 'org_1',
+  debugUserStatus: async () => {},
+}));
 
 import TasksPage from '../src/app/tasks/TasksPage';
 

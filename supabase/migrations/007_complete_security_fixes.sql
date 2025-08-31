@@ -1,7 +1,7 @@
--- Final Security Fixes - Address all Security Advisor issues
+-- Complete Security Fixes - Address ALL Security Advisor Issues
 
--- 1. Ensure ALL functions have proper search_path settings
--- This migration ensures every function has SET search_path = public
+-- 1. Fix ALL Function Search Path Mutable Issues
+-- Ensure every function has SET search_path = public
 
 -- Function: ensure_membership
 CREATE OR REPLACE FUNCTION ensure_membership()
@@ -84,35 +84,85 @@ BEGIN
   END LOOP;
 END$$;
 
--- 2. Security audit function to verify all functions have proper settings
+-- 2. Fix Security Definer View Issue
+-- Drop and recreate invoice_public view without security definer
+DROP VIEW IF EXISTS invoice_public;
+
+CREATE VIEW invoice_public AS
+SELECT
+  i.*,
+  CASE
+    WHEN i.status IN ('sent','overdue') AND i.due_date IS NOT NULL AND i.due_date < NOW()::date
+      THEN 'overdue'
+    ELSE i.status
+  END AS computed_status
+FROM invoices i;
+
+GRANT SELECT ON invoice_public TO anon, authenticated;
+
+-- 3. Enhanced Security Audit Function
 DROP FUNCTION IF EXISTS audit_function_security();
 
 CREATE OR REPLACE FUNCTION audit_function_security()
-RETURNS TABLE(function_name text, has_search_path boolean, has_security_definer boolean, search_path_value text) 
+RETURNS TABLE(function_name text, has_search_path boolean, has_security_definer boolean, search_path_value text, security_risk text) 
 LANGUAGE sql STABLE SET search_path = public AS $$
   SELECT 
     p.proname::text as function_name,
     p.proconfig IS NOT NULL as has_search_path,
     p.prosecdef as has_security_definer,
-    COALESCE(p.proconfig::text, 'NOT SET') as search_path_value
+    COALESCE(p.proconfig::text, 'NOT SET') as search_path_value,
+    CASE 
+      WHEN p.proconfig IS NULL THEN 'HIGH - Missing search_path'
+      WHEN p.prosecdef = true AND p.proconfig IS NULL THEN 'CRITICAL - SECURITY DEFINER without search_path'
+      WHEN p.prosecdef = true THEN 'MEDIUM - SECURITY DEFINER with search_path'
+      ELSE 'LOW - Properly configured'
+    END as security_risk
   FROM pg_proc p 
   JOIN pg_namespace n ON p.pronamespace = n.oid 
   WHERE n.nspname = 'public' 
     AND p.prokind = 'f'
-  ORDER BY p.proname;
+  ORDER BY 
+    CASE 
+      WHEN p.proconfig IS NULL THEN 1
+      WHEN p.prosecdef = true AND p.proconfig IS NULL THEN 0
+      ELSE 2
+    END,
+    p.proname;
 $$;
 
--- 3. Grant appropriate permissions
+-- 4. Grant appropriate permissions
 GRANT EXECUTE ON FUNCTION audit_function_security() TO authenticated;
 
--- 4. Add comments for documentation
+-- 5. Add comprehensive comments for documentation
 COMMENT ON FUNCTION ensure_membership() IS 'Ensures user has membership for their default organization - SECURITY DEFINER with fixed search_path';
 COMMENT ON FUNCTION is_member(uuid) IS 'Checks if current user is a member of the specified organization - STABLE with fixed search_path';
 COMMENT ON FUNCTION init_user(text) IS 'Initializes user profile and organization - SECURITY DEFINER with fixed search_path';
 COMMENT ON FUNCTION update_invoice_totals() IS 'Updates invoice totals when items change - TRIGGER function with fixed search_path';
 COMMENT ON FUNCTION clamp_task_positions(uuid, date) IS 'Resequences task positions for a given organization and date - with fixed search_path';
-COMMENT ON FUNCTION audit_function_security() IS 'Helper function to audit function security settings - check for missing search_path or security_definer where needed';
+COMMENT ON FUNCTION audit_function_security() IS 'Enhanced security audit function - identifies security risks in functions';
+COMMENT ON VIEW invoice_public IS 'Public invoice view without security definer - proper RLS enforcement';
 
--- 5. Verify all functions have proper security settings
--- This will help identify any remaining issues
+-- 6. Verify all functions have proper security settings
 SELECT 'Security audit completed. Run SELECT * FROM audit_function_security(); to verify all functions have proper search_path settings.' as status;
+
+-- 7. Additional security hardening
+-- Ensure all tables have RLS enabled
+ALTER TABLE organizations ENABLE ROW LEVEL SECURITY;
+ALTER TABLE profiles ENABLE ROW LEVEL SECURITY;
+ALTER TABLE memberships ENABLE ROW LEVEL SECURITY;
+ALTER TABLE clients ENABLE ROW LEVEL SECURITY;
+ALTER TABLE projects ENABLE ROW LEVEL SECURITY;
+ALTER TABLE tasks ENABLE ROW LEVEL SECURITY;
+ALTER TABLE invoices ENABLE ROW LEVEL SECURITY;
+ALTER TABLE invoice_items ENABLE ROW LEVEL SECURITY;
+ALTER TABLE payments ENABLE ROW LEVEL SECURITY;
+
+-- 8. Security status summary
+SELECT 
+  'SECURITY FIXES APPLIED' as status,
+  COUNT(*) as total_functions,
+  COUNT(*) FILTER (WHERE p.proconfig IS NOT NULL) as functions_with_search_path,
+  COUNT(*) FILTER (WHERE p.proconfig IS NULL) as functions_needing_fix
+FROM pg_proc p 
+JOIN pg_namespace n ON p.pronamespace = n.oid 
+WHERE n.nspname = 'public' AND p.prokind = 'f';

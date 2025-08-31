@@ -5,10 +5,16 @@ import App from '../src/App';
 
 // Mock the router to avoid navigation issues in tests
 vi.mock('react-router-dom', () => ({
-  BrowserRouter: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
-  Routes: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
+  BrowserRouter: ({ children }: { children: React.ReactNode }) => (
+    <div>{children}</div>
+  ),
+  Routes: ({ children }: { children: React.ReactNode }) => (
+    <div>{children}</div>
+  ),
   Route: ({ element }: { element: React.ReactNode }) => <div>{element}</div>,
-  Link: ({ children, to }: { children: React.ReactNode; to: string }) => <a href={to}>{children}</a>,
+  Link: ({ children, to }: { children: React.ReactNode; to: string }) => (
+    <a href={to}>{children}</a>
+  ),
   useNavigate: () => vi.fn(),
   useLocation: () => ({ pathname: '/' }),
 }));

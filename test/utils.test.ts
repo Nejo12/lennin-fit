@@ -24,6 +24,8 @@ describe('cx utility', () => {
   });
 
   it('handles mixed types', () => {
-    expect(cx('base', 'class1', false, null, undefined, 'class2')).toBe('base class1 class2');
+    expect(cx('base', 'class1', false, null, undefined, 'class2')).toBe(
+      'base class1 class2'
+    );
   });
 });
