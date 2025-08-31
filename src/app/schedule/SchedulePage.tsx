@@ -23,10 +23,94 @@ import {
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 
-// Sortable row with overdue styling and click to open details
+// Status badge component with better visual design
+function StatusBadge({ status }: { status: string }) {
+  const getStatusConfig = (status: string) => {
+    switch (status) {
+      case 'todo':
+        return {
+          label: 'To Do',
+          color: 'var(--status-todo)',
+          bg: 'var(--status-todo-bg)',
+        };
+      case 'doing':
+        return {
+          label: 'In Progress',
+          color: 'var(--status-doing)',
+          bg: 'var(--status-doing-bg)',
+        };
+      case 'done':
+        return {
+          label: 'Done',
+          color: 'var(--status-done)',
+          bg: 'var(--status-done-bg)',
+        };
+      case 'blocked':
+        return {
+          label: 'Blocked',
+          color: 'var(--status-blocked)',
+          bg: 'var(--status-blocked-bg)',
+        };
+      default:
+        return { label: status, color: 'var(--muted)', bg: 'var(--elev)' };
+    }
+  };
+
+  const config = getStatusConfig(status);
+
+  return (
+    <span
+      className="status-badge"
+      style={{
+        backgroundColor: config.bg,
+        color: config.color,
+        padding: '4px 8px',
+        borderRadius: '12px',
+        fontSize: '11px',
+        fontWeight: '600',
+        textTransform: 'uppercase',
+        letterSpacing: '0.5px',
+      }}
+    >
+      {config.label}
+    </span>
+  );
+}
+
+// Priority indicator
+function PriorityIndicator({ priority }: { priority: string }) {
+  const getPriorityColor = (priority: string) => {
+    switch (priority) {
+      case 'urgent':
+        return '#ef4444';
+      case 'high':
+        return '#f97316';
+      case 'medium':
+        return '#eab308';
+      case 'low':
+        return '#22c55e';
+      default:
+        return 'var(--muted)';
+    }
+  };
+
+  return (
+    <div
+      className="priority-dot"
+      style={{
+        width: '8px',
+        height: '8px',
+        borderRadius: '50%',
+        backgroundColor: getPriorityColor(priority),
+        flexShrink: 0,
+      }}
+    />
+  );
+}
+
+// Improved sortable row with better visual design
 function SortRow({
   t,
-  onStatus,
   onOpen,
   onQuickActions,
 }: {
@@ -34,9 +118,9 @@ function SortRow({
     id: string;
     title: string;
     status: string;
+    priority: string;
     due_date: string;
   };
-  onStatus: (id: string, s: string) => void;
   onOpen: (id: string) => void;
   onQuickActions: (id: string, action: 'today' | 'tomorrow' | 'toggle') => void;
 }) {
@@ -45,60 +129,65 @@ function SortRow({
   const style = { transform: CSS.Transform.toString(transform), transition };
   const overdue =
     t.due_date && new Date(t.due_date) < new Date() && t.status !== 'done';
+
   return (
     <li
       ref={setNodeRef}
       style={style}
-      className={`task ${t.status} ${overdue ? 'overdue' : ''}`}
+      className={`task-item ${t.status} ${overdue ? 'overdue' : ''}`}
       {...attributes}
       {...listeners}
     >
-      <span className="handle">⋮⋮</span>
-      <label className="row gap center">
-        <input
-          type="checkbox"
-          checked={t.status === 'done'}
-          onChange={() => onQuickActions(t.id, 'toggle')}
-          aria-label="Mark done"
-        />
-        <button
-          className="task-link"
-          onClick={() => onOpen(t.id)}
-          title="Open details"
-        >
-          {t.title}
-        </button>
-      </label>
-      <div className="row gap">
-        <button
-          className="btn btn-ghost"
-          onClick={e => {
-            e.stopPropagation();
-            onQuickActions(t.id, 'today');
-          }}
-        >
-          Today
-        </button>
-        <button
-          className="btn btn-ghost"
-          onClick={e => {
-            e.stopPropagation();
-            onQuickActions(t.id, 'tomorrow');
-          }}
-        >
-          Tomorrow
-        </button>
+      <div className="task-content">
+        <div className="task-header">
+          <PriorityIndicator priority={t.priority} />
+          <button
+            className="task-title"
+            onClick={() => onOpen(t.id)}
+            title="Open details"
+          >
+            {t.title}
+          </button>
+          <div className="task-actions">
+            <button
+              className="action-btn"
+              onClick={e => {
+                e.stopPropagation();
+                onQuickActions(t.id, 'toggle');
+              }}
+              title="Toggle completion"
+            >
+              {t.status === 'done' ? '✓' : '○'}
+            </button>
+          </div>
+        </div>
+
+        <div className="task-footer">
+          <StatusBadge status={t.status} />
+          <div className="quick-actions">
+            <button
+              className="quick-btn"
+              onClick={e => {
+                e.stopPropagation();
+                onQuickActions(t.id, 'today');
+              }}
+              title="Move to today"
+            >
+              Today
+            </button>
+            <button
+              className="quick-btn"
+              onClick={e => {
+                e.stopPropagation();
+                onQuickActions(t.id, 'tomorrow');
+              }}
+              title="Move to tomorrow"
+            >
+              Tomorrow
+            </button>
+          </div>
+        </div>
       </div>
-      <select
-        value={t.status}
-        onChange={e => onStatus(t.id, e.target.value)}
-        className="status"
-      >
-        <option value="todo">todo</option>
-        <option value="doing">doing</option>
-        <option value="done">done</option>
-        <option value="blocked">blocked</option>
-      </select>
     </li>
   );
 }
@@ -218,10 +307,6 @@ export default function SchedulePage() {
     // If same day, reorder within day using DOM order
     if (toDay === fromDay) {
       const ids = (byDay[fromDay] || []).map(t => t.id);
-      // Compute nearest index based on current list + active/over
-      // Simple fallback: keep current order (server already sorted)
-      // If you want precise index: use sensors + data from e.over to compute.
-      // We'll just resequence from current render order:
       reorderDay.mutate({ due_date: fromDay, orderedIds: ids });
       return;
     }
@@ -230,7 +315,6 @@ export default function SchedulePage() {
     const fromIds = (byDay[fromDay] || [])
       .map(t => t.id)
       .filter(id => id !== activeId);
-    // Insert at end of target day for simplicity (or compute index by pointer—fine for MVP+)
     const toIds = [...(byDay[toDay] || []).map(t => t.id), activeId];
 
     moveAcross.mutate({
@@ -267,29 +351,46 @@ export default function SchedulePage() {
     }
   };
 
+  const formatDateRange = (start: Date, end: Date) => {
+    const startStr = start.toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+    });
+    const endStr = addDays(end, -1).toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric',
+    });
+    return `${startStr} - ${endStr}`;
+  };
+
   return (
     <div className="schedule-page">
-      <div className="row between center header">
-        <div className="row gap">
-          <button className="btn btn-ghost" onClick={prevWeek}>
-            ←
+      <div className="schedule-header">
+        <div className="header-navigation">
+          <button className="nav-btn" onClick={prevWeek}>
+            ← Previous
           </button>
-          <button className="btn" onClick={thisWeek}>
-            This week
+          <button className="current-week-btn" onClick={thisWeek}>
+            This Week
           </button>
-          <button className="btn btn-ghost" onClick={nextWeek}>
-            →
+          <button className="nav-btn" onClick={nextWeek}>
+            Next →
           </button>
         </div>
-        <div className="muted">
-          {week.start.toLocaleDateString()} –{' '}
-          {addDays(week.end, -1).toLocaleDateString()}
+
+        <div className="date-range">
+          {formatDateRange(week.start, week.end)}
         </div>
-        <div className="row gap">
-          <a className="btn" href="/app/schedule/month">
+
+        <div className="view-options">
+          <a className="view-btn active" href="/app/schedule">
+            Week
+          </a>
+          <a className="view-btn" href="/app/schedule/month">
             Month
           </a>
-          <a className="btn btn-ghost" href="/app/schedule/agenda">
+          <a className="view-btn" href="/app/schedule/agenda">
             Agenda
           </a>
         </div>
@@ -306,14 +407,20 @@ export default function SchedulePage() {
           {week.days.map(d => {
             const key = toISODate(d);
             const list = byDay[key] || [];
+            const isToday = key === todayISO;
+            const isPast = new Date(key) < new Date();
+
             return (
               <div
-                className={`day ${dragOverDay === key ? 'dropping' : ''}`}
+                className={`day-column ${dragOverDay === key ? 'dropping' : ''} ${isToday ? 'today' : ''} ${isPast ? 'past' : ''}`}
                 key={key}
                 data-day={key}
               >
                 <div className="day-header">
-                  <div className="weekday">{fmtDay(d)}</div>
+                  <div className="day-info">
+                    <div className="weekday">{fmtDay(d)}</div>
+                    <div className="date-number">{d.getDate()}</div>
+                  </div>
                   <QuickAdd
                     onAdd={title => createTask.mutate({ title, due_date: key })}
                   />
@@ -323,22 +430,21 @@ export default function SchedulePage() {
                   items={list.map(t => t.id)}
                   strategy={verticalListSortingStrategy}
                 >
-                  <ul className="tasks">
+                  <ul className="tasks-list">
                     {list.map(t => (
                       <SortRow
                         key={t.id}
                         t={t}
-                        onStatus={(id, s) =>
-                          updateTask.mutate({
-                            id,
-                            status: s as 'todo' | 'doing' | 'done' | 'blocked',
-                          })
-                        }
                         onOpen={id => setSelectedTaskId(id)}
                         onQuickActions={handleQuickActions}
                       />
                     ))}
-                    {!list.length && <li className="empty">No tasks</li>}
+                    {!list.length && (
+                      <li className="empty-state">
+                        <div className="empty-icon">📝</div>
+                        <div className="empty-text">No tasks</div>
+                      </li>
+                    )}
                   </ul>
                 </SortableContext>
               </div>
@@ -347,7 +453,12 @@ export default function SchedulePage() {
         </div>
       </DndContext>
 
-      {isLoading && <div style={{ marginTop: 12 }}>Loading…</div>}
+      {isLoading && (
+        <div className="loading-state">
+          <div className="loading-spinner"></div>
+          <div>Loading tasks...</div>
+        </div>
+      )}
 
       <TaskDetailsModal
         taskId={selectedTaskId}
@@ -362,7 +473,7 @@ function QuickAdd({ onAdd }: { onAdd: (title: string) => void }) {
   const [v, setV] = useState('');
   return (
     <form
-      className="quick-add"
+      className="quick-add-form"
       onSubmit={e => {
         e.preventDefault();
         if (!v.trim()) return;
@@ -373,12 +484,10 @@ function QuickAdd({ onAdd }: { onAdd: (title: string) => void }) {
       <input
         value={v}
         onChange={e => setV(e.target.value)}
-        placeholder="Add task"
+        placeholder="+ Add task"
         aria-label="Add task"
+        className="quick-add-input"
       />
-      <button className="btn btn-ghost" type="submit">
-        +
-      </button>
     </form>
   );
 }

@@ -18,6 +18,16 @@
   --warning: #ffb020;
   --info: #3b82f6;
 
+  /* Status colors for tasks */
+  --status-todo: #b5b6bc;
+  --status-todo-bg: rgba(181, 182, 188, 0.1);
+  --status-doing: #3b82f6;
+  --status-doing-bg: rgba(59, 130, 246, 0.1);
+  --status-done: #65d46e;
+  --status-done-bg: rgba(101, 212, 110, 0.1);
+  --status-blocked: #f59e0b;
+  --status-blocked-bg: rgba(245, 158, 11, 0.1);
+
   /* Typography */
   --font-sans:
     ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
