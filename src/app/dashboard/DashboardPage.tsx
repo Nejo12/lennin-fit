@@ -1,9 +1,11 @@
 import { useUnpaidTotal, useThisWeekTasks } from './api';
+import { useQuickActions } from '@/app/common/actions';
 import styles from './Dashboard.module.scss';
 
 export default function DashboardPage() {
   const { data: unpaidTotal, isLoading: unpaidLoading } = useUnpaidTotal();
   const { data: thisWeekTasks, isLoading: tasksLoading } = useThisWeekTasks();
+  const { newInvoice, newTask, scheduleMeeting, addLead } = useQuickActions();
 
   const getStatusClass = (status: string) => {
     switch (status) {
@@ -132,10 +134,18 @@ export default function DashboardPage() {
       <div className={styles.quickActions}>
         <h3 className={styles.quickActionsTitle}>Quick Actions</h3>
         <div className={styles.actionsGrid}>
-          <button className={styles.actionButton}>Create Invoice</button>
-          <button className={styles.actionButton}>Add Task</button>
-          <button className={styles.actionButton}>Schedule Meeting</button>
-          <button className={styles.actionButton}>Add Lead</button>
+          <button className={styles.actionButton} onClick={() => newInvoice()}>
+            Create Invoice
+          </button>
+          <button className={styles.actionButton} onClick={() => newTask()}>
+            Add Task
+          </button>
+          <button className={styles.actionButton} onClick={scheduleMeeting}>
+            Schedule Meeting
+          </button>
+          <button className={styles.actionButton} onClick={addLead}>
+            Add Lead
+          </button>
         </div>
       </div>
     </div>

@@ -13,7 +13,7 @@ describe('track', () => {
   beforeEach(() => {
     // Reset mocks
     vi.clearAllMocks();
-    
+
     // Mock window object
     Object.defineProperty(window, 'posthog', {
       value: mockWindow.posthog,
@@ -52,13 +52,18 @@ describe('track', () => {
 
     track(eventName);
 
-    expect(mockWindow.posthog.capture).toHaveBeenCalledWith(eventName, undefined);
-    expect(mockWindow.plausible).toHaveBeenCalledWith(eventName, { props: undefined });
+    expect(mockWindow.posthog.capture).toHaveBeenCalledWith(
+      eventName,
+      undefined
+    );
+    expect(mockWindow.plausible).toHaveBeenCalledWith(eventName, {
+      props: undefined,
+    });
   });
 
   it('should handle missing posthog gracefully', () => {
     window.posthog = undefined;
-    
+
     const eventName = 'test_event';
     const props = { key: 'value' };
 
@@ -68,7 +73,7 @@ describe('track', () => {
 
   it('should handle missing plausible gracefully', () => {
     window.plausible = undefined;
-    
+
     const eventName = 'test_event';
     const props = { key: 'value' };
 

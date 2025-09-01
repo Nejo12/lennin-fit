@@ -1,5 +1,9 @@
 import { describe, it, expect } from 'vitest';
-import { formatCurrency, buildReminderEmail, type OverdueLike } from '../../src/lib/reminders';
+import {
+  formatCurrency,
+  buildReminderEmail,
+  type OverdueLike,
+} from '../../src/lib/reminders';
 
 describe('formatCurrency', () => {
   it('should format EUR currency correctly', () => {
@@ -25,8 +29,16 @@ describe('formatCurrency', () => {
   it('should fallback to simple format on error', () => {
     // Mock Intl.NumberFormat to throw an error
     const originalIntl = global.Intl;
-    // @ts-expect-error - Testing error handling
-    global.Intl = { NumberFormat: () => { throw new Error('Test error'); } };
+    global.Intl = {
+      NumberFormat: Object.assign(
+        () => {
+          throw new Error('Test error');
+        },
+        {
+          supportedLocalesOf: () => [],
+        }
+      ),
+    } as unknown as typeof Intl;
 
     expect(formatCurrency(1234.56, 'EUR')).toBe('€1234.56');
 
@@ -40,7 +52,7 @@ describe('buildReminderEmail', () => {
     id: 'inv-123456',
     client_id: 'client-789',
     client_name: 'John Doe',
-    amount_total: 1500.00,
+    amount_total: 1500.0,
     due_date: '2024-01-15',
     days_overdue: 5,
     status: 'overdue',
@@ -49,7 +61,9 @@ describe('buildReminderEmail', () => {
   it('should build reminder email with default options', () => {
     const result = buildReminderEmail(mockOverdueItem);
 
-    expect(result.subject).toBe('Friendly reminder: Invoice inv-12 (€1,500.00)');
+    expect(result.subject).toBe(
+      'Friendly reminder: Invoice inv-12 (€1,500.00)'
+    );
     expect(result.body).toContain('Hi John Doe,');
     expect(result.body).toContain('invoice inv-12 for €1,500.00');
     expect(result.body).toContain('5 day(s) overdue');
@@ -58,7 +72,9 @@ describe('buildReminderEmail', () => {
   });
 
   it('should build reminder email with custom sender', () => {
-    const result = buildReminderEmail(mockOverdueItem, { sender: 'Jane Smith' });
+    const result = buildReminderEmail(mockOverdueItem, {
+      sender: 'Jane Smith',
+    });
 
     expect(result.body).toContain('Thanks so much,');
     expect(result.body).toContain('Jane Smith');
@@ -67,7 +83,9 @@ describe('buildReminderEmail', () => {
   it('should build reminder email with custom currency', () => {
     const result = buildReminderEmail(mockOverdueItem, { currency: 'USD' });
 
-    expect(result.subject).toBe('Friendly reminder: Invoice inv-12 ($1,500.00)');
+    expect(result.subject).toBe(
+      'Friendly reminder: Invoice inv-12 ($1,500.00)'
+    );
     expect(result.body).toContain('invoice inv-12 for $1,500.00');
   });
 
@@ -103,14 +121,20 @@ describe('buildReminderEmail', () => {
     const result = buildReminderEmail(mockOverdueItem);
 
     const lines = result.body.split('\n');
-    expect(lines).toContain('Subject: Friendly reminder: Invoice inv-12 (€1,500.00)');
+    expect(lines).toContain(
+      'Subject: Friendly reminder: Invoice inv-12 (€1,500.00)'
+    );
     expect(lines).toContain('');
     expect(lines).toContain('Hi John Doe,');
     expect(lines).toContain('');
-    expect(lines).toContain('Hope you\'re well. This is a friendly reminder about invoice inv-12 for €1,500.00,');
+    expect(lines).toContain(
+      "Hope you're well. This is a friendly reminder about invoice inv-12 for €1,500.00,"
+    );
     expect(lines).toContain('which fell due on 1/15/2024 (5 day(s) overdue).');
     expect(lines).toContain('');
-    expect(lines).toContain('Could you let me know the expected payment date? If you\'ve already sent it, please ignore this.');
+    expect(lines).toContain(
+      "Could you let me know the expected payment date? If you've already sent it, please ignore this."
+    );
     expect(lines).toContain('');
     expect(lines).toContain('Thanks so much,');
     expect(lines).toContain('—');

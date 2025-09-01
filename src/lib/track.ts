@@ -20,7 +20,7 @@ export function track(name: string, props?: Record<string, unknown>) {
     // Silently fail for analytics
     console.debug('Analytics error:', error);
   }
-  
+
   try {
     // Or Plausible:
     window.plausible?.(name, { props });

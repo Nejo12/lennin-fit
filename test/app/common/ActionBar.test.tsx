@@ -89,7 +89,7 @@ describe('ActionBar', () => {
 
     const scheduleLink = screen.getByText('Schedule');
     const leadsLink = screen.getByText('Leads');
-    
+
     expect(scheduleLink.closest('a')).toHaveClass('btn', 'btn-ghost');
     expect(leadsLink.closest('a')).toHaveClass('btn', 'btn-ghost');
   });

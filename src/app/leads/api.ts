@@ -41,13 +41,17 @@ export function useCreateClient() {
         }
 
         const org_id = await currentOrgId();
-        const { error: supabaseError } = await supabase
+        const { data, error: supabaseError } = await supabase
           .from('clients')
-          .insert({ org_id, ...payload });
+          .insert({ org_id, ...payload })
+          .select('id, name')
+          .single();
         if (supabaseError) throw supabaseError;
+        return data!;
       } catch {
         // Mock creation - in real app this would be handled by the database
         console.log('Mock client creation:', payload);
+        return { id: 'mock-id', name: payload.name };
       }
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ['clients'] }),
