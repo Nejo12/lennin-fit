@@ -69,9 +69,11 @@ export default function InvoicesPage() {
     client_name?: string;
   }) {
     try {
+      // Fix NaN issue by properly handling null/undefined due_date
+      const dueDate = inv.due_date ? new Date(inv.due_date) : new Date();
       const days = Math.max(
         0,
-        Math.floor((Date.now() - +new Date(inv.due_date || '')) / 86400000)
+        Math.floor((Date.now() - dueDate.getTime()) / 86400000)
       );
       const email = buildReminderEmail({
         id: inv.id,

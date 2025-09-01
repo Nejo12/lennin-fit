@@ -152,7 +152,11 @@ export function useTopOverdue(limit = 3) {
           ...r,
           days_overdue: Math.max(
             0,
-            Math.floor((+new Date() - +new Date(r.due_date || '')) / 86400000)
+            Math.floor(
+              (Date.now() -
+                (r.due_date ? new Date(r.due_date).getTime() : Date.now())) /
+                86400000
+            )
           ),
         }))
         .sort((a, b) => b.days_overdue - a.days_overdue)

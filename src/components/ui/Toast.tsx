@@ -5,13 +5,16 @@ import type { ToastItem } from './Toast.constants';
 import { Ctx } from './ToastContext';
 
 export function ToastProvider({ children }: React.PropsWithChildren) {
+  // Initialize state with empty array to avoid potential issues
   const [items, setItems] = useState<ToastItem[]>([]);
   const timers = useRef<Record<string, NodeJS.Timeout>>({});
 
   const remove = useCallback((id: string) => {
     setItems(prev => prev.filter(i => i.id !== id));
-    clearTimeout(timers.current[id]);
-    delete timers.current[id];
+    if (timers.current[id]) {
+      clearTimeout(timers.current[id]);
+      delete timers.current[id];
+    }
   }, []);
 
   const add = useCallback(
