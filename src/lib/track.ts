@@ -16,6 +16,12 @@ export function track(name: string, props?: Record<string, unknown>) {
     if (window.posthog) {
       window.posthog.capture(name, props);
     }
+  } catch (error) {
+    // Silently fail for analytics
+    console.debug('Analytics error:', error);
+  }
+  
+  try {
     // Or Plausible:
     window.plausible?.(name, { props });
   } catch (error) {
