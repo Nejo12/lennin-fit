@@ -15,6 +15,14 @@ export default function AppShell() {
               isActive ? styles.navLink + ' ' + styles.active : styles.navLink
             }
           >
+            Dashboard
+          </NavLink>
+          <NavLink
+            to="/app/focus"
+            className={({ isActive }) =>
+              isActive ? styles.navLink + ' ' + styles.active : styles.navLink
+            }
+          >
             Focus
           </NavLink>
           <NavLink

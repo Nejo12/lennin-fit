@@ -2,6 +2,47 @@ import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
 import { mockData } from '@/lib/mockData';
 
+/** Fetches total count of active clients/leads */
+export function useActiveLeadsCount() {
+  return useQuery({
+    queryKey: ['active-leads-count'],
+    queryFn: async () => {
+      try {
+        const { count, error } = await supabase
+          .from('clients')
+          .select('*', { count: 'exact', head: true });
+        if (error) throw error;
+        return count ?? 0;
+      } catch {
+        // Fallback to mock data count
+        return mockData.clients?.length ?? 0;
+      }
+    },
+  });
+}
+
+/** Fetches count of tasks due today */
+export function useTodayEventsCount() {
+  return useQuery({
+    queryKey: ['today-events-count'],
+    queryFn: async () => {
+      try {
+        const today = new Date().toISOString().slice(0, 10);
+        const { count, error } = await supabase
+          .from('tasks')
+          .select('*', { count: 'exact', head: true })
+          .eq('due_date', today);
+        if (error) throw error;
+        return count ?? 0;
+      } catch {
+        // Fallback to mock data
+        const today = new Date().toISOString().slice(0, 10);
+        return mockData.tasks?.filter(t => t.due_date === today).length ?? 0;
+      }
+    },
+  });
+}
+
 export function useUnpaidTotal() {
   return useQuery({
     queryKey: ['unpaid-total'],

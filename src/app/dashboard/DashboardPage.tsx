@@ -1,10 +1,17 @@
-import { useUnpaidTotal, useThisWeekTasks } from './api';
+import {
+  useUnpaidTotal,
+  useThisWeekTasks,
+  useActiveLeadsCount,
+  useTodayEventsCount,
+} from './api';
 import { useQuickActions } from '@/app/common/actions';
 import styles from './Dashboard.module.scss';
 
 export default function DashboardPage() {
   const { data: unpaidTotal, isLoading: unpaidLoading } = useUnpaidTotal();
   const { data: thisWeekTasks, isLoading: tasksLoading } = useThisWeekTasks();
+  const { data: activeLeads, isLoading: leadsLoading } = useActiveLeadsCount();
+  const { data: todayEvents, isLoading: eventsLoading } = useTodayEventsCount();
   const { newInvoice, newTask, scheduleMeeting, addLead } = useQuickActions();
 
   const getStatusClass = (status: string) => {
@@ -49,13 +56,17 @@ export default function DashboardPage() {
 
         <div className={styles.metricCard}>
           <div className={styles.metricLabel}>Active Leads</div>
-          <div className={styles.metricValue}>-</div>
+          <div className={styles.metricValue}>
+            {leadsLoading ? '...' : activeLeads || 0}
+          </div>
           <div className={styles.metricSubtext}>in pipeline</div>
         </div>
 
         <div className={styles.metricCard}>
           <div className={styles.metricLabel}>Today's Events</div>
-          <div className={styles.metricValue}>-</div>
+          <div className={styles.metricValue}>
+            {eventsLoading ? '...' : todayEvents || 0}
+          </div>
           <div className={styles.metricSubtext}>scheduled</div>
         </div>
       </div>

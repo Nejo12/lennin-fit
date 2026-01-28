@@ -6,6 +6,8 @@ import { useQuickActions } from '../../../src/app/common/actions';
 import {
   useUnpaidTotal,
   useThisWeekTasks,
+  useActiveLeadsCount,
+  useTodayEventsCount,
 } from '../../../src/app/dashboard/api';
 import { vi, type MockedFunction } from 'vitest';
 import type { UseQueryResult } from '@tanstack/react-query';
@@ -30,6 +32,12 @@ const mockUseUnpaidTotal = useUnpaidTotal as MockedFunction<
 >;
 const mockUseThisWeekTasks = useThisWeekTasks as MockedFunction<
   typeof useThisWeekTasks
+>;
+const mockUseActiveLeadsCount = useActiveLeadsCount as MockedFunction<
+  typeof useActiveLeadsCount
+>;
+const mockUseTodayEventsCount = useTodayEventsCount as MockedFunction<
+  typeof useTodayEventsCount
 >;
 
 const mockQuickActions: MockQuickActions = {
@@ -74,6 +82,16 @@ describe('DashboardPage', () => {
       isLoading: false,
       error: null,
     } as unknown as UseQueryResult<Task[], Error>);
+    mockUseActiveLeadsCount.mockReturnValue({
+      data: 5,
+      isLoading: false,
+      error: null,
+    } as unknown as UseQueryResult<number, Error>);
+    mockUseTodayEventsCount.mockReturnValue({
+      data: 3,
+      isLoading: false,
+      error: null,
+    } as unknown as UseQueryResult<number, Error>);
   });
 
   it('should render dashboard with quick actions', () => {

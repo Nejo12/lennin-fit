@@ -26,13 +26,23 @@ const wrapper = ({ children }: { children: React.ReactNode }) => (
   <QueryClientProvider client={mockQueryClient}>{children}</QueryClientProvider>
 );
 
+/**
+ * Helper to generate ISO date strings relative to today.
+ * This ensures tasks appear within the current week view.
+ */
+const getRelativeDate = (daysFromNow: number): string => {
+  const date = new Date();
+  date.setDate(date.getDate() + daysFromNow);
+  return date.toISOString().slice(0, 10);
+};
+
 const mockTasks = [
   {
     id: '1',
     title: 'Task 1',
     status: 'todo' as const,
     priority: 'medium',
-    due_date: '2025-09-01',
+    due_date: getRelativeDate(0), // Today
     position: 0,
   },
   {
@@ -40,7 +50,7 @@ const mockTasks = [
     title: 'Task 2',
     status: 'doing' as const,
     priority: 'high',
-    due_date: '2025-09-02',
+    due_date: getRelativeDate(1), // Tomorrow
     position: 1,
   },
   {
@@ -48,7 +58,7 @@ const mockTasks = [
     title: 'Task 3',
     status: 'done' as const,
     priority: 'low',
-    due_date: '2025-09-03',
+    due_date: getRelativeDate(2), // Day after tomorrow
     position: 2,
   },
 ];
